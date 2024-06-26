@@ -61,7 +61,7 @@ function love.update(dt)
         if love.keyboard.isDown("lctrl") or love.keyboard.isDown("lgui") then
             cam:zoom(1.01)
         else
-            cam:move(0, -1 / (cam:getScale() / 2)) -- scale is zoom
+            cam:move(0, (-1 / (cam:getScale() / 2))) -- scale is zoom
         end
     end
     if love.keyboard.isDown("down") then

@@ -11,10 +11,10 @@ ui = {
 function ui:tileLogic(tile)
     tiles = tileHolder:getTiles()
     actions = {}
-    if tile.structure == nil then
+    if tile.structure == nil or tile.type == "ooze" then
         actions.build = true
     end
-    if tile.insideCity == false and tile.structure == nil then
+    if tile.insideCity ~= true and tile.structure == nil then
         actions.foundCity = true
     end
     return actions
@@ -48,9 +48,16 @@ function ui:renderActions(tile)
     if not(next(actions) == nil) then
         imageLib:drawImage(x + 16, y + 16 + 20, "uiActions.png") -- it's 64x64
         imageLib:drawImage(x + 74, y + 64 + 13, "actionCap.png")
+
+        currentButton = 1
         
+        if actions.foundCity == true then
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "foundCity.png")
+            currentButton = currentButton + 1
+        end
         if actions.build == true then
-            imageLib:drawImage(x + 32, y + 64 + 12 + 2, "build.png")
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "build.png")
+            currentButton = currentButton + 1
         end
         -- love.graphics.rectangle("fill", x, y, 300, 30)
     end
@@ -71,6 +78,7 @@ function ui:execute()
 
     if buttons[self.currentButton] == "build" then
         selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "player.png", structure = nil}
+        selectedTile.insideCity = true
         for  _, nearTiles in ipairs(tileHolder:getTiles()) do
             if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < 10 then
                 if nearTiles.structure == nil then

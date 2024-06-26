@@ -19,18 +19,24 @@ function isometricRenderer:render()
             isometricRenderer:renderTile(tile.structure, (tile.height * 16))
         end
         if tile.insideCity then
-            if tileHolder:getTileAtPos(tile.x + 1, tile.y).insideCity ~= true then
-                isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "citywallD.png", structure = nil})
-            end
-            if tileHolder:getTileAtPos(tile.x - 1, tile.y).insideCity ~= true then
-                isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "citywallU.png", structure = nil})
-            end
-            if tileHolder:getTileAtPos(tile.x, tile.y - 1).insideCity ~= true then
-                isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "citywallL.png", structure = nil})
-            end
-            if tileHolder:getTileAtPos(tile.x, tile.y + 1).insideCity ~= true then
-                isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "citywallR.png", structure = nil})
-            end
+            -- -- if tile.x % 2 == 1 then
+            -- --     isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "player.png", structure = nil})
+            -- -- end
+            -- if (tileHolder:getTileAtPos(tile.x + 1, tile.y + 1) or {}).insideCity ~= true then
+            --     isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "citywallRD.png", structure = nil})
+            -- end
+            -- if (tileHolder:getTileAtPos(tile.x + 1, tile.y) or {}).insideCity ~= true and (tileHolder:getTileAtPos(tile.x + 1, tile.y - 1) or {}).insideCity ~= true then
+            --     isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "citywallLD.png", structure = nil})
+            -- end
+            -- if (tileHolder:getTileAtPos(tile.x - 1, tile.y) or {}).insideCity ~= true and (tileHolder:getTileAtPos(tile.x - 1, tile.y - 1) or {}).insideCity ~= true then
+            --     isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "citywallLU.png", structure = nil})
+            -- end
+            -- -- if tileHolder:getTileAtPos(tile.x + 1, tile.y - 1).insideCity ~= true then
+            -- --     isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "citywallLD.png", structure = nil})
+            -- -- end
+            -- if (tileHolder:getTileAtPos(tile.x, tile.y + 1) or {}).insideCity ~= true then
+            --     isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "citywallRU.png", structure = nil})
+            -- end
         end
     end
 end

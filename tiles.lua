@@ -1,20 +1,19 @@
 local simplex = require("simplex")
 
 tileHolder = {
-    tiles = {}
+    tiles = {},
+    tileMap = {}
 }
 
-function tileHolder:newTile(x, y, height, image)
-    newTile = {x = x, y = y, height = height, image = image, structure = nil}
+function tileHolder:newTile(x, y, height, image, type)
+    newTile = {x = x, y = y, height = height, image = image, structure = nil, type = type}
     table.insert(self.tiles, newTile)
     return newTile
 end
 
 function tileHolder:getTileAtPos(x, y)
-    for _, tile in ipairs(tileHolder:getTiles()) do
-        if tile.x == x and tile.y == y then
-            return tile
-        end
+    function tileHolder:getTileAtPos(x, y)
+        return self.tileMap[x .. "," .. y]
     end
 end
 
@@ -27,11 +26,25 @@ function tileHolder:createMap()
     local noiseMap = createNoiseMap(resolution)
     for i = 0, 100 do
         for j = 0, 30 do
-            local randHeight = simplex.Noise2D(i, j)
-            randHeight = 0
-            local newTile = tileHolder:newTile(i, j, randHeight, "tilesmudge.png")
+            local randHeight = math.random(0, 100) / 100
+            local newTile = tileHolder:newTile(i, j, 0, "tilesmudge.png")
+            if randHeight < .1 then
+                print(randHeight)
+                local oozeImg
+                if randHeight < .03 then
+                    oozeImg = "ooze1.png"
+                elseif randHeight < .06 then
+                    oozeImg = "ooze2.png"
+                else
+                    oozeImg = "ooze3.png"
+                end
+                newTile.structure = {x = i, y = j, height = 0, image = oozeImg, structure = nil, type = "ooze"}
+            end
             -- newTile.structure = {x = i, y = j, height = randHeight, image = "city.png", structure = nil}
         end
+    end
+    for _, tile in ipairs(self.tiles) do
+        self.tileMap[tile.x .. "," .. tile.y] = tile
     end
 end
 function createNoiseMap(resolution)
@@ -49,5 +62,6 @@ function createNoiseMap(resolution)
             end
         end
     end
+    
     return map
 end
