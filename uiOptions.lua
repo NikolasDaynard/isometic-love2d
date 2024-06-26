@@ -3,6 +3,8 @@
 
 -- returns possible actions on the tile
 
+ui = {}
+
 function ui:tileLogic(tile)
     tiles = tileHolder:getTiles()
     actions = {}
@@ -14,8 +16,6 @@ function ui:tileLogic(tile)
     end
     return actions
 end
-
-ui = {}
 
 function ui:render() 
 

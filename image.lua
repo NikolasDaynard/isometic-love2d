@@ -7,7 +7,7 @@ function imageLib:loadImage(imageName)
 end
 
 -- draws isometrically
-function imageLib:drawImage(x, y, imageName, brightness)
+function imageLib:drawImage(x, y, imageName)
     if self.images[imageName] == nil then
         imageLib:loadImage(imageName)
     end

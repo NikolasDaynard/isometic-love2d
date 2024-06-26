@@ -28,8 +28,9 @@ function tileHolder:createMap()
     for i = 0, 100 do
         for j = 0, 30 do
             local randHeight = simplex.Noise2D(i, j)
+            randHeight = 0
             local newTile = tileHolder:newTile(i, j, randHeight, "tilesmudge.png")
-            newTile.structure = {x = i, y = j, height = randHeight, image = "city.png", structure = nil}
+            -- newTile.structure = {x = i, y = j, height = randHeight, image = "city.png", structure = nil}
         end
     end
 end
