@@ -27,54 +27,52 @@ function love.update(dt)
     local mousex = cam:mousePosition().x
     local mousey = cam:mousePosition().y
     local hitTile = false
+    local hitUi = false
+    if love.mouse.isDown(1) and not dragging then
+        if ui:click(mousex, mousey) then
+            hitUi = true
+            dragging = true
+        end
+    elseif not love.mouse.isDown(1) then
+        dragging = false
+    end
+    ui:execute()
+
     local tile = isometricRenderer:whatTileClickHit(mousex, mousey)
-    if tile ~= nil then
+    if tile ~= nil and hitUi == false then
         drag_offset_x, drag_offset_y = love.mouse.getPosition() -- needs to stop snapping
         if love.mouse.isDown(1) then
             if not dragging then
                 hitTile = true
                 dragging = true
                 selectedTile = tile
-                -- actions = ui:tileLogic(tile)
-                -- if actions.build == true then
-                --     tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "player.png", structure = nil}
-                --     for  _, nearTiles in ipairs(tileHolder:getTiles()) do
-                --         if distance(nearTiles.x, nearTiles.y, tile.x, tile.y) < 10 then
-                --             if nearTiles.structure == nil then
-                --                 nearTiles.structure = {x = nearTiles.x, y = nearTiles.y, height = tile.height, image = "testing.png", structure = nil}
-                --             end
-                --         end
-                --     end
-                -- end
             end
         else 
             dragging = false
         end
     end
     if love.keyboard.isDown("left") then
-        cam:move(-1 / cam:getScale(), 0)
+        cam:move(-1 / (cam:getScale() / 2), 0)
     end
     if love.keyboard.isDown("right") then
-        cam:move(1 / cam:getScale(), 0)
+        cam:move(1 / (cam:getScale() / 2), 0)
     end
     if love.keyboard.isDown("up") then
         if love.keyboard.isDown("lctrl") or love.keyboard.isDown("lgui") then
             cam:zoom(1.01)
         else
-            cam:move(0, -1 / cam:getScale()) -- scale is zoom
+            cam:move(0, -1 / (cam:getScale() / 2)) -- scale is zoom
         end
     end
     if love.keyboard.isDown("down") then
         if love.keyboard.isDown("lctrl") or love.keyboard.isDown("lgui") then
             cam:zoom(.99)
         else
-            cam:move(0, 1 / cam:getScale())
+            cam:move(0, 1 / (cam:getScale() / 2))
         end
     end
 
-
-
-    if not hitTile then
+    if not hitTile and not hitUi then
         windowUpdate()
     end
 end

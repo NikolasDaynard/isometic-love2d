@@ -11,3 +11,6 @@ end
 function clickHitButton(x, y, buttonX, buttonY, buttonRadius)
     return distance(x, y, buttonX, buttonY) < buttonRadius
 end
+function clickHitRect(x, y, buttonX, buttonY, buttonW, buttonH)
+    return x >= buttonX and x <= buttonX + buttonW and y >= buttonY and y <= buttonY + buttonH
+end
