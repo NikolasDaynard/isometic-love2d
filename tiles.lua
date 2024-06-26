@@ -27,16 +27,15 @@ function tileHolder:createMap()
     for i = 0, 100 do
         for j = 0, 30 do
             local randHeight = math.random(0, 100) / 100
-            local newTile = tileHolder:newTile(i, j, 0, "tilesmudge.png")
+            local newTile = tileHolder:newTile(i, j, 0, "images/tilesmudge.png")
             if randHeight < .1 then
-                print(randHeight)
                 local oozeImg
                 if randHeight < .03 then
-                    oozeImg = "ooze1.png"
+                    oozeImg = "images/resources/ooze1.png"
                 elseif randHeight < .06 then
-                    oozeImg = "ooze2.png"
+                    oozeImg = "images/resources/ooze2.png"
                 else
-                    oozeImg = "ooze3.png"
+                    oozeImg = "images/resources/ooze3.png"
                 end
                 newTile.structure = {x = i, y = j, height = 0, image = oozeImg, structure = nil, type = "ooze"}
             end

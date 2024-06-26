@@ -4,10 +4,11 @@ require("image")
 require("isometric")
 require("tiles")
 require("uiOptions")
+require("ui")
 require("helpers")
 Camera = require 'camera' 
 
-player = tileHolder:newTile(5, 3, 1, "player.png")
+player = tileHolder:newTile(5, 3, 1, "images/player.png")
 
 function love.load()
     tileHolder:createMap()
@@ -29,14 +30,14 @@ function love.update(dt)
     local hitTile = false
     local hitUi = false
     if love.mouse.isDown(1) and not dragging then
-        if ui:click(mousex, mousey) then
+        if actionUi:click(mousex, mousey) then
             hitUi = true
             dragging = true
         end
     elseif not love.mouse.isDown(1) then
         dragging = false
     end
-    ui:execute()
+    actionUi:execute()
 
     local tile = isometricRenderer:whatTileClickHit(mousex, mousey)
     if tile ~= nil and hitUi == false then
@@ -82,10 +83,12 @@ function love.draw()
     cam:attach()
     isometricRenderer:render()
     if selectedTile then
-        ui:renderActions(selectedTile)
+        actionUi:renderActions(selectedTile)
     end
     -- isometricRenderer:renderTile(player)
     cam:detach()
+
+    ui:render()
 end
 
 function windowUpdate()

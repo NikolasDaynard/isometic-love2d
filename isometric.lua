@@ -1,19 +1,30 @@
 require("helpers")
 
 isometricRenderer = {
-    -- tiles = {}
 }
 
 -- tiles on the same level are y 5 diff
 -- 32 between levels
 -- 16 per x
 
-function isometricRenderer:render()
+function isometricRenderer:render(rotation)
+    rotation = rotation or 0
+
     for _, tile in ipairs(tileHolder:getTiles()) do
+        local x, y = tile.x, tile.y
+
+        if rotation == 90 then
+            x, y = y, -x
+        elseif rotation == 180 then
+            x, y = -x, -y
+        elseif rotation == 270 then
+            x, y = -y, x
+        end
+
         if tile ~= selectedTile then
-            imageLib:drawImage(tile.y * 32 + ((tile.x % 2) * 16), (tile.x * 5) + (tile.height * 16), tile.image)
+            imageLib:drawImage(y * 32 + ((x % 2) * 16), (x * 5) + (tile.height * 16), tile.image)
         else
-            imageLib:drawImage(tile.y * 32 + ((tile.x % 2) * 16), (tile.x * 5) + (tile.height * 16), "tileselected.png")
+            imageLib:drawImage(y * 32 + ((x % 2) * 16), (x * 5) + (tile.height * 16), "images/tileselected.png")
         end
         if tile.structure ~= nil then
             isometricRenderer:renderTile(tile.structure, (tile.height * 16))
