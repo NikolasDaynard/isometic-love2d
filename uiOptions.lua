@@ -14,11 +14,15 @@ function actionUi:tileLogic(tile)
     if tile.structure == nil then
         actions.build = true
     else
-        if tile.structure.type == "ooze" then
+        if tile.structure.type == "ooze" and tile.insideCity == true then
             actions.collect = true
+        elseif tile.structure.type == "city" then
+            if oozeNum - tile.structure.level > 0 then -- this is right I promise
+                actions.upgradeCity = true
+            end
         end
     end
-    if tile.insideCity ~= true and tile.structure == nil then
+    if tile.insideCity ~= true and tile.structure == nil and oozeNum - 3 >= 0 then
         actions.foundCity = true
     end
     return actions
@@ -73,6 +77,10 @@ function actionUi:renderActions(tile)
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/collect.png")
             currentButton = currentButton + 1
         end
+        if actions.upgradeCity == true then
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/upgrade.png")
+            currentButton = currentButton + 1
+        end
         -- love.graphics.rectangle("fill", x, y, 300, 30)
     end
 end
@@ -93,14 +101,20 @@ function actionUi:execute()
     if actions.collect then
         table.insert(buttons, "collect")
     end
+    if actions.upgradeCity then
+        table.insert(buttons, "upgrade")
+    end
 
     print(buttons[self.currentButton])
 
     if buttons[self.currentButton] == "foundCity" then
         selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/player.png", structure = nil}
+        selectedTile.structure.type = "city"
         selectedTile.insideCity = true
+        selectedTile.structure.level = 3
+        oozeNum = oozeNum - 3
         for  _, nearTiles in ipairs(tileHolder:getTiles()) do
-            if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < 10 then
+            if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
                 if nearTiles.structure == nil then
                     nearTiles.structure = {x = nearTiles.x, y = nearTiles.y, height = selectedTile.height, image = "images/testing.png", structure = nil}
                 end
@@ -109,7 +123,18 @@ function actionUi:execute()
         end
     elseif buttons[self.currentButton] == "collect" then
         selectedTile.structure = nil
-        -- iterate ooze score here ig
+        oozeNum = oozeNum + 1
+    elseif buttons[self.currentButton] == "upgrade" then
+        selectedTile.structure.level = selectedTile.structure.level + 1
+        for  _, nearTiles in ipairs(tileHolder:getTiles()) do
+            if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
+                if nearTiles.structure == nil then
+                    nearTiles.structure = {x = nearTiles.x, y = nearTiles.y, height = selectedTile.height, image = "images/testing.png", structure = nil}
+                end
+                nearTiles.insideCity = true
+            end
+        end
+        oozeNum = oozeNum - selectedTile.structure.level
     end
     
 

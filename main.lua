@@ -8,9 +8,13 @@ require("ui")
 require("helpers")
 Camera = require 'camera' 
 
+font = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 20)
+
 player = tileHolder:newTile(5, 3, 1, "images/player.png")
+oozeNum = 10
 
 function love.load()
+    love.graphics.setFont(font)
     tileHolder:createMap()
     cam = Camera()
 end
@@ -30,7 +34,7 @@ function love.update(dt)
     local hitTile = false
     local hitUi = false
     if love.mouse.isDown(1) and not dragging then
-        if actionUi:click(mousex, mousey) then
+        if actionUi:click(mousex, mousey) or ui:click(love.mouse.getX(), love.mouse.getY()) then
             hitUi = true
             dragging = true
         end
@@ -44,9 +48,14 @@ function love.update(dt)
         drag_offset_x, drag_offset_y = love.mouse.getPosition() -- needs to stop snapping
         if love.mouse.isDown(1) then
             if not dragging then
-                hitTile = true
-                dragging = true
-                selectedTile = tile
+                if selectedTile ~= tile then
+                    hitTile = true
+                    dragging = true
+                    selectedTile = tile
+                else
+                    dragging = true
+                    selectedTile = nil
+                end
             end
         else 
             dragging = false
