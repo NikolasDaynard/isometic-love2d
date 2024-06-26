@@ -2,20 +2,19 @@ local desktop = require("globalMouse")
 local coordsys = desktop()
 require("image")
 require("isometric")
+isometricRenderer:createMap()
 
 function love.load()
-    -- Create a canvas to apply the shader
-    canvas = love.graphics.newCanvas()
     
 end
-
 local dragging = false
 local drag_offset_x, drag_offset_y = 0, 0
 
 function love.update(dt)
     windowUpdate()
-
-
+    if not love.window.hasFocus() then
+        love.timer.sleep(1)
+    end
 end
 
 function love.draw()
