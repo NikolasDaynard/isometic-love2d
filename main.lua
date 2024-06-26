@@ -52,20 +52,23 @@ function love.update(dt)
         end
     end
     if love.keyboard.isDown("left") then
-        cam:move(-1, 0)
-    elseif love.keyboard.isDown("right") then
-        cam:move(1, 0)
-    elseif love.keyboard.isDown("up") then
+        cam:move(-1 / cam:getScale(), 0)
+    end
+    if love.keyboard.isDown("right") then
+        cam:move(1 / cam:getScale(), 0)
+    end
+    if love.keyboard.isDown("up") then
         if love.keyboard.isDown("lctrl") or love.keyboard.isDown("lgui") then
             cam:zoom(1.01)
         else
-            cam:move(0, -1)
+            cam:move(0, -1 / cam:getScale()) -- scale is zoom
         end
-    elseif love.keyboard.isDown("down") then
+    end
+    if love.keyboard.isDown("down") then
         if love.keyboard.isDown("lctrl") or love.keyboard.isDown("lgui") then
             cam:zoom(.99)
         else
-            cam:move(0, 1)
+            cam:move(0, 1 / cam:getScale())
         end
     end
 
@@ -80,7 +83,9 @@ function love.draw()
     love.graphics.clear()
     cam:attach()
     isometricRenderer:render()
-    -- ui:renderActions(selectedTile)
+    if selectedTile then
+        ui:renderActions(selectedTile)
+    end
     -- isometricRenderer:renderTile(player)
     cam:detach()
 end
