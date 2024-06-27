@@ -16,6 +16,11 @@ function actionUi:tileLogic(tile)
     else
         if tile.structure.type == "ooze" and tile.insideCity == true then
             actions.collect = true
+        elseif tile.structure.type == "troop" then
+            actions.move = true
+            actions.move1 = true
+            actions.move2 = true
+            actions.move3 = true
         elseif tile.structure.type == "city" then
             if oozeNum - tile.structure.level > 0 then -- this is right I promise
                 actions.upgradeCity = true
@@ -50,7 +55,7 @@ function actionUi:click(mouseX, mouseY)
         if self.currentButton ~= -1 then
             return true
         end
-        if clickHitRect(mouseX, mouseY, x + 40, y + 64 + 16, 32, 16) then
+        if clickHitRect(mouseX, mouseY, x + 40, y + 64 + 16, 320, 16) then
             return true
         end
     else
@@ -80,6 +85,13 @@ function actionUi:renderActions(tile)
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/collect.png")
             currentButton = currentButton + 1
         end
+        if actions.move == true then
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveup.png")
+            imageLib:drawImage(x + 32 + ((currentButton) * 18), y + 64 + 12 + 2, "images/icons/movedown.png")
+            imageLib:drawImage(x + 32 + ((currentButton + 1) * 18), y + 64 + 12 + 2, "images/icons/moveleft.png")
+            imageLib:drawImage(x + 32 + ((currentButton + 2) * 18), y + 64 + 12 + 2, "images/icons/moveright.png")
+            currentButton = currentButton + 4
+        end
         if actions.upgradeCity == true then
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/upgrade.png")
             currentButton = currentButton + 1
@@ -107,6 +119,12 @@ function actionUi:execute()
     end
     if actions.collect then
         table.insert(buttons, "collect")
+    end
+    if actions.move then
+        table.insert(buttons, "moveup")
+        table.insert(buttons, "movedown")
+        table.insert(buttons, "moveleft")
+        table.insert(buttons, "moveright")
     end
     if actions.upgradeCity then
         table.insert(buttons, "upgrade")
@@ -143,10 +161,28 @@ function actionUi:execute()
         oozeNum = oozeNum - selectedTile.structure.level
     elseif buttons[self.currentButton] == "createTroop" then
         local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
-        print(tile)
-        print(selectedTile.x, selectedTile.y)
-        print(tile.x, tile.y)
-        tile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/3warrior.png", structure = nil}
+        tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/player.png", structure = nil}
+        tile.structure.type = "troop"
+    elseif buttons[self.currentButton] == "moveright" then
+        local newTile = tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1)
+        newTile.structure = selectedTile.structure
+        selectedTile.structure = nil
+        newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
+    elseif buttons[self.currentButton] == "moveleft" then
+        local newTile = tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1)
+        newTile.structure = selectedTile.structure
+        selectedTile.structure = nil
+        newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
+    elseif buttons[self.currentButton] == "movedown" then
+        local newTile = tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y)
+        newTile.structure = selectedTile.structure
+        selectedTile.structure = nil
+        newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
+    elseif buttons[self.currentButton] == "moveup" then
+        local newTile = tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y)
+        newTile.structure = selectedTile.structure
+        selectedTile.structure = nil
+        newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
     end
     
 

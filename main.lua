@@ -23,6 +23,8 @@ local dragging = false
 local drag_offset_x, drag_offset_y = 0, 0
 selectedTile = nil
 
+local currentRot = 0
+
 function love.update(dt)
     if not love.window.hasFocus() then
         -- disabled for faster dev
@@ -82,6 +84,16 @@ function love.update(dt)
         end
     end
 
+    if love.keyboard.isDown("1") then
+        currentRot = 0
+    elseif love.keyboard.isDown("2") then
+        currentRot = 90
+    elseif love.keyboard.isDown("3") then
+        currentRot = 180
+    elseif love.keyboard.isDown("4") then
+        currentRot = 270
+    end
+
     if not hitTile and not hitUi then
         windowUpdate()
     end
@@ -90,7 +102,7 @@ end
 function love.draw()
     love.graphics.clear()
     cam:attach()
-    isometricRenderer:render()
+    isometricRenderer:render(currentRot)
     if selectedTile then
         actionUi:renderActions(selectedTile)
     end
