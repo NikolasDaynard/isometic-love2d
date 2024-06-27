@@ -12,6 +12,7 @@ font = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 20)
 
 player = tileHolder:newTile(5, 3, 1, "images/player.png")
 oozeNum = 10
+oozesPerTurn = 1
 
 function love.load()
     love.graphics.setFont(font)

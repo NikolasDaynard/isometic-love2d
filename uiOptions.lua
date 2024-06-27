@@ -12,22 +12,26 @@ function actionUi:tileLogic(tile)
     tiles = tileHolder:getTiles()
     actions = {}
     if tile.structure == nil then
-        actions.build = true
+        if oozeNum - 2 >= 0 then
+            actions.build = true
+        end
     else
         if tile.structure.type == "ooze" and tile.insideCity == true then
             actions.collect = true
         elseif tile.structure.type == "troop" then
-            if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1).structure == nil then -- right
-                actions.moveRight = true
-            end
-            if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1).structure == nil then -- left
-                actions.moveLeft = true
-            end
-            if tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y).structure == nil then -- dow
-                actions.moveDown = true
-            end
-            if tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y).structure == nil then -- up
-                actions.moveUp = true
+            if tile.structure.moved ~= true then
+                if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1).structure == nil then -- right
+                    actions.moveRight = true
+                end
+                if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1).structure == nil then -- left
+                    actions.moveLeft = true
+                end
+                if tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y).structure == nil then -- dow
+                    actions.moveDown = true
+                end
+                if tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y).structure == nil then -- up
+                    actions.moveUp = true
+                end
             end
             
         elseif tile.structure.type == "city" then
@@ -78,7 +82,6 @@ function actionUi:renderActions(tile)
     local y = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).y
     if not(next(actions) == nil) then
         imageLib:drawImage(x + 16, y + 16 + 20, "images/uiActions.png") -- it's 64x64
-        imageLib:drawImage(x + 74, y + 64 + 13, "images/actionCap.png")
 
         local currentButton = 1
         
@@ -120,6 +123,7 @@ function actionUi:renderActions(tile)
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/createTroop.png")
             currentButton = currentButton + 1
         end
+        imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 13, "images/actionCap.png")
         -- love.graphics.rectangle("fill", x, y, 300, 30)
     end
 end
@@ -163,7 +167,11 @@ function actionUi:execute()
 
     print(buttons[self.currentButton])
 
-    if buttons[self.currentButton] == "foundCity" then
+    if buttons[self.currentButton] == "build" then
+        oozeNum = oozeNum - 2
+        oozesPerTurn = oozesPerTurn + 1
+        selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/refinery.png", structure = nil}
+    elseif buttons[self.currentButton] == "foundCity" then
         selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/player.png", structure = nil}
         selectedTile.structure.type = "city"
         selectedTile.insideCity = true
@@ -195,21 +203,25 @@ function actionUi:execute()
     elseif buttons[self.currentButton] == "moveright" then
         local newTile = tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1)
         newTile.structure = selectedTile.structure
+        newTile.structure.moved = true
         selectedTile.structure = nil
         newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
     elseif buttons[self.currentButton] == "moveleft" then
         local newTile = tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1)
         newTile.structure = selectedTile.structure
+        newTile.structure.moved = true
         selectedTile.structure = nil
         newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
     elseif buttons[self.currentButton] == "movedown" then
         local newTile = tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y)
         newTile.structure = selectedTile.structure
+        newTile.structure.moved = true
         selectedTile.structure = nil
         newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
     elseif buttons[self.currentButton] == "moveup" then
         local newTile = tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y)
         newTile.structure = selectedTile.structure
+        newTile.structure.moved = true
         selectedTile.structure = nil
         newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
     end
