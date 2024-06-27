@@ -14,3 +14,27 @@ end
 function clickHitRect(x, y, buttonX, buttonY, buttonW, buttonH)
     return x >= buttonX and x <= buttonX + buttonW and y >= buttonY and y <= buttonY + buttonH
 end
+
+function findRandomOpenTileAdjacent(x, y)
+    local possibleOffsets = {
+        {0, 1}, {0, -1}, {1, 1}, {1, -1}, 
+        {-1, 1}, {-1, -1}, {-1, 0}, {1, 0}
+    }
+    local openTiles = {}
+
+    for _, offset in ipairs(possibleOffsets) do
+        local newX, newY = x + offset[1], y + offset[2]
+        if (tileHolder:getTileAtPos(newX, newY)) ~= nil then
+            if (tileHolder:getTileAtPos(newX, newY).structure) == nil then
+                table.insert(openTiles, {newX, newY})
+            end
+        end
+    end
+
+    if #openTiles == 0 then
+        return nil  -- No open adjacent tiles
+    end
+
+    local rand = math.random(1, #openTiles)
+    return tileHolder:getTileAtPos(openTiles[rand][1], openTiles[rand][2])
+end

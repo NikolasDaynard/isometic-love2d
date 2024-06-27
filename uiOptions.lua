@@ -20,6 +20,9 @@ function actionUi:tileLogic(tile)
             if oozeNum - tile.structure.level > 0 then -- this is right I promise
                 actions.upgradeCity = true
             end
+            if findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil then
+                actions.createTroop = true
+            end
         end
     end
     if tile.insideCity ~= true and tile.structure == nil and oozeNum - 3 >= 0 then
@@ -81,6 +84,10 @@ function actionUi:renderActions(tile)
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/upgrade.png")
             currentButton = currentButton + 1
         end
+        if actions.createTroop == true then
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/createTroop.png")
+            currentButton = currentButton + 1
+        end
         -- love.graphics.rectangle("fill", x, y, 300, 30)
     end
 end
@@ -104,6 +111,9 @@ function actionUi:execute()
     if actions.upgradeCity then
         table.insert(buttons, "upgrade")
     end
+    if actions.createTroop then
+        table.insert(buttons, "createTroop")
+    end
 
     print(buttons[self.currentButton])
 
@@ -115,9 +125,7 @@ function actionUi:execute()
         oozeNum = oozeNum - 3
         for  _, nearTiles in ipairs(tileHolder:getTiles()) do
             if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
-                if nearTiles.structure == nil then
-                    nearTiles.structure = {x = nearTiles.x, y = nearTiles.y, height = selectedTile.height, image = "images/testing.png", structure = nil}
-                end
+                nearTiles.image = "images/cityTile.png"
                 nearTiles.insideCity = true
             end
         end
@@ -128,13 +136,17 @@ function actionUi:execute()
         selectedTile.structure.level = selectedTile.structure.level + 1
         for  _, nearTiles in ipairs(tileHolder:getTiles()) do
             if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
-                if nearTiles.structure == nil then
-                    nearTiles.structure = {x = nearTiles.x, y = nearTiles.y, height = selectedTile.height, image = "images/testing.png", structure = nil}
-                end
+                nearTiles.image = "images/cityTile.png"
                 nearTiles.insideCity = true
             end
         end
         oozeNum = oozeNum - selectedTile.structure.level
+    elseif buttons[self.currentButton] == "createTroop" then
+        local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
+        print(tile)
+        print(selectedTile.x, selectedTile.y)
+        print(tile.x, tile.y)
+        tile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/3warrior.png", structure = nil}
     end
     
 
