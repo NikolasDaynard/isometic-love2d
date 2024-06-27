@@ -22,6 +22,7 @@ function actionUi:tileLogic(tile)
             if tile.structure.moved ~= true then
                 if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1).structure == nil then -- right
                     actions.moveRight = true
+                    table.insert(interactibleTiles.tiles, tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1))
                 end
                 if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1).structure == nil then -- left
                     actions.moveLeft = true
@@ -86,40 +87,49 @@ function actionUi:renderActions(tile)
         local currentButton = 1
         
         if actions.foundCity == true then
+            imageLib:drawImage(x + 31 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/foundCity.png")
             currentButton = currentButton + 1
         end
         if actions.build == true then
+            imageLib:drawImage(x + 31 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/build.png")
             currentButton = currentButton + 1
         end
         if actions.collect == true then
+            imageLib:drawImage(x + 31 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/collect.png")
             currentButton = currentButton + 1
         end
 
         if actions.moveLeft == true then
+            imageLib:drawImage(x + 31 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveleft.png")
             currentButton = currentButton + 1
         end
         if actions.moveRight == true then
+            imageLib:drawImage(x + 31 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveright.png")
             currentButton = currentButton + 1
         end
         if actions.moveUp == true then
+            imageLib:drawImage(x + 31 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveup.png")
             currentButton = currentButton + 1
         end
         if actions.moveDown == true then
+            imageLib:drawImage(x + 31 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/movedown.png")
             currentButton = currentButton + 1
         end
 
         if actions.upgradeCity == true then
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/upgrade.png")
             currentButton = currentButton + 1
         end
         if actions.createTroop == true then
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/createTroop.png")
             currentButton = currentButton + 1
         end
