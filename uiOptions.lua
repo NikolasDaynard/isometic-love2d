@@ -8,6 +8,13 @@ actionUi = {
     currentButton = -1
 }
 
+function moveTile(tile, newTile, movement)
+    newTile.structure = tile.structure
+    tile.structure = nil
+    newTile.structure.x = newTile.x
+    newTile.structure.y = newTile.y
+end
+
 function actionUi:tileLogic(tile)
     tiles = tileHolder:getTiles()
     actions = {}
@@ -23,15 +30,30 @@ function actionUi:tileLogic(tile)
                 if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1).structure == nil then -- right
                     actions.moveRight = true
                     table.insert(interactibleTiles.tiles, tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1))
+                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                        moveTile(tile, newTile, "right")
+                    end
                 end
                 if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1).structure == nil then -- left
                     actions.moveLeft = true
+                    table.insert(interactibleTiles.tiles, tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1))
+                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                        moveTile(tile, newTile, "left")
+                    end
                 end
                 if tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y).structure == nil then -- dow
                     actions.moveDown = true
+                    table.insert(interactibleTiles.tiles, tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y))
+                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                        moveTile(tile, newTile, "down")
+                    end
                 end
                 if tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y).structure == nil then -- up
                     actions.moveUp = true
+                    table.insert(interactibleTiles.tiles, tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y))
+                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                        moveTile(tile, newTile, "up")
+                    end
                 end
             end
             
@@ -101,28 +123,6 @@ function actionUi:renderActions(tile)
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/collect.png")
             currentButton = currentButton + 1
         end
-
-        if actions.moveLeft == true then
-            imageLib:drawImage(x + 31 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
-            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveleft.png")
-            currentButton = currentButton + 1
-        end
-        if actions.moveRight == true then
-            imageLib:drawImage(x + 31 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
-            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveright.png")
-            currentButton = currentButton + 1
-        end
-        if actions.moveUp == true then
-            imageLib:drawImage(x + 31 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
-            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveup.png")
-            currentButton = currentButton + 1
-        end
-        if actions.moveDown == true then
-            imageLib:drawImage(x + 31 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
-            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/movedown.png")
-            currentButton = currentButton + 1
-        end
-
         if actions.upgradeCity == true then
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/upgrade.png")
@@ -153,19 +153,6 @@ function actionUi:execute()
     end
     if actions.collect then
         table.insert(buttons, "collect")
-    end
-
-    if actions.moveLeft == true then
-        table.insert(buttons, "moveleft")
-    end
-    if actions.moveRight == true then
-        table.insert(buttons, "moveright")
-    end
-    if actions.moveUp == true then
-        table.insert(buttons, "moveup")
-    end
-    if actions.moveDown == true then
-        table.insert(buttons, "movedown")
     end
 
     if actions.upgradeCity then
@@ -210,30 +197,6 @@ function actionUi:execute()
         local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
         tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/drillwarriorTile.png", structure = nil}
         tile.structure.type = "troop"
-    elseif buttons[self.currentButton] == "moveright" then
-        local newTile = tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1)
-        newTile.structure = selectedTile.structure
-        newTile.structure.moved = true
-        selectedTile.structure = nil
-        newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
-    elseif buttons[self.currentButton] == "moveleft" then
-        local newTile = tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1)
-        newTile.structure = selectedTile.structure
-        newTile.structure.moved = true
-        selectedTile.structure = nil
-        newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
-    elseif buttons[self.currentButton] == "movedown" then
-        local newTile = tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y)
-        newTile.structure = selectedTile.structure
-        newTile.structure.moved = true
-        selectedTile.structure = nil
-        newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
-    elseif buttons[self.currentButton] == "moveup" then
-        local newTile = tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y)
-        newTile.structure = selectedTile.structure
-        newTile.structure.moved = true
-        selectedTile.structure = nil
-        newTile.structure.x, newTile.structure.y = newTile.x, newTile.y
     end
     
 

@@ -57,7 +57,7 @@ function love.update(dt)
             if love.mouse.isDown(1) then
                 for _, interactiveTile in ipairs(interactibleTiles.tiles) do
                     if tile.x == interactiveTile.x and tile.y == interactiveTile.y then
-                        -- interactibleTiles.callback(interactiveTile)
+                        interactiveTile.callback(selectedTile, interactiveTile) -- this, what click
                         interactibleTiles.tiles = {}
                         break
                     end
@@ -77,6 +77,7 @@ function love.update(dt)
                 end
             end
         else 
+            interactibleTiles.tiles = {}
             dragging = false
         end
     end
