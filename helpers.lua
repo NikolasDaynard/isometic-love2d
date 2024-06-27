@@ -54,3 +54,20 @@ function deepCopy(original)
     end
     return copy
 end
+-- Replaces ${foo} with the value of the global foo
+function interpolate(str)
+    if str == nil or type(str) ~= "string" then
+        return str
+    end
+
+    return (str:gsub("%${(.-)}", function(key)
+        local chunk, err = load("return " .. key)
+        if chunk then
+            local success, result = pcall(chunk)
+            if success then
+                return tostring(result)
+            end
+        end
+        return "${" .. key .. "}"
+    end))
+end

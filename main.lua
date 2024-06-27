@@ -9,8 +9,8 @@ require("helpers")
 Camera = require 'camera' 
 
 font = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 20)
+smallfont = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 10)
 
-player = tileHolder:newTile(5, 3, 1, "images/player.png")
 oozeNum = 10
 oozesPerTurn = 1
 
@@ -41,7 +41,7 @@ function love.update(dt)
     local mousey = cam:mousePosition().y
     local hitTile = false
     local hitUi = false
-    if love.mouse.isDown(1) and not dragging then
+    if not dragging then
         if actionUi:click(mousex, mousey) or ui:click(love.mouse.getX(), love.mouse.getY()) then
             hitUi = true
             dragging = true
@@ -103,7 +103,7 @@ function love.draw()
             isometricRenderer:renderTile({x = interactiveTile.x, y = interactiveTile.y, height = interactiveTile.height, image = interactiveTile.image or "images/testing.png", structure = nil, type = "interact"})
         end
     end
-    -- isometricRenderer:renderTile(player)
+
     cam:detach()
 
     ui:render()

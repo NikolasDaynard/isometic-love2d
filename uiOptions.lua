@@ -6,7 +6,9 @@ require("image")
 require("actions")
 
 actionUi = {
-    currentButton = -1
+    currentButton = -1,
+    tooltip = {x = 0, y = 0, text = ""},
+    tooltipTimer = 20,
 }
 
 function actionUi:tileLogic(tile)
@@ -14,7 +16,7 @@ function actionUi:tileLogic(tile)
     actionArray = {}
     for _, action in pairs(actions) do
         if action.check(tile) then
-            table.insert(actionArray, #OLDACTIONS + 1, action)
+            table.insert(actionArray, #actionArray + 1, action)
         end
     end
 
@@ -30,9 +32,13 @@ function actionUi:click(mouseX, mouseY)
 
         local i = 1
 
-        for action, _ in pairs(actionArray) do
+        for _, action in pairs(actionArray) do
             if clickHitButton(mouseX, mouseY, x + 40 + ((i - 1) * 18), y + 64 + 20 + 2, 6) then
-                self.currentButton = i
+                if love.mouse.isDown(1) then
+                    self.currentButton = i
+                else
+                    self.tooltip = {x = x + 40 + ((i - 1) * 18), y = y + 64 + 32, text = action.tooltip}
+                end
                 break
             end
             i = i + 1
@@ -41,15 +47,23 @@ function actionUi:click(mouseX, mouseY)
         if self.currentButton ~= -1 then
             return true
         end
-        if clickHitRect(mouseX, mouseY, x + 40, y + 64 + 16, 320, 16) then
+        if clickHitRect(mouseX, mouseY, x + 40, y + 64 + 16, 320, 16) and love.mouse.isDown(1) then
             return true
         end
-    else
-        return false -- no ui to click if ytou aint hit the thnnd
     end
+    return false-- no ui to click if ytou aint hit the thnnd
 end
 
 function actionUi:renderActions(tile) 
+    if self.tooltip ~= nil then
+        ui:renderTooltip(self.tooltip.text, self.tooltip.x, self.tooltip.y)
+        
+        self.tooltipTimer = self.tooltipTimer - 1
+        if self.tooltipTimer == 0 then
+            self.tooltip = nil
+            self.tooltipTimer = 20
+        end
+    end
     actionArray = actionUi:tileLogic(tile)
     local x = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).x
     local y = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).y

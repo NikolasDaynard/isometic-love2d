@@ -2,6 +2,7 @@ require("helpers")
 
 actions = {
     foundCity = {
+        tooltip = "Build a new slime city",
         image = "images/icons/foundCity.png",
         check = function(tile)
             return tile.insideCity ~= true and tile.structure == nil and oozeNum - 3 >= 0
@@ -21,6 +22,7 @@ actions = {
         end
     },
     build = {
+        tooltip = "Build a slime factory (-2 (+1))",
         image = "images/icons/build.png",
         check = function(tile)
             return tile.structure == nil and oozeNum - 2 >= 0
@@ -32,11 +34,12 @@ actions = {
         end
     },
     upgradeCity = {
+        tooltip = "Increace city radius (-${selectedTile.structure.level}",
         image = "images/icons/upgrade.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "city" then
-                    return oozeNum - tile.structure.level > 0
+                    return oozeNum - tile.structure.level >= 0
                 end
             end
             return false
@@ -53,6 +56,7 @@ actions = {
         end
     },
     createTroop = {
+        tooltip = "Create sawslime (-2)",
         image = "images/icons/createTroop.png",
         check = function(tile)
             if tile.structure ~= nil then
@@ -70,6 +74,7 @@ actions = {
         end
     },
     collect = {
+        tooltip = "Collect slime (+1)",
         image = "images/icons/collect.png",
         check = function(tile)
             if tile.structure ~= nil then
@@ -94,44 +99,23 @@ actions = {
             return false
         end,
         action = function()
-            if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1).structure == nil then -- right
-                local tileCopy = deepCopy(tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1))
-                tileCopy.image = "images/move.png"
-                table.insert(interactibleTiles.tiles, tileCopy)
-                interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
-                    actions.moveTroop.moveTile(tile, newTile)
-                end
-            end
-            
-            if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1).structure == nil then -- left
-                local tileCopy = deepCopy(tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1))
-                tileCopy.image = "images/move.png"
-                table.insert(interactibleTiles.tiles, tileCopy)
-                interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
-                    actions.moveTroop.moveTile(tile, newTile)
-                end
-            end
-            
-            if tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y).structure == nil then -- down
-                local tileCopy = deepCopy(tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y))
-                tileCopy.image = "images/move.png"
-                table.insert(interactibleTiles.tiles, tileCopy)
-                interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
-                    actions.moveTroop.moveTile(tile, newTile)
-                end
-            end
-            
-            if tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y).structure == nil then -- up
-                local tileCopy = deepCopy(tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y))
-                tileCopy.image = "images/move.png"
-                table.insert(interactibleTiles.tiles, tileCopy)
-                interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
-                    actions.moveTroop.moveTile(tile, newTile)
+            directions = {{-1, 0}, {1, 0}, {-1, 1}, {-1, -1}, 
+                {0, -1}, {0, 1}, {1, 1}, {1, -1}}
+
+            for _, direction in ipairs(directions) do
+                local dx, dy = direction[1], direction[2]
+                local targetTile = tileHolder:getTileAtPos(selectedTile.x + dx, selectedTile.y + dy)
+                if targetTile and targetTile.structure == nil then
+                    local tileCopy = deepCopy(targetTile)
+                    tileCopy.image = "images/move.png"
+                    table.insert(interactibleTiles.tiles, tileCopy)
+                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                        actions.moveTroop.moveTile(tile, newTile)
+                    end
                 end
             end
         end,
-        moveTile = function(tile, newTile, movement)
-            print("moce")
+        moveTile = function(tile, newTile)
             newTile.structure = selectedTile.structure
             selectedTile.structure = nil
             newTile.structure.x = newTile.x
