@@ -1,6 +1,7 @@
+require("helpers")
+
 actions = {
     foundCity = {
-        name = "foundCity",
         image = "images/icons/foundCity.png",
         check = function(tile)
             return tile.insideCity ~= true and tile.structure == nil and oozeNum - 3 >= 0
@@ -20,7 +21,6 @@ actions = {
         end
     },
     build = {
-        name = "build",
         image = "images/icons/build.png",
         check = function(tile)
             return tile.structure == nil and oozeNum - 2 >= 0
@@ -32,7 +32,6 @@ actions = {
         end
     },
     upgradeCity = {
-        name = "upgradeCity",
         image = "images/icons/upgrade.png",
         check = function(tile)
             if tile.structure ~= nil then
@@ -54,7 +53,6 @@ actions = {
         end
     },
     createTroop = {
-        name = "createTroop",
         image = "images/icons/createTroop.png",
         check = function(tile)
             if tile.structure ~= nil then
@@ -72,7 +70,6 @@ actions = {
         end
     },
     collect = {
-        name = "collect",
         image = "images/icons/collect.png",
         check = function(tile)
             if tile.structure ~= nil then
@@ -84,4 +81,61 @@ actions = {
             oozeNum = oozeNum + 1
         end
     },
+    moveTroop = {
+        check = function(tile)
+            -- interactive tile here
+            if tile.structure ~= nil then
+                if tile.structure.type == "troop" then
+                    if tile.structure.moved ~= true then
+                        actions.moveTroop.action()
+                    end
+                end
+            end
+            return false
+        end,
+        action = function()
+            if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1).structure == nil then -- right
+                local tileCopy = deepCopy(tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1))
+                tileCopy.image = "images/move.png"
+                table.insert(interactibleTiles.tiles, tileCopy)
+                interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                    actions.moveTroop.moveTile(tile, newTile)
+                end
+            end
+            
+            if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1).structure == nil then -- left
+                local tileCopy = deepCopy(tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1))
+                tileCopy.image = "images/move.png"
+                table.insert(interactibleTiles.tiles, tileCopy)
+                interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                    actions.moveTroop.moveTile(tile, newTile)
+                end
+            end
+            
+            if tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y).structure == nil then -- down
+                local tileCopy = deepCopy(tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y))
+                tileCopy.image = "images/move.png"
+                table.insert(interactibleTiles.tiles, tileCopy)
+                interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                    actions.moveTroop.moveTile(tile, newTile)
+                end
+            end
+            
+            if tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y).structure == nil then -- up
+                local tileCopy = deepCopy(tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y))
+                tileCopy.image = "images/move.png"
+                table.insert(interactibleTiles.tiles, tileCopy)
+                interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                    actions.moveTroop.moveTile(tile, newTile)
+                end
+            end
+        end,
+        moveTile = function(tile, newTile, movement)
+            print("moce")
+            newTile.structure = selectedTile.structure
+            selectedTile.structure = nil
+            newTile.structure.x = newTile.x
+            newTile.structure.y = newTile.y
+        end
+    }
 }

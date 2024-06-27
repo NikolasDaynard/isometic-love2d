@@ -57,13 +57,15 @@ function love.update(dt)
             if love.mouse.isDown(1) then
                 for _, interactiveTile in ipairs(interactibleTiles.tiles) do
                     if tile.x == interactiveTile.x and tile.y == interactiveTile.y then
-                        interactiveTile.callback(selectedTile, interactiveTile) -- this, what click
+                        interactiveTileTile = tileHolder:getTileAtPos(interactiveTile.x, interactiveTile.y)
+                        interactiveTile.callback(selectedTile, interactiveTileTile) -- this, what click
                         interactibleTiles.tiles = {}
                         break
                     end
                 end
             end
         end
+
         drag_offset_x, drag_offset_y = love.mouse.getPosition() -- needs to stop snapping
         if love.mouse.isDown(1) then
             if not dragging then
@@ -98,7 +100,7 @@ function love.draw()
     end
     if interactibleTiles.tiles and next(interactibleTiles.tiles) then
         for _, interactiveTile in ipairs(interactibleTiles.tiles) do
-            isometricRenderer:renderTile({x = interactiveTile.x, y = interactiveTile.y, height = interactiveTile.height, image = "images/testing.png", structure = nil, type = "interact"})
+            isometricRenderer:renderTile({x = interactiveTile.x, y = interactiveTile.y, height = interactiveTile.height, image = interactiveTile.image or "images/testing.png", structure = nil, type = "interact"})
         end
     end
     -- isometricRenderer:renderTile(player)

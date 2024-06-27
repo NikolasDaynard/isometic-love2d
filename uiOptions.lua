@@ -9,75 +9,28 @@ actionUi = {
     currentButton = -1
 }
 
-function moveTile(tile, newTile, movement)
-    newTile.structure = tile.structure
-    tile.structure = nil
-    newTile.structure.x = newTile.x
-    newTile.structure.y = newTile.y
-end
-
 function actionUi:tileLogic(tile)
     tiles = tileHolder:getTiles()
-    OLDACTIONS = {}
+    actionArray = {}
     for _, action in pairs(actions) do
         if action.check(tile) then
-            table.insert(OLDACTIONS, #OLDACTIONS + 1, action)
+            table.insert(actionArray, #OLDACTIONS + 1, action)
         end
     end
 
-    -- OLDACTIONS.build = actions.build.check(tile)
-    -- OLDACTIONS.collect = actions.collect.check(tile)
-    -- OLDACTIONS.upgradeCity = actions.upgradeCity.check(tile)
-    -- OLDACTIONS.upgradeCity = actions.upgradeCity.check(tile)
-    -- OLDACTIONS.createTroop = actions.createTroop.check(tile)
-    -- OLDACTIONS.foundCity = actions.foundCity.check(tile)
-    if tile.structure ~= nil then
-        if tile.structure.type == "troop" then
-            if tile.structure.moved ~= true then
-                if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1).structure == nil then -- right
-                    OLDACTIONS.moveRight = true
-                    table.insert(interactibleTiles.tiles, tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1))
-                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
-                        moveTile(tile, newTile, "right")
-                    end
-                end
-                if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1).structure == nil then -- left
-                    OLDACTIONS.moveLeft = true
-                    table.insert(interactibleTiles.tiles, tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1))
-                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
-                        moveTile(tile, newTile, "left")
-                    end
-                end
-                if tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y).structure == nil then -- dow
-                    OLDACTIONS.moveDown = true
-                    table.insert(interactibleTiles.tiles, tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y))
-                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
-                        moveTile(tile, newTile, "down")
-                    end
-                end
-                if tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y).structure == nil then -- up
-                    OLDACTIONS.moveUp = true
-                    table.insert(interactibleTiles.tiles, tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y))
-                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
-                        moveTile(tile, newTile, "up")
-                    end
-                end
-            end
-        end
-    end
-    return OLDACTIONS
+    return actionArray
 end
 
 function actionUi:click(mouseX, mouseY)
     self.currentButton = -1
     if selectedTile ~= nil then
-        OLDACTIONS = actionUi:tileLogic(selectedTile)
+        actionArray = actionUi:tileLogic(selectedTile)
         local x = IsoCordToWorldSpace(selectedTile.x, selectedTile.y, selectedTile.height, isometricRenderer.rotation).x
         local y = IsoCordToWorldSpace(selectedTile.x, selectedTile.y, selectedTile.height, isometricRenderer.rotation).y
 
         local i = 1
 
-        for action, _ in pairs(OLDACTIONS) do
+        for action, _ in pairs(actionArray) do
             if clickHitButton(mouseX, mouseY, x + 40 + ((i - 1) * 18), y + 64 + 20 + 2, 6) then
                 self.currentButton = i
                 break
@@ -97,22 +50,20 @@ function actionUi:click(mouseX, mouseY)
 end
 
 function actionUi:renderActions(tile) 
-    OLDACTIONS = actionUi:tileLogic(tile)
+    actionArray = actionUi:tileLogic(tile)
     local x = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).x
     local y = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).y
-    
-    imageLib:drawImage(x + 16, y + 16 + 20, "images/uiactions.png") -- it's 64x64
+    if #actionArray ~= 0 then
+        imageLib:drawImage(x + 16, y + 16 + 20, "images/uiactions.png") -- it's 64x64
 
-    local currentButton = 1
-    print(#OLDACTIONS)
-    for _, action in ipairs(OLDACTIONS) do
-        print("render")
-        imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
-        imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, action.image)
-        currentButton = currentButton + 1
+        local currentButton = 1
+        for _, action in ipairs(actionArray) do
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, action.image)
+            currentButton = currentButton + 1
+        end
+        imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 13, "images/actionCap.png")
     end
-    imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 13, "images/actionCap.png")
-    -- love.graphics.rectangle("fill", x, y, 300, 30)
 end
 
 function actionUi:execute()
@@ -120,10 +71,10 @@ function actionUi:execute()
         return
     end
 
-    OLDACTIONS = actionUi:tileLogic(selectedTile)
+    actionArray = actionUi:tileLogic(selectedTile)
     buttons = {}
     buttonNum = 1
-    for _, action in ipairs(OLDACTIONS) do
+    for _, action in ipairs(actionArray) do
         if buttonNum == self.currentButton then
             action.action()
             break
