@@ -17,15 +17,24 @@ function actionUi:tileLogic(tile)
         if tile.structure.type == "ooze" and tile.insideCity == true then
             actions.collect = true
         elseif tile.structure.type == "troop" then
-            actions.move = true
-            actions.move1 = true
-            actions.move2 = true
-            actions.move3 = true
+            if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1).structure == nil then -- right
+                actions.moveRight = true
+            end
+            if tileHolder:getTileAtPos(selectedTile.x, selectedTile.y - 1).structure == nil then -- left
+                actions.moveLeft = true
+            end
+            if tileHolder:getTileAtPos(selectedTile.x + 1, selectedTile.y).structure == nil then -- dow
+                actions.moveDown = true
+            end
+            if tileHolder:getTileAtPos(selectedTile.x - 1, selectedTile.y).structure == nil then -- up
+                actions.moveUp = true
+            end
+            
         elseif tile.structure.type == "city" then
             if oozeNum - tile.structure.level > 0 then -- this is right I promise
                 actions.upgradeCity = true
             end
-            if findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil then
+            if findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and oozeNum - 2 >= 0 then
                 actions.createTroop = true
             end
         end
@@ -85,16 +94,24 @@ function actionUi:renderActions(tile)
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/collect.png")
             currentButton = currentButton + 1
         end
-        if actions.move == true then
-            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveup.png")
-            currentButton = currentButton + 1
-            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/movedown.png")
-            currentButton = currentButton + 1
+
+        if actions.moveLeft == true then
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveleft.png")
             currentButton = currentButton + 1
+        end
+        if actions.moveRight == true then
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveright.png")
             currentButton = currentButton + 1
         end
+        if actions.moveUp == true then
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveup.png")
+            currentButton = currentButton + 1
+        end
+        if actions.moveDown == true then
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/movedown.png")
+            currentButton = currentButton + 1
+        end
+
         if actions.upgradeCity == true then
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/upgrade.png")
             currentButton = currentButton + 1
@@ -123,12 +140,20 @@ function actionUi:execute()
     if actions.collect then
         table.insert(buttons, "collect")
     end
-    if actions.move then
-        table.insert(buttons, "moveup")
-        table.insert(buttons, "movedown")
+
+    if actions.moveLeft == true then
         table.insert(buttons, "moveleft")
+    end
+    if actions.moveRight == true then
         table.insert(buttons, "moveright")
     end
+    if actions.moveUp == true then
+        table.insert(buttons, "moveup")
+    end
+    if actions.moveDown == true then
+        table.insert(buttons, "movedown")
+    end
+
     if actions.upgradeCity then
         table.insert(buttons, "upgrade")
     end
@@ -146,7 +171,6 @@ function actionUi:execute()
         oozeNum = oozeNum - 3
         for  _, nearTiles in ipairs(tileHolder:getTiles()) do
             if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
-                nearTiles.height = nearTiles.height + 1
                 nearTiles.image = "images/cityTile.png"
                 nearTiles.insideCity = true
             end
@@ -164,8 +188,9 @@ function actionUi:execute()
         end
         oozeNum = oozeNum - selectedTile.structure.level
     elseif buttons[self.currentButton] == "createTroop" then
+        oozeNum = oozeNum - 2
         local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
-        tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/player.png", structure = nil}
+        tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/drillwarriorTile.png", structure = nil}
         tile.structure.type = "troop"
     elseif buttons[self.currentButton] == "moveright" then
         local newTile = tileHolder:getTileAtPos(selectedTile.x, selectedTile.y + 1)
