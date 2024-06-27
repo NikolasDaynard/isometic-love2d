@@ -40,8 +40,8 @@ function actionUi:click(mouseX, mouseY)
     self.currentButton = -1
     if selectedTile ~= nil then
         actions = actionUi:tileLogic(selectedTile)
-        local x = IsoCordToWorldSpace(selectedTile.x, selectedTile.y, selectedTile.height).x
-        local y = IsoCordToWorldSpace(selectedTile.x, selectedTile.y, selectedTile.height).y
+        local x = IsoCordToWorldSpace(selectedTile.x, selectedTile.y, selectedTile.height, isometricRenderer.rotation).x
+        local y = IsoCordToWorldSpace(selectedTile.x, selectedTile.y, selectedTile.height, isometricRenderer.rotation).y
 
         local i = 1
         for action, _ in pairs(actions) do
@@ -65,8 +65,8 @@ end
 
 function actionUi:renderActions(tile) 
     actions = actionUi:tileLogic(tile)
-    local x = IsoCordToWorldSpace(tile.x, tile.y, tile.height).x
-    local y = IsoCordToWorldSpace(tile.x, tile.y, tile.height).y
+    local x = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).x
+    local y = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).y
     if not(next(actions) == nil) then
         imageLib:drawImage(x + 16, y + 16 + 20, "images/uiActions.png") -- it's 64x64
         imageLib:drawImage(x + 74, y + 64 + 13, "images/actionCap.png")
@@ -87,10 +87,13 @@ function actionUi:renderActions(tile)
         end
         if actions.move == true then
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveup.png")
-            imageLib:drawImage(x + 32 + ((currentButton) * 18), y + 64 + 12 + 2, "images/icons/movedown.png")
-            imageLib:drawImage(x + 32 + ((currentButton + 1) * 18), y + 64 + 12 + 2, "images/icons/moveleft.png")
-            imageLib:drawImage(x + 32 + ((currentButton + 2) * 18), y + 64 + 12 + 2, "images/icons/moveright.png")
-            currentButton = currentButton + 4
+            currentButton = currentButton + 1
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/movedown.png")
+            currentButton = currentButton + 1
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveleft.png")
+            currentButton = currentButton + 1
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/moveright.png")
+            currentButton = currentButton + 1
         end
         if actions.upgradeCity == true then
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, "images/icons/upgrade.png")
@@ -143,6 +146,7 @@ function actionUi:execute()
         oozeNum = oozeNum - 3
         for  _, nearTiles in ipairs(tileHolder:getTiles()) do
             if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
+                nearTiles.height = nearTiles.height + 1
                 nearTiles.image = "images/cityTile.png"
                 nearTiles.insideCity = true
             end

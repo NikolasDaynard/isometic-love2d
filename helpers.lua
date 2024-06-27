@@ -1,10 +1,13 @@
 function distance(x1, y1, x2, y2)
   return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
 end
-function IsoCordToWorldSpace(x, y, height)
+function IsoCordToWorldSpace(x, y, height, rotation)
+    rotation = rotation or 0
+    local rotX, rotY = isometricRenderer:rotateCoords(x, y, rotation)
+
     height = height or 1
-    local tileX = y * 32 + ((x % 2) * 16)
-    local tileY = (x * 5) + (height * 16) - 24
+    local tileX = rotY * 32 + ((rotX % 2) * 16)
+    local tileY = (rotX * 5) + (height * 16) - 24
 
     return {x = tileX, y = tileY}
 end

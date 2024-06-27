@@ -8,13 +8,15 @@ isometricRenderer = {
 -- 32 between levels
 -- 16 per x
 
-local function rotateCoords(x, y, rotation)
+local maxSizeX = 100 * 32
+
+function isometricRenderer:rotateCoords(x, y, rotation)
     if rotation == 90 then
-        return y, -x
+        return y + 30, -x + 50
     elseif rotation == 180 then
-        return -x, -y
+        return -x + 100, -y + 30
     elseif rotation == 270 then
-        return -y, x
+        return -y + 50, x - 50
     else
         return x, y
     end
@@ -32,13 +34,13 @@ function isometricRenderer:render(rotation)
 
     -- Sort tiles to ensure correct rendering order
     table.sort(tiles, function(a, b)
-        local ax, ay = rotateCoords(a.x, a.y, rotation)
-        local bx, by = rotateCoords(b.x, b.y, rotation)
+        local ax, ay = isometricRenderer:rotateCoords(a.x, a.y, rotation)
+        local bx, by = isometricRenderer:rotateCoords(b.x, b.y, rotation)
         return (ax < bx) or (ax == bx and ay < by)
     end)
 
     for _, tile in ipairs(tiles) do
-        local x, y = rotateCoords(tile.x, tile.y, rotation)
+        local x, y = isometricRenderer:rotateCoords(tile.x, tile.y, rotation)
 
         if tile ~= selectedTile then
             imageLib:drawImage(y * 32 + ((math.abs(x) % 2) * 16), (x * 5) + (tile.height * 16), tile.image)
@@ -72,7 +74,7 @@ end
     -- end
 -- end
 function isometricRenderer:renderTile(tile)
-    local x, y = rotateCoords(tile.x, tile.y, self.rotation)
+    local x, y = isometricRenderer:rotateCoords(tile.x, tile.y, self.rotation)
 
     -- iteractable tiles go above
     imageLib:drawImage(y * 32 + ((x % 2) * 16), (x * 5) + (tile.height * 16) - 14, tile.image)
@@ -81,14 +83,14 @@ end
 function isometricRenderer:whatTileClickHit(x, y)
     local bestTile = nil
     for  _, tile in ipairs(tileHolder:getTiles()) do
-        local tileX = IsoCordToWorldSpace(tile.x, tile.y, tile.height).x
-        local tileY = IsoCordToWorldSpace(tile.x, tile.y, tile.height).y
+        local tileX = IsoCordToWorldSpace(tile.x, tile.y, tile.height, self.rotation).x
+        local tileY = IsoCordToWorldSpace(tile.x, tile.y, tile.height, self.rotation).y
         if x > tileX and x < tileX + 32 and y > tileY and y < tileY + 32 then
             if bestTile == nil then
                 bestTile = tile
             else
-                local bestTileX = bestTile.y * 32 + ((bestTile.x % 2) * 16)
-                local bestTileY = (bestTile.x * 5) + (bestTile.height * 16) - 24
+                local bestTileX = IsoCordToWorldSpace(bestTile.x, bestTile.y, bestTile.height, self.rotation).x
+                local bestTileY = IsoCordToWorldSpace(bestTile.x, bestTile.y, bestTile.height, self.rotation).y
                 if bestTileY > tileY then
                     bestTile = tile
                 end

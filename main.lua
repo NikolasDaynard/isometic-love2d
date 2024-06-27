@@ -20,6 +20,7 @@ function love.load()
 end
 
 local dragging = false
+local clickedRotate = false
 local drag_offset_x, drag_offset_y = 0, 0
 selectedTile = nil
 
@@ -85,13 +86,31 @@ function love.update(dt)
     end
 
     if love.keyboard.isDown("1") then
-        currentRot = 0
+        if not clickedRotate then
+            currentRot = 0
+            clickedRotate = true
+        end
     elseif love.keyboard.isDown("2") then
-        currentRot = 90
+        if not clickedRotate then
+            currentRot = 90
+            clickedRotate = true
+        end
     elseif love.keyboard.isDown("3") then
-        currentRot = 180
+        if not clickedRotate then
+            currentRot = 180
+            clickedRotate = true
+        end
     elseif love.keyboard.isDown("4") then
-        currentRot = 270
+        if not clickedRotate then
+            currentRot = 270
+            clickedRotate = true
+        end
+    else
+        clickedRotate = false
+    end
+    if clickedRotate and selectedTile then
+        local newCamPos = IsoCordToWorldSpace(selectedTile.x, selectedTile.y, selectedTile.height, currentRot)
+        cam:lookAt(newCamPos.x, newCamPos.y)
     end
 
     if not hitTile and not hitUi then
