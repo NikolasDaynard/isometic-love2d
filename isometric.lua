@@ -48,7 +48,7 @@ function isometricRenderer:render(rotation)
             imageLib:drawImage(y * 32 + ((math.abs(x) % 2) * 16), (x * 5) + (tile.height * 16), "images/tileselected.png")
         end
         if tile.structure ~= nil then
-            isometricRenderer:renderTile(tile.structure, (tile.height * 16))
+            isometricRenderer:renderTile(tile.structure)
         end
         if tile.insideCity then
             local x, y = tile.x, tile.y

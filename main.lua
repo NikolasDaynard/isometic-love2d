@@ -6,6 +6,7 @@ require("tiles")
 require("uiOptions")
 require("ui")
 require("helpers")
+require("menu")
 Camera = require 'camera' 
 
 font = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 20)
@@ -36,13 +37,17 @@ function love.update(dt)
         -- disabled for faster dev
         -- love.timer.sleep(1) -- .5 is less delay but .6 more cpu points
     end
+
+    menu:update()
     
     local mousex = cam:mousePosition().x
     local mousey = cam:mousePosition().y
     local hitTile = false
     local hitUi = false
     if not dragging then
-        if actionUi:click(mousex, mousey) or ui:click(love.mouse.getX(), love.mouse.getY()) then
+        if menu.open then
+            menu:click(love.mouse.getX(), love.mouse.getY())
+        elseif actionUi:click(mousex, mousey) or ui:click(love.mouse.getX(), love.mouse.getY()) then
             hitUi = true
             dragging = true
         end
@@ -107,6 +112,7 @@ function love.draw()
     cam:detach()
 
     ui:render()
+    menu:render()
 end
 
 function windowUpdate()
