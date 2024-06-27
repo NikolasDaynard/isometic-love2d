@@ -62,7 +62,7 @@ function love.update(dt)
             if love.mouse.isDown(1) then
                 for _, interactiveTile in ipairs(interactibleTiles.tiles) do
                     if tile.x == interactiveTile.x and tile.y == interactiveTile.y then
-                        interactiveTileTile = tileHolder:getTileAtPos(interactiveTile.x, interactiveTile.y)
+                        local interactiveTileTile = tileHolder:getTileAtPos(interactiveTile.x, interactiveTile.y)
                         interactiveTile.callback(selectedTile, interactiveTileTile) -- this, what click
                         interactibleTiles.tiles = {}
                         break
@@ -111,8 +111,8 @@ function love.draw()
 
     cam:detach()
 
-    ui:render()
     menu:render()
+    ui:render()
 end
 
 function windowUpdate()

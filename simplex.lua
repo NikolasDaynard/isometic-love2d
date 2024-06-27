@@ -1,3 +1,4 @@
+---@diagnostic disable: deprecated
 -----------------------------------------------
 ---Simplex Noise
 -- Original Java Source: http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
