@@ -6,14 +6,14 @@ actions = {
         tooltip = "Build a new slime city",
         image = "images/icons/foundCity.png",
         check = function(tile)
-            return tile.insideCity ~= true and tile.structure == nil and oozeNum - 3 >= 0
+            return tile.insideCity ~= true and tile.structure == nil and playerStat[currentPlayer].oozeNum - 3 >= 0
         end,
         action = function()
             selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/player.png", structure = nil}
             selectedTile.structure.type = "city"
             selectedTile.insideCity = true
             selectedTile.structure.level = 3
-            oozeNum = oozeNum - 3
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
             for  _, nearTiles in ipairs(tileHolder:getTiles()) do
                 if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
                     nearTiles.image = "images/tiles/cityTile.png"
@@ -27,11 +27,11 @@ actions = {
         tooltip = "Build a slime factory (-2 (+1))",
         image = "images/icons/build.png",
         check = function(tile)
-            return tile.structure == nil and oozeNum - 2 >= 0
+            return tile.structure == nil and playerStat[currentPlayer].oozeNum - 2 >= 0
         end,
         action = function()
-            oozeNum = oozeNum - 2
-            oozesPerTurn = oozesPerTurn + 1
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
+            playerStat[currentPlayer].oozesPerTurn = playerStat[currentPlayer].oozesPerTurn + 1
             selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/refinery.png", structure = nil}
         end
     },
@@ -41,7 +41,7 @@ actions = {
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "city" then
-                    return oozeNum - tile.structure.level >= 0
+                    return playerStat[currentPlayer].oozeNum - tile.structure.level >= 0
                 end
             end
             return false
@@ -52,9 +52,10 @@ actions = {
                 if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
                     nearTiles.image = "images/tiles/cityTile.png"
                     nearTiles.insideCity = true
+                    selectedTile.control = currentPlayer
                 end
             end
-            oozeNum = oozeNum - selectedTile.structure.level
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - selectedTile.structure.level
         end
     },
     createSawSlime = {
@@ -63,16 +64,17 @@ actions = {
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "city" and menu.skills.sawSlime.earned == true then
-                    return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and oozeNum - 2 >= 0
+                    return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 2 >= 0
                 end
             end
             return false
         end,
         action = function()
-            oozeNum = oozeNum - 2
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
             tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/drillwarrior.png", structure = nil}
             tile.structure.type = "troop"
+            tile.control = currentPlayer
         end
     },
     create3Slime = {
@@ -81,16 +83,17 @@ actions = {
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "city" and menu.skills.slimes3.earned == true then
-                    return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and oozeNum - 3 >= 0
+                    return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 3 >= 0
                 end
             end
             return false
         end,
         action = function()
-            oozeNum = oozeNum - 3
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
             tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/3warrior.png", structure = nil}
-            tile.structure.type = "troop"
+            tile.structure.type = "fastTroop"
+            tile.control = currentPlayer
         end
     },
     createCrystalSlime = {
@@ -99,16 +102,17 @@ actions = {
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "city" and menu.skills.crystalSlime.earned == true then
-                    return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and oozeNum - 3 >= 0
+                    return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 3 >= 0
                 end
             end
             return false
         end,
         action = function()
-            oozeNum = oozeNum - 3
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
             tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/crystalwarrior.png", structure = nil}
             tile.structure.type = "troop"
+            tile.control = currentPlayer
         end
     },
     twistTroop = {
@@ -168,7 +172,7 @@ actions = {
         end,
         action = function()
             selectedTile.structure = nil
-            oozeNum = oozeNum + 1
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum + 1
         end
     },
     drill = {
@@ -181,7 +185,7 @@ actions = {
         end,
         action = function()
             selectedTile.structure = nil
-            oozeNum = oozeNum + 2
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum + 2
         end
     },
     moveTroop = {
@@ -190,35 +194,60 @@ actions = {
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" then
                     if tile.structure.moved ~= true then
-                        actions.moveTroop.action()
+                        moveTroopDist(1)
                     end
                 end
             end
             return false
         end,
-        action = function()
-            directions = {{-1, 0}, {1, 0}, {-1, 1}, {-1, -1}, 
-                {0, -1}, {0, 1}, {1, 1}, {1, -1}}
-
-            for _, direction in ipairs(directions) do
-                local dx, dy = direction[1], direction[2]
-                local targetTile = tileHolder:getTileAtPos(selectedTile.x + dx, selectedTile.y + dy)
-                if targetTile and targetTile.structure == nil then
-                    local tileCopy = deepCopy(targetTile)
-                    tileCopy.image = "images/move.png"
-                    table.insert(interactibleTiles.tiles, tileCopy)
-                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
-                        actions.moveTroop.moveTile(tile, newTile)
+    },
+    moveTroopFast = {
+        check = function(tile)
+            -- interactive tile here
+            if tile.structure ~= nil then
+                if tile.structure.type == "fastTroop" then
+                    if tile.structure.moved ~= true then
+                        moveTroopDist(2)
                     end
                 end
             end
+            return false
         end,
-        moveTile = function(tile, newTile)
-            newTile.structure = selectedTile.structure
-            selectedTile.structure = nil
-            newTile.structure.x = newTile.x
-            newTile.structure.y = newTile.y
-            newTile.structure.moved = true
-        end
     }
 }
+function moveTroopDist(distance)
+    local moveTile = function(tile, newTile)
+        newTile.structure = selectedTile.structure
+        selectedTile.structure = nil
+        newTile.structure.x = newTile.x
+        newTile.structure.y = newTile.y
+        newTile.structure.moved = true
+        newTile.control = selectedTile.control
+        if not selectedTile.insideCity then
+            selectedTile.control = nil
+        end
+        print(newTile.control)
+    end
+
+    local directions = {}
+    for dx = -distance, distance do
+        for dy = -distance, distance do
+            if math.abs(dx) <= distance and math.abs(dy) <= distance then
+                table.insert(directions, {dx, dy})
+            end
+        end
+    end
+
+    for _, direction in ipairs(directions) do
+        local dx, dy = direction[1], direction[2]
+        local targetTile = tileHolder:getTileAtPos(selectedTile.x + dx, selectedTile.y + dy)
+        if targetTile and targetTile.structure == nil then
+            local tileCopy = deepCopy(targetTile)
+            tileCopy.image = "images/move.png"
+            table.insert(interactibleTiles.tiles, tileCopy)
+            interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                moveTile(tile, newTile)
+            end
+        end
+    end
+end

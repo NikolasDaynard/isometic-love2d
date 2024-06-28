@@ -55,6 +55,9 @@ function isometricRenderer:render(rotation)
         if tile.structure ~= nil then
             isometricRenderer:renderTile(tile.structure)
         end
+        if tile.control == currentPlayer then
+            isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "images/testing.png", structure = nil})
+        end
         if tile.insideCity then
             local x, y = tile.x, tile.y
 

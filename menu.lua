@@ -150,8 +150,8 @@ function menu:click(x, y)
                     if not menu:isClickInButton(x, y, self.selectedSkill.x - 130, self.selectedSkill.y - 60, 320, 220) then
                         self.selectedSkill = nil
                     else
-                        if menu:isClickInButton(x, y, self.selectedSkill.x - 160, self.selectedSkill.y + 10, 320, 120) and oozeNum - self.selectedSkill.price >= 0 and self.selectedSkill.earned ~= true then
-                            oozeNum = oozeNum - self.selectedSkill.price
+                        if menu:isClickInButton(x, y, self.selectedSkill.x - 160, self.selectedSkill.y + 10, 320, 120) and playerStat[currentPlayer].oozeNum - self.selectedSkill.price >= 0 and self.selectedSkill.earned ~= true then
+                            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - self.selectedSkill.price
                             self.selectedSkill.earned = true
                             self.selectedSkill = nil
                         end

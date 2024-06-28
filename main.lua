@@ -16,9 +16,11 @@ smallfont:setFilter("nearest", "nearest")
 realbigfont = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 45)
 realbigfont:setFilter("nearest", "nearest")
 
-oozeNum = 10
-oozesPerTurn = 1
+-- playerStat[currentPlayer].oozeNum = 10
+-- playerStat[currentPlayer].oozesPerTurn = 1
 currentPlayer = 1
+playerStat = {{id = 1, oozesPerTurn = 1, oozeNum = 10},
+{id = 2, oozesPerTurn = 1, oozeNum = 10}}
 
 function love.load()
     love.graphics.setFont(font)

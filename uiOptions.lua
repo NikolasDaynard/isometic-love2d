@@ -15,8 +15,10 @@ function actionUi:tileLogic(tile)
     tiles = tileHolder:getTiles()
     actionArray = {}
     for _, action in pairs(actions) do
-        if action.check(tile) then
-            table.insert(actionArray, #actionArray + 1, action)
+        if (tile.control == currentPlayer or tile.control == nil) then
+            if action.check(tile) then
+                table.insert(actionArray, #actionArray + 1, action)
+            end
         end
     end
 
