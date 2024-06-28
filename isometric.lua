@@ -128,8 +128,7 @@ function isometricRenderer:renderTileBackground(tile)
     local scaleY = 34 / 32
 
     imageLib:drawImage(
-        y * 32 + ((x % 2) * 16) - 1, 
-        (x * 5) + (tile.height * 16) - 15, 
+        y * 32 + ((x % 2) * 16) - scaleX, (x * 5) + (tile.height * 16) - 14 - scaleY,
         tile.image, 
         scaleX, 
         scaleY

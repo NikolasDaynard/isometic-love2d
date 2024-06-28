@@ -37,6 +37,11 @@ description = "A slime with a mineral shoved into it's head, granting it mystica
 price = 3,
 link = function() return playerStat[currentPlayer].skills.drilling end
 }
+menu.skills.crystalize = {x = .1, y = -.35, earned = false, image = "images/skillTree/crystalizeSkill.png", text = "Crystal Slime",
+description = "A slime with extrodinary crystal coverage",
+price = 3,
+link = function() return playerStat[currentPlayer].skills.crystalSlime end
+}
 
 menu.skills.expand = {x = -.25, y = -.2, earned = false, image = "images/skillTree/expandSkill.png", text = "Expansion",
 description = "A blinding light alters the slime",
@@ -53,7 +58,7 @@ description = "A dark magic conceals the form of the slime until it moves for 1 
 price = 3,
 link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
-menu.skills.newtworkSlime = {x = .3, y = -.4, earned = false, image = "images/skillTree/networkwarriorSkill.png", text = "Network Slime",
+menu.skills.newtworkSlime = {x = .35, y = -.2, earned = false, image = "images/skillTree/networkwarriorSkill.png", text = "Network Slime",
 description = "A small unassuming slime hooked into a large ooze network, giving it regerative properties",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.slimes3 end
@@ -63,25 +68,25 @@ description = "A mysterious force crushes the slime and converts the tile into a
 price = 3,
 link = function() return playerStat[currentPlayer].skills.disguise end
 }
-menu.skills.slimeTrap = {x = .2, y = -.5, earned = false, image = "images/skillTree/slimeTrapSkill.png", text = "Slime Trap",
+menu.skills.slimeTrap = {x = .25, y = -.5, earned = false, image = "images/skillTree/slimeTrapSkill.png", text = "Slime Trap",
 description = "A mysterious force grabs the slime and crushes them",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.disguise end
 }
-menu.skills.slimescraper = {x = .05, y = -.5, earned = false, image = "images/skillTree/slimescraperSkill.png", text = "Slimescraper",
+menu.skills.slimescraper = {x = 0, y = -.3, earned = false, image = "images/skillTree/slimescraperSkill.png", text = "Slimescraper",
 description = "A big tower to put a lot of slimes",
 price = 3,
-link = function() return playerStat[currentPlayer].skills.disguise end
+link = function() return playerStat[currentPlayer].skills.drilling end
 }
-menu.skills.swapSkill = {x = -.25, y = -.5, earned = false, image = "images/skillTree/swapSkill.png", text = "Swap",
+menu.skills.swapSkill = {x = -.2, y = -.5, earned = false, image = "images/skillTree/swapSkill.png", text = "Swap",
 description = "A light force instantly swaps two slimes",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.twist end
 }
-menu.skills.slimeArrowSkill = {x = 0.05, y = -.6, earned = false, image = "images/skillTree/slimeArrowSkill.png", text = "Slime Arrow",
-description = "An arrow leveraging the power of slime",
+menu.skills.slimeArrowSkill = {x = 0.3, y = -.4, earned = false, image = "images/skillTree/slimeArrowSkill.png", text = "Slime Arrow",
+description = "A slime that shoots arrows from the cover of darkness",
 price = 3,
-link = function() return playerStat[currentPlayer].skills.twist end
+link = function() return playerStat[currentPlayer].skills.disguise end
 }
 
 local function menuToScreen(x, y)
