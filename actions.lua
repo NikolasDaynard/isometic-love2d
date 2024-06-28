@@ -27,7 +27,7 @@ actions = {
         tooltip = "Build a slime factory (-2 (+1))",
         image = "images/icons/build.png",
         check = function(tile)
-            return tile.structure == nil and playerStat[currentPlayer].oozeNum - 2 >= 0
+            return tile.control == currentPlayer and tile.structure == nil and playerStat[currentPlayer].oozeNum - 2 >= 0
         end,
         action = function()
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
@@ -52,7 +52,7 @@ actions = {
                 if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
                     nearTiles.image = "images/tiles/cityTile.png"
                     nearTiles.insideCity = true
-                    selectedTile.control = currentPlayer
+                    nearTiles.control = currentPlayer
                 end
             end
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - selectedTile.structure.level
@@ -63,7 +63,7 @@ actions = {
         image = "images/icons/createTroop.png",
         check = function(tile)
             if tile.structure ~= nil then
-                if tile.structure.type == "city" and menu.skills.sawSlime.earned == true then
+                if tile.structure.type == "city" and playerStat[currentPlayer].skills.sawSlime.earned == true then
                     return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 2 >= 0
                 end
             end
@@ -82,7 +82,7 @@ actions = {
         image = "images/icons/createTroop.png",
         check = function(tile)
             if tile.structure ~= nil then
-                if tile.structure.type == "city" and menu.skills.slimes3.earned == true then
+                if tile.structure.type == "city" and playerStat[currentPlayer].skills.slimes3.earned == true then
                     return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 3 >= 0
                 end
             end
@@ -101,7 +101,7 @@ actions = {
         image = "images/icons/createTroop.png",
         check = function(tile)
             if tile.structure ~= nil then
-                if tile.structure.type == "city" and menu.skills.crystalSlime.earned == true then
+                if tile.structure.type == "city" and playerStat[currentPlayer].skills.crystalSlime.earned == true then
                     return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 3 >= 0
                 end
             end
@@ -120,7 +120,7 @@ actions = {
         image = "images/icons/createTroop.png", -- TODO: finish this
         check = function(tile)
             if tile.structure ~= nil then
-                if tile.structure.type == "troop" and menu.skills.twist.earned == true then
+                if tile.structure.type == "troop" and playerStat[currentPlayer].skills.twist.earned == true then
                     return true
                 end
             end
@@ -135,7 +135,7 @@ actions = {
         image = "images/icons/createTroop.png", -- TODO: finish this
         check = function(tile)
             if tile.structure ~= nil then
-                if tile.structure.type == "troop" and menu.skills.disguise.earned == true then
+                if tile.structure.type == "troop" and playerStat[currentPlayer].skills.disguise.earned == true then
                     return true
                 end
             end
@@ -150,7 +150,7 @@ actions = {
         image = "images/icons/createTroop.png", -- TODO: finish this
         check = function(tile)
             if tile.structure ~= nil then
-                if tile.structure.type == "troop" and menu.skills.dissolve.earned == true and selectedTile.insideCity == false then
+                if tile.structure.type == "troop" and playerStat[currentPlayer].skills.dissolve.earned == true and selectedTile.insideCity == false then
                     return true
                 end
             end
@@ -180,7 +180,7 @@ actions = {
         image = "images/icons/drill.png",
         check = function(tile)
             if tile.structure ~= nil then
-                return tile.structure.type == "mineral" and tile.insideCity == true and menu.skills.drilling.earned == true
+                return tile.structure.type == "mineral" and tile.insideCity == true and playerStat[currentPlayer].skills.drilling.earned == true
             end
         end,
         action = function()

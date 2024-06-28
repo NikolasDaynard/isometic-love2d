@@ -75,38 +75,40 @@ function isometricRenderer:render(rotation)
             --     isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallLU.png", structure = nil})
             --     isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallRU.png", structure = nil})
             -- end
-            if not down.insideCity then
-                if not left_down.insideCity then -- down right
-                    isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallLD.png", structure = nil})
-                end
-                if not right_down.insideCity then -- down right
-                    isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallRD.png", structure = nil})
-                end
-            end
-            if not up.insideCity then
-                if not left_up.insideCity then
-                    isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallLU.png", structure = nil})
-                end
-                if not right_up.insideCity then
-                    isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallRU.png", structure = nil})
-                end
-            end
-            if not left.insideCity then
-                if not left_up.insideCity then
-                    isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallLU.png", structure = nil})
-                end
-                if not left_down.insideCity then
-                    isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallLD.png", structure = nil})
-                end
-            end
-            if not right.insideCity then
-                if not right_up.insideCity then
-                    isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallRU.png", structure = nil})
-                end
-                if not right_down.insideCity then
-                    isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallRD.png", structure = nil})
-                end
-            end
+
+            
+            -- if not down.insideCity then
+            --     if not left_down.insideCity then -- down right
+            --         isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallLD.png", structure = nil})
+            --     end
+            --     if not right_down.insideCity then -- down right
+            --         isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallRD.png", structure = nil})
+            --     end
+            -- end
+            -- if not up.insideCity then
+            --     if not left_up.insideCity then
+            --         isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallLU.png", structure = nil})
+            --     end
+            --     if not right_up.insideCity then
+            --         isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallRU.png", structure = nil})
+            --     end
+            -- end
+            -- if not left.insideCity then
+            --     if not left_up.insideCity then
+            --         isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallLU.png", structure = nil})
+            --     end
+            --     if not left_down.insideCity then
+            --         isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallLD.png", structure = nil})
+            --     end
+            -- end
+            -- if not right.insideCity then
+            --     if not right_up.insideCity then
+            --         isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallRU.png", structure = nil})
+            --     end
+            --     if not right_down.insideCity then
+            --         isometricRenderer:renderTile({x = x, y = y, height = tile.height, image = "images/citywallRD.png", structure = nil})
+            --     end
+            -- end
         end
     end
 end
