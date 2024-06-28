@@ -18,6 +18,7 @@ actions = {
                 if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
                     nearTiles.image = "images/tiles/cityTile.png"
                     nearTiles.insideCity = true
+                    nearTiles.control = currentPlayer
                 end
             end
         end

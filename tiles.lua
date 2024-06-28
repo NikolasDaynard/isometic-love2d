@@ -12,9 +12,7 @@ function tileHolder:newTile(x, y, height, image, type)
 end
 
 function tileHolder:getTileAtPos(x, y)
-    function tileHolder:getTileAtPos(x, y)
-        return self.tileMap[x .. "," .. y]
-    end
+    return self.tileMap[x .. "," .. y]
 end
 
 function tileHolder:getTiles()
@@ -43,6 +41,7 @@ function tileHolder:createMap()
                     oozeImg = "images/resources/ooze3.png"
                 end
                 newTile.structure = {x = i, y = j, height = 1, image = oozeImg, structure = nil, type = "ooze"}
+                newTile.control = nil
             end
             -- newTile.structure = {x = i, y = j, height = randHeight, image = "city.png", structure = nil}
         end

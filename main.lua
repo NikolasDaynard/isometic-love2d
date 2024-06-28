@@ -18,6 +18,7 @@ realbigfont:setFilter("nearest", "nearest")
 
 oozeNum = 10
 oozesPerTurn = 1
+currentPlayer = 1
 
 function love.load()
     love.graphics.setFont(font)

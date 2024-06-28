@@ -5,6 +5,7 @@
     "Lua.diagnostics.disable": [
         "inject-field",
         "undefined-field",
-        "need-check-nil"
+        "need-check-nil",
+        "lowercase-global"
     ]
 }
