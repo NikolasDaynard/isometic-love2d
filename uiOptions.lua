@@ -57,7 +57,7 @@ end
 function actionUi:renderActions(tile) 
     if self.tooltip ~= nil then
         ui:renderTooltip(self.tooltip.text, self.tooltip.x, self.tooltip.y)
-        
+
         self.tooltipTimer = self.tooltipTimer - 1
         if self.tooltipTimer == 0 then
             self.tooltip = nil
@@ -72,11 +72,15 @@ function actionUi:renderActions(tile)
 
         local currentButton = 1
         for _, action in ipairs(actionArray) do
-            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/ui/actionCont.png")
+            if currentButton == 1 then
+                imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/ui/actionCap.png")
+            else
+                imageLib:drawImage(x + 32 + ((currentButton - 1) * 18) - 7, y + 64 + 12 + 1, "images/ui/actionCapLong.png")
+            end
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, action.image)
             currentButton = currentButton + 1
         end
-        imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 13, "images/ui/actionCap.png")
+        -- imageLib:drawImage(x + 16 + ((#actionArray) * 18), y + 64 + 13, "images/ui/actionCap.png")
     end
 end
 

@@ -1,5 +1,7 @@
 require("ui")
 
+-- fracture? Splits target into a bunch of VERY weak, could be used for or against
+
 menu = {
     open = false,
     holdingEsc = false,
@@ -11,23 +13,7 @@ menu = {
         description = "3 slimes ready to fight for you, they all seem to have different priorities, but mostly fighting for you",
         price = 3,
         },
-        disguise = {x = .7, y = .5, earned = false, image = "images/skillTree/disguiseSkill.png", text = "Cloning",
-        description = "A dark magic conceals the form of the slime until it moves for 1 slime",
-        price = 3,
-        },
-        dissolve = {x = .7, y = .6, earned = false, image = "images/skillTree/dissolveSkill.png", text = "Dissolve",
-        description = "A mysterious force crushes the slime and converts the tile into a city tile",
-        price = 3,
-        },
-        expand = {x = .9, y = .5, earned = false, image = "images/skillTree/expandSkill.png", text = "Expansion",
-        description = "A blinding light alters the slime",
-        price = 3,
-        },
-        telekinisis = {x = 1, y = .5, earned = false, image = "images/skillTree/telekinisisSkill.png", text = "Telekinisis",
-        description = "A blinding force binds and harms slime",
-        price = 3,
-        },
-        twist = {x = 1.1, y = .5, earned = false, image = "images/skillTree/twistSkill.png", text = "Twist",
+        twist = {x = -.2, y = 0, earned = false, image = "images/skillTree/twistSkill.png", text = "Twist",
         description = "A white light twists the slime and converts it into another unit",
         price = 3,
         },
@@ -45,6 +31,27 @@ menu.skills.sawSlime = {x = 0, y = -.2, earned = false, image = "images/skillTre
     description = "A slime engineered to spin ooze at a high speed turning it into the perfect drilling machine",
     price = 3,
     link = menu.skills.drilling
+}
+
+menu.skills.expand = {x = -.25, y = -.2, earned = false, image = "images/skillTree/expandSkill.png", text = "Expansion",
+description = "A blinding light alters the slime",
+price = 3,
+link = menu.skills.twist
+}
+menu.skills.telekinisis = {x = -.25, y = -.4, earned = false, image = "images/skillTree/telekinisisSkill.png", text = "Telekinisis",
+description = "A blinding force binds and harms slime",
+price = 3,
+link = menu.skills.expand
+}
+menu.skills.disguise = {x = .25, y = -.2, earned = false, image = "images/skillTree/disguiseSkill.png", text = "Cloning",
+description = "A dark magic conceals the form of the slime until it moves for 1 slime",
+price = 3,
+link = menu.skills.slimes3
+}
+menu.skills.dissolve = {x = .25, y = -.4, earned = false, image = "images/skillTree/dissolveSkill.png", text = "Dissolve",
+description = "A mysterious force crushes the slime and converts the tile into a city tile",
+price = 3,
+link = menu.skills.disguise
 }
 
 local function menuToScreen(x, y)

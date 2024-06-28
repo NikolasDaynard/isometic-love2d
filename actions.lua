@@ -56,7 +56,7 @@ actions = {
             oozeNum = oozeNum - selectedTile.structure.level
         end
     },
-    createTroop = {
+    createSawSlime = {
         tooltip = "Create sawslime (-2)",
         image = "images/icons/createTroop.png",
         check = function(tile)
@@ -72,6 +72,54 @@ actions = {
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
             tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/drillwarrior.png", structure = nil}
             tile.structure.type = "troop"
+        end
+    },
+    create3Slime = {
+        tooltip = "Create a Triple Slime (-3)",
+        image = "images/icons/createTroop.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "city" and menu.skills.slimes3.earned == true then
+                    return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and oozeNum - 3 >= 0
+                end
+            end
+            return false
+        end,
+        action = function()
+            oozeNum = oozeNum - 3
+            local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/3warrior.png", structure = nil}
+            tile.structure.type = "troop"
+        end
+    },
+    twistTroop = {
+        tooltip = "Twists around the troop and alters it's type",
+        image = "images/icons/createTroop.png", -- TODO: finish this
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "troop" and menu.skills.twist.earned == true then
+                    return true
+                end
+            end
+            return false
+        end,
+        action = function()
+            selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/troops/3warrior.png", structure = nil}
+        end
+    },
+    disguise = {
+        tooltip = "Hides the troop to make it appear like a slime deposit",
+        image = "images/icons/createTroop.png", -- TODO: finish this
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "troop" and menu.skills.disguise.earned == true then
+                    return true
+                end
+            end
+            return false
+        end,
+        action = function()
+            selectedTile.structure.image = "images/resources/ooze3.png"
         end
     },
     collect = {
