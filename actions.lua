@@ -1,4 +1,5 @@
 require("helpers")
+require("menu")
 
 actions = {
     foundCity = {
@@ -60,7 +61,7 @@ actions = {
         image = "images/icons/createTroop.png",
         check = function(tile)
             if tile.structure ~= nil then
-                if tile.structure.type == "city" then
+                if tile.structure.type == "city" and menu.skills.sawSlime.earned == true then
                     return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and oozeNum - 2 >= 0
                 end
             end

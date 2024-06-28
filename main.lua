@@ -11,6 +11,7 @@ Camera = require 'camera'
 
 font = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 20)
 smallfont = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 10)
+realbigfont = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 50)
 
 oozeNum = 10
 oozesPerTurn = 1
