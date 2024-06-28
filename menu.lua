@@ -26,11 +26,16 @@ menu = {
     clicking = false
 }
 -- sawSlime is locked behind drilling
-menu.skills.sawSlime = {x = 0, y = -.2, earned = false, image = "images/skillTree/drillwarriorSkill.png", 
+menu.skills.sawSlime = {x = -.06, y = -.2, earned = false, image = "images/skillTree/drillwarriorSkill.png",
     text = "sawslime",
     description = "A slime engineered to spin ooze at a high speed turning it into the perfect drilling machine",
     price = 3,
     link = menu.skills.drilling
+}
+menu.skills.crystalSlime = {x = .06, y = -.2, earned = false, image = "images/skillTree/crystalwarriorSkill.png", text = "Crystal Slime",
+description = "A slime with a mineral shoved into it's head, granting it mystical powers",
+price = 3,
+link = menu.skills.drilling
 }
 
 menu.skills.expand = {x = -.25, y = -.2, earned = false, image = "images/skillTree/expandSkill.png", text = "Expansion",
@@ -48,7 +53,12 @@ description = "A dark magic conceals the form of the slime until it moves for 1 
 price = 3,
 link = menu.skills.slimes3
 }
-menu.skills.dissolve = {x = .25, y = -.4, earned = false, image = "images/skillTree/dissolveSkill.png", text = "Dissolve",
+menu.skills.newtworkSlime = {x = .3, y = -.4, earned = false, image = "images/skillTree/networkwarriorSkill.png", text = "Network Slime",
+description = "A small unassuming slime hooked into a large ooze network, giving it regerative properties",
+price = 3,
+link = menu.skills.slimes3
+}
+menu.skills.dissolve = {x = .2, y = -.4, earned = false, image = "images/skillTree/dissolveSkill.png", text = "Dissolve",
 description = "A mysterious force crushes the slime and converts the tile into a city tile",
 price = 3,
 link = menu.skills.disguise
@@ -116,16 +126,16 @@ function menu:render()
     if self.selectedSkill ~= nil then
         local maxWidth = 280
 
-        imageLib:drawImage((width / 2) - 160, height / 2 - 120, "images/skillTree/ConfirmUi.png") --  -80 is center
-        imageLib:drawImage((width / 2) - 160, height / 2 + 10, "images/skillTree/PurchaseUi.png")
+        imageLib:drawImage(self.selectedSkill.x - 160, self.selectedSkill.y - 120, "images/skillTree/ConfirmUi.png") --  -80 is center
+        imageLib:drawImage(self.selectedSkill.x - 160, self.selectedSkill.y + 10, "images/skillTree/PurchaseUi.png")
 
         love.graphics.setFont(realbigfont)
-        love.graphics.print(self.selectedSkill.price, (width / 2) - 20, height / 2 + 60)
+        love.graphics.print(self.selectedSkill.price, self.selectedSkill.x - 20, self.selectedSkill.y + 60)
 
         love.graphics.setFont(smallfont)
 
         -- printf wrapps text which is cool
-        love.graphics.printf(self.selectedSkill.description, (width / 2) - 130, (height / 2) - 60, maxWidth, "left")
+        love.graphics.printf(self.selectedSkill.description, self.selectedSkill.x - 130, self.selectedSkill.y - 60, maxWidth, "center")
     end
 
 end
@@ -136,14 +146,15 @@ function menu:click(x, y)
         if self.selectedSkill ~= nil then
             if love.mouse.isDown(1) then
                 if not self.clicking then -- ui for the input
-                    if menu:isClickInButton(x, y, (width / 2) - 160, height / 2 + 10, 320, 120) and oozeNum - self.selectedSkill.price >= 0 and self.selectedSkill.earned ~= true then
-                        oozeNum = oozeNum - self.selectedSkill.price
-                        self.selectedSkill.earned = true
-                        self.selectedSkill = nil
-                    end
                     -- if it's not in some arbitary bounding box
-                    if not menu:isClickInButton(x, y, (width / 2) - 160, (height / 2) - 120, 320, 220) then
+                    if not menu:isClickInButton(x, y, self.selectedSkill.x - 130, self.selectedSkill.y - 60, 320, 220) then
                         self.selectedSkill = nil
+                    else
+                        if menu:isClickInButton(x, y, self.selectedSkill.x - 160, self.selectedSkill.y + 10, 320, 120) and oozeNum - self.selectedSkill.price >= 0 and self.selectedSkill.earned ~= true then
+                            oozeNum = oozeNum - self.selectedSkill.price
+                            self.selectedSkill.earned = true
+                            self.selectedSkill = nil
+                        end
                     end
                     self.clicking = true
                 end

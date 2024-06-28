@@ -93,6 +93,24 @@ actions = {
             tile.structure.type = "troop"
         end
     },
+    createCrystalSlime = {
+        tooltip = "Create a Crystal Slime (-3)",
+        image = "images/icons/createTroop.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "city" and menu.skills.crystalSlime.earned == true then
+                    return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and oozeNum - 3 >= 0
+                end
+            end
+            return false
+        end,
+        action = function()
+            oozeNum = oozeNum - 3
+            local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/crystalwarrior.png", structure = nil}
+            tile.structure.type = "troop"
+        end
+    },
     twistTroop = {
         tooltip = "Twists around the troop and alters it's type",
         image = "images/icons/createTroop.png", -- TODO: finish this
@@ -121,6 +139,23 @@ actions = {
         end,
         action = function()
             selectedTile.structure.image = "images/resources/ooze3.png"
+        end
+    },
+    dissolve = {
+        tooltip = "Dissolve this unit and turn the current tile into a city tile",
+        image = "images/icons/createTroop.png", -- TODO: finish this
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "troop" and menu.skills.dissolve.earned == true and selectedTile.insideCity == false then
+                    return true
+                end
+            end
+            return false
+        end,
+        action = function()
+            selectedTile.insideCity = true
+            selectedTile.image = "images/tiles/cityTile.png"
+            selectedTile.structure = nil
         end
     },
     collect = {
