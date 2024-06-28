@@ -30,38 +30,38 @@ menu.skills.sawSlime = {x = -.06, y = -.2, earned = false, image = "images/skill
     text = "sawslime",
     description = "A slime engineered to spin ooze at a high speed turning it into the perfect drilling machine",
     price = 3,
-    link = menu.skills.drilling
+    link = function() return playerStat[currentPlayer].skills.drilling end
 }
 menu.skills.crystalSlime = {x = .06, y = -.2, earned = false, image = "images/skillTree/crystalwarriorSkill.png", text = "Crystal Slime",
 description = "A slime with a mineral shoved into it's head, granting it mystical powers",
 price = 3,
-link = menu.skills.drilling
+link = function() return playerStat[currentPlayer].skills.drilling end
 }
 
 menu.skills.expand = {x = -.25, y = -.2, earned = false, image = "images/skillTree/expandSkill.png", text = "Expansion",
 description = "A blinding light alters the slime",
 price = 3,
-link = menu.skills.twist
+link = function() return playerStat[currentPlayer].skills.twist end
 }
 menu.skills.telekinisis = {x = -.25, y = -.4, earned = false, image = "images/skillTree/telekinisisSkill.png", text = "Telekinisis",
 description = "A blinding force binds and harms slime",
 price = 3,
-link = menu.skills.expand
+link = function() return playerStat[currentPlayer].skills.expand end
 }
 menu.skills.disguise = {x = .25, y = -.2, earned = false, image = "images/skillTree/disguiseSkill.png", text = "Cloning",
 description = "A dark magic conceals the form of the slime until it moves for 1 slime",
 price = 3,
-link = menu.skills.slimes3
+link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
 menu.skills.newtworkSlime = {x = .3, y = -.4, earned = false, image = "images/skillTree/networkwarriorSkill.png", text = "Network Slime",
 description = "A small unassuming slime hooked into a large ooze network, giving it regerative properties",
 price = 3,
-link = menu.skills.slimes3
+link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
 menu.skills.dissolve = {x = .2, y = -.4, earned = false, image = "images/skillTree/dissolveSkill.png", text = "Dissolve",
 description = "A mysterious force crushes the slime and converts the tile into a city tile",
 price = 3,
-link = menu.skills.disguise
+link = function() return playerStat[currentPlayer].skills.disguise end
 }
 
 local function menuToScreen(x, y)
@@ -101,7 +101,7 @@ function menu:render()
         love.graphics.setColor(1, 1, 1)
     end
 
-    for _, ui in pairs(menu.skills) do
+    for _, ui in pairs(playerStat[currentPlayer].skills) do
         if ui.earned then
             imageLib:drawImage((ui.x * width) - 32, (ui.y * height) - 32, "images/skillTree/skillEarnedUi.png")
         elseif self.selectedSkill == ui then
@@ -111,8 +111,8 @@ function menu:render()
         end
         if ui.link ~= nil then
             love.graphics.line(menuToScreen(ui.x, ui.y).x + 32, menuToScreen(ui.x, ui.y).y + 32,
-            menuToScreen(ui.link.x, ui.link.y).x + 32, menuToScreen(ui.link.x, ui.link.y).y + 32)
-            if ui.link.earned ~= true then
+            menuToScreen(ui.link().x, ui.link().y).x + 32, menuToScreen(ui.link().x, ui.link().y).y + 32)
+            if ui.link().earned ~= true then
                 love.graphics.setColor(0.2, 0.2, 0.2)
             end
         end
@@ -142,7 +142,7 @@ end
 
 function menu:click(x, y)
     self.tooltip = nil
-    for _, skillUi in pairs(menu.skills) do
+    for _, skillUi in pairs(playerStat[currentPlayer].skills) do
         if self.selectedSkill ~= nil then
             if love.mouse.isDown(1) then
                 if not self.clicking then -- ui for the input
@@ -167,7 +167,7 @@ function menu:click(x, y)
                 if skillUi.link == nil then
                     self.selectedSkill = skillUi
                     self.clicking = true
-                elseif skillUi.link.earned then
+                elseif skillUi.link().earned then
                     self.selectedSkill = skillUi
                     self.clicking = true
                 end

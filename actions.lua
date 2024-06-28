@@ -217,22 +217,24 @@ actions = {
 }
 function moveTroopDist(distance)
     local moveTile = function(tile, newTile)
+        if selectedTile.structure ~= nil then
         newTile.structure = selectedTile.structure
-        selectedTile.structure = nil
         newTile.structure.x = newTile.x
         newTile.structure.y = newTile.y
         newTile.structure.moved = true
         newTile.control = selectedTile.control
+        selectedTile.structure = nil
         if not selectedTile.insideCity then
             selectedTile.control = nil
         end
         print(newTile.control)
     end
+    end
 
     local directions = {}
     for dx = -distance, distance do
         for dy = -distance, distance do
-            if math.abs(dx) <= distance and math.abs(dy) <= distance then
+            if math.abs(dx) <= distance and math.abs(dy) <= distance and (dx ~= 0 and dy ~= 0) then
                 table.insert(directions, {dx, dy})
             end
         end
@@ -247,6 +249,18 @@ function moveTroopDist(distance)
             table.insert(interactibleTiles.tiles, tileCopy)
             interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
                 moveTile(tile, newTile)
+            end
+        elseif targetTile then
+            if targetTile.structure ~= nil then
+                if string.find(string.lower(targetTile.structure.type), "troop") ~= nil then
+                    print("troop")
+                    local tileCopy = deepCopy(targetTile)
+                    tileCopy.image = "images/attack.png"
+                    table.insert(interactibleTiles.tiles, tileCopy)
+                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                        moveTile(tile, newTile)
+                    end
+                end
             end
         end
     end
