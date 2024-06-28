@@ -7,11 +7,13 @@ function imageLib:loadImage(imageName)
 end
 
 -- draws isometrically (not true)
-function imageLib:drawImage(x, y, imageName)
+function imageLib:drawImage(x, y, imageName, sx, sy)
+    sx = sx or 1
+    sy = sy or 1
     if self.images[imageName] == nil then
         imageLib:loadImage(imageName)
     end
-    love.graphics.draw(self.images[imageName], x, y, 0, 1, 1)
+    love.graphics.draw(self.images[imageName], x, y, 0, sx, sy)
 end
 
 function imageLib:drawCircleClipped(x, y, imageName, r)

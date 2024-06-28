@@ -68,15 +68,15 @@ function actionUi:renderActions(tile)
     local x = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).x
     local y = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).y
     if #actionArray ~= 0 then
-        imageLib:drawImage(x + 16, y + 16 + 20, "images/uiactions.png") -- it's 64x64
+        imageLib:drawImage(x + 16, y + 16 + 20, "images/ui/uiactions.png") -- it's 64x64
 
         local currentButton = 1
         for _, action in ipairs(actionArray) do
-            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/actionCont.png")
+            imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 1, "images/ui/actionCont.png")
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, action.image)
             currentButton = currentButton + 1
         end
-        imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 13, "images/actionCap.png")
+        imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 13, "images/ui/actionCap.png")
     end
 end
 

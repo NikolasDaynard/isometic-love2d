@@ -1,5 +1,10 @@
 {
     "Lua.diagnostics.globals": [
         "love"
+    ],
+    "Lua.diagnostics.disable": [
+        "inject-field",
+        "undefined-field",
+        "need-check-nil"
     ]
 }

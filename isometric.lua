@@ -45,7 +45,12 @@ function isometricRenderer:render(rotation)
         if tile ~= selectedTile then
             imageLib:drawImage(y * 32 + ((math.abs(x) % 2) * 16), (x * 5) + (tile.height * 16), tile.image)
         else
-            imageLib:drawImage(y * 32 + ((math.abs(x) % 2) * 16), (x * 5) + (tile.height * 16), "images/tileselected.png")
+            imageLib:drawImage(y * 32 + ((math.abs(x) % 2) * 16), (x * 5) + (tile.height * 16), "images/tiles/tileselected.png")
+            if tile.structure ~= nil then
+                love.graphics.setColor(0, .2, 1)
+                isometricRenderer:renderTileBackground(tile.structure)
+                love.graphics.setColor(1, 1, 1)
+            end
         end
         if tile.structure ~= nil then
             isometricRenderer:renderTile(tile.structure)
@@ -109,6 +114,23 @@ function isometricRenderer:renderTile(tile)
     -- iteractable tiles go above
     imageLib:drawImage(y * 32 + ((x % 2) * 16), (x * 5) + (tile.height * 16) - 14, tile.image)
 end
+
+-- renders the gb for selected tiles these numbers aint right but whatever
+function isometricRenderer:renderTileBackground(tile)
+    local x, y = isometricRenderer:rotateCoords(tile.x, tile.y, self.rotation)
+
+    local scaleX = 34 / 32
+    local scaleY = 34 / 32
+
+    imageLib:drawImage(
+        y * 32 + ((x % 2) * 16) - 1, 
+        (x * 5) + (tile.height * 16) - 15, 
+        tile.image, 
+        scaleX, 
+        scaleY
+    )
+end
+
 
 function isometricRenderer:whatTileClickHit(x, y)
     local bestTile = nil

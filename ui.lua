@@ -10,7 +10,7 @@ function ui:render()
     love.graphics.setColor(1, 1, 1)
 
     imageLib:drawImage(2, 2, "images/icons/collect.png")
-    imageLib:drawImage(width - 20, 2, "images/icons/turnpass.png")
+    imageLib:drawImage(width - 30, 2, "images/icons/turnpass.png")
     love.graphics.setFont(font)
     love.graphics.print("Ooze: " .. oozeNum .. " + (" .. oozesPerTurn .. ")", 23, 1)
 end

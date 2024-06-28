@@ -27,7 +27,7 @@ function tileHolder:createMap()
     for i = 0, 100 do
         for j = 0, 30 do
             local randHeight = math.random(0, 100) / 100
-            local newTile = tileHolder:newTile(i, j, 0, "images/tilesmudge.png")
+            local newTile = tileHolder:newTile(i, j, 0, "images/tiles/tilesmudge.png")
             newTile.height = 1
             if randHeight > .99 then
                 local mineralImg = "images/resources/mineral.png"

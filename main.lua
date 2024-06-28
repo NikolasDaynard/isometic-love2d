@@ -9,9 +9,12 @@ require("helpers")
 require("menu")
 Camera = require 'camera' 
 
-font = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 20)
-smallfont = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 10)
-realbigfont = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 50)
+font = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 18)
+font:setFilter("nearest", "nearest")
+smallfont = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 9)
+smallfont:setFilter("nearest", "nearest")
+realbigfont = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 45)
+realbigfont:setFilter("nearest", "nearest")
 
 oozeNum = 10
 oozesPerTurn = 1
@@ -47,7 +50,7 @@ function love.update(dt)
     local hitUi = false
     if not dragging then
         if menu.open then
-            menu:click(love.mouse.getX(), love.mouse.getY())
+            menu:click(mousex, mousey)
         elseif actionUi:click(mousex, mousey) or ui:click(love.mouse.getX(), love.mouse.getY()) then
             hitUi = true
             dragging = true
@@ -100,19 +103,21 @@ end
 function love.draw()
     love.graphics.clear()
     cam:attach()
-    isometricRenderer:render(currentRot)
-    if selectedTile then
-        actionUi:renderActions(selectedTile)
-    end
-    if interactibleTiles.tiles and next(interactibleTiles.tiles) then
-        for _, interactiveTile in ipairs(interactibleTiles.tiles) do
-            isometricRenderer:renderTile({x = interactiveTile.x, y = interactiveTile.y, height = interactiveTile.height, image = interactiveTile.image or "images/testing.png", structure = nil, type = "interact"})
+    if not menu.open then
+        isometricRenderer:render(currentRot)
+        if selectedTile then
+            actionUi:renderActions(selectedTile)
+        end
+        if interactibleTiles.tiles and next(interactibleTiles.tiles) then
+            for _, interactiveTile in ipairs(interactibleTiles.tiles) do
+                isometricRenderer:renderTile({x = interactiveTile.x, y = interactiveTile.y, height = interactiveTile.height, image = interactiveTile.image or "images/testing.png", structure = nil, type = "interact"})
+            end
         end
     end
+    menu:render()
 
     cam:detach()
 
-    menu:render()
     ui:render()
 end
 
@@ -139,14 +144,14 @@ function updateCamPosition()
         cam:move(1 / (cam:getScale() / 2), 0)
     end
     if love.keyboard.isDown("up") then
-        if love.keyboard.isDown("lctrl") or love.keyboard.isDown("lgui") then
+        if love.keyboard.isDown("lctrl") or love.keyboard.isDown("lgui") or love.keyboard.isDown("rgui") then
             cam:zoom(1.01)
         else
             cam:move(0, (-1 / (cam:getScale() / 2))) -- scale is zoom
         end
     end
     if love.keyboard.isDown("down") then
-        if love.keyboard.isDown("lctrl") or love.keyboard.isDown("lgui") then
+        if love.keyboard.isDown("lctrl") or love.keyboard.isDown("lgui") or love.keyboard.isDown("rgui") then
             cam:zoom(.99)
         else
             cam:move(0, 1 / (cam:getScale() / 2))

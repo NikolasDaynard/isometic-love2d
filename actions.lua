@@ -16,7 +16,7 @@ actions = {
             oozeNum = oozeNum - 3
             for  _, nearTiles in ipairs(tileHolder:getTiles()) do
                 if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
-                    nearTiles.image = "images/cityTile.png"
+                    nearTiles.image = "images/tiles/cityTile.png"
                     nearTiles.insideCity = true
                 end
             end
@@ -49,7 +49,7 @@ actions = {
             selectedTile.structure.level = selectedTile.structure.level + 1
             for  _, nearTiles in ipairs(tileHolder:getTiles()) do
                 if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
-                    nearTiles.image = "images/cityTile.png"
+                    nearTiles.image = "images/tiles/cityTile.png"
                     nearTiles.insideCity = true
                 end
             end
@@ -70,7 +70,7 @@ actions = {
         action = function()
             oozeNum = oozeNum - 2
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
-            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/drillwarriorTile.png", structure = nil}
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/drillwarrior.png", structure = nil}
             tile.structure.type = "troop"
         end
     },
@@ -85,6 +85,19 @@ actions = {
         action = function()
             selectedTile.structure = nil
             oozeNum = oozeNum + 1
+        end
+    },
+    drill = {
+        tooltip = "Collect minerals (+2)",
+        image = "images/icons/drill.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                return tile.structure.type == "mineral" and tile.insideCity == true and menu.skills.drilling.earned == true
+            end
+        end,
+        action = function()
+            selectedTile.structure = nil
+            oozeNum = oozeNum + 2
         end
     },
     moveTroop = {
@@ -121,6 +134,7 @@ actions = {
             selectedTile.structure = nil
             newTile.structure.x = newTile.x
             newTile.structure.y = newTile.y
+            newTile.structure.moved = true
         end
     }
 }

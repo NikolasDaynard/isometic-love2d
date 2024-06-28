@@ -7,20 +7,20 @@ menu = {
         drilling = {x = .6, y = .6, earned = false, image = "images/skillTree/DrillingSkill.png", text = "Drilling",
         description = "Allows you to drill mineral deposits",
         price = 3},
-        slimes3 = {x = .6, y = .5, earned = false, image = "images/3warrior.png", text = "Triple Slime",
+        slimes3 = {x = .6, y = .5, earned = false, image = "images/skillTree/3warriorSkill.png", text = "Triple Slime",
         description = "3 slimes ready to fight for you, they all seem to have different priorities, but mostly fighting for you",
         price = 3,
         },
         -- sawSlime = {x = 100, y = 100, earned = false, image = "images/drillwarrior.png"}
     },
-    scrollOffset = 0,
+    worldCameraPos = {},
     tooltip = nil,
     selectedSkill = nil,
     openedMenuSize = {x = 200, y = 200},
     clicking = false
 }
 -- sawSlime is locked behind drilling
-menu.skills.sawSlime = {x = .5, y = .5, earned = false, image = "images/drillwarrior.png", 
+menu.skills.sawSlime = {x = 0, y = .5, earned = false, image = "images/skillTree/drillwarriorSkill.png", 
     text = "sawslime",
     description = "A slime engineered to spin ooze at a high speed turning it into the perfect drilling machine",
     price = 3,
@@ -39,6 +39,12 @@ function menu:update()
     if love.keyboard.isDown("escape") then
         if not self.holdingEsc then
             self.open = not self.open
+            if self.open then
+                self.worldCameraPos.x, self.worldCameraPos.y = cam:position()
+                cam:lookAt(0, 0)
+            else
+                cam:lookAt(self.worldCameraPos.x, self.worldCameraPos.y)
+            end
             self.holdingEsc = true
         end
     else
@@ -98,7 +104,7 @@ function menu:click(x, y)
         if self.selectedSkill ~= nil then
             if love.mouse.isDown(1) then
                 if not self.clicking then -- ui for the input
-                    if menu:isClickInButton(x, y, (width / 2) - 160, height / 2 + 10, 320, 120) then
+                    if menu:isClickInButton(x, y, (width / 2) - 160, height / 2 + 10, 320, 120) and oozeNum - self.selectedSkill.price >= 0 and self.selectedSkill.earned ~= true then
                         oozeNum = oozeNum - self.selectedSkill.price
                         self.selectedSkill.earned = true
                         self.selectedSkill = nil
