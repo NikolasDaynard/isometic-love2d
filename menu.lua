@@ -4,11 +4,31 @@ menu = {
     open = false,
     holdingEsc = false,
     skills = {
-        drilling = {x = .6, y = .6, earned = false, image = "images/skillTree/DrillingSkill.png", text = "Drilling",
+        drilling = {x = 0, y = 0, earned = false, image = "images/skillTree/DrillingSkill.png", text = "Drilling",
         description = "Allows you to drill mineral deposits",
         price = 3},
-        slimes3 = {x = .6, y = .5, earned = false, image = "images/skillTree/3warriorSkill.png", text = "Triple Slime",
+        slimes3 = {x = .2, y = 0, earned = false, image = "images/skillTree/3warriorSkill.png", text = "Triple Slime",
         description = "3 slimes ready to fight for you, they all seem to have different priorities, but mostly fighting for you",
+        price = 3,
+        },
+        disguise = {x = .7, y = .5, earned = false, image = "images/skillTree/disguiseSkill.png", text = "Cloning",
+        description = "A dark magic conceals the form of the slime until it moves for 1 slime",
+        price = 3,
+        },
+        dissolve = {x = .7, y = .6, earned = false, image = "images/skillTree/dissolveSkill.png", text = "Dissolve",
+        description = "A mysterious force crushes the slime and converts the tile into a city tile",
+        price = 3,
+        },
+        expand = {x = .9, y = .5, earned = false, image = "images/skillTree/expandSkill.png", text = "Expansion",
+        description = "A blinding light alters the slime",
+        price = 3,
+        },
+        telekinisis = {x = 1, y = .5, earned = false, image = "images/skillTree/telekinisisSkill.png", text = "Telekinisis",
+        description = "A blinding force binds and harms slime",
+        price = 3,
+        },
+        twist = {x = 1.1, y = .5, earned = false, image = "images/skillTree/twistSkill.png", text = "Twist",
+        description = "A white light twists the slime and converts it into another unit",
         price = 3,
         },
         -- sawSlime = {x = 100, y = 100, earned = false, image = "images/drillwarrior.png"}
@@ -20,7 +40,7 @@ menu = {
     clicking = false
 }
 -- sawSlime is locked behind drilling
-menu.skills.sawSlime = {x = 0, y = .5, earned = false, image = "images/skillTree/drillwarriorSkill.png", 
+menu.skills.sawSlime = {x = 0, y = -.2, earned = false, image = "images/skillTree/drillwarriorSkill.png", 
     text = "sawslime",
     description = "A slime engineered to spin ooze at a high speed turning it into the perfect drilling machine",
     price = 3,
@@ -75,8 +95,13 @@ function menu:render()
         if ui.link ~= nil then
             love.graphics.line(menuToScreen(ui.x, ui.y).x + 32, menuToScreen(ui.x, ui.y).y + 32,
             menuToScreen(ui.link.x, ui.link.y).x + 32, menuToScreen(ui.link.x, ui.link.y).y + 32)
+            if ui.link.earned ~= true then
+                love.graphics.setColor(0.2, 0.2, 0.2)
+            end
         end
+
         imageLib:drawCircleClipped((ui.x * width) - 16, (ui.y * height) - 16, ui.image, 32)
+        love.graphics.setColor(1, 1, 1)
     end
     if self.tooltip then
         ui:renderTooltip(self.tooltip.text, self.tooltip.x, self.tooltip.y)
