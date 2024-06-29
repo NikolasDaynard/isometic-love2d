@@ -53,6 +53,9 @@ function isometricRenderer:render(rotation)
                 love.graphics.setColor(1, 1, 1)
             end
         end
+        if tile.controlRender and tile.control == currentPlayer then
+            tile.controlRender(tile)
+        end
         if tile.structure ~= nil then
             isometricRenderer:renderTile(tile.structure)
             if tile.structure.controlRender and tile.control == currentPlayer then

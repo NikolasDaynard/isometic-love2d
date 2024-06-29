@@ -394,6 +394,47 @@ actions = {
             selectedTile.structure = nil
         end
     },
+    slimeTrap = {
+        tooltip = "Destroys slime that steps on it (-3)",
+        image = "images/icons/sleep.png", -- TODO: finish this
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "troop" and playerStat[currentPlayer].skills.slimeTrap.earned == true then
+                    if tile.structure.trap then
+                        for _, newTile in ipairs(tileHolder:getTiles()) do
+                            if newTile.structure == nil then
+                                if distance(newTile.x, newTile.y, tile.x, tile.y) < 4 then
+                                    local tileCopy = deepCopy(newTile)
+                                    tileCopy.image = "images/attack.png"
+                                    table.insert(interactibleTiles.tiles, tileCopy)
+                                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                                        selectedTile.structure.trap = false
+                                        newTile.controlRender = function(tile)
+                                            local x = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).x
+                                            local y = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).y
+                                            imageLib:drawImage(x, y + 8, "images/testing.png")
+                                        end
+                                        newTile.moveCallback = function(tile, newTile)
+                                            tile.structure.health = tile.structure.health - 1
+                                            newTile.controlRender = nil
+                                            if tile.structure.health <= 0 then
+                                                tile.structure = nil
+                                            end
+                                            newTile.moveCallback = nil
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    return true
+                end
+            end
+        end,
+        action = function()
+            selectedTile.structure.trap = true
+        end
+    },
     sleep = {
         tooltip = "Puts slime to sleep in close range (-3)",
         image = "images/icons/sleep.png", -- TODO: finish this
@@ -656,6 +697,12 @@ actions = {
 function moveTroopDist(distance)
     local moveTile = function(tile, newTile)
         if selectedTile.structure ~= nil then
+            if newTile.moveCallback then
+                newTile.moveCallback(tile, newTile)
+                if selectedTile.structure == nil then
+                    return
+                end
+            end
             if newTile.structure ~= nil then
                 newTile.structure.health = newTile.structure.health - 1
                 if newTile.structure.health > 0 then
