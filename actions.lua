@@ -92,6 +92,65 @@ actions = {
             tile.control = currentPlayer
         end
     },
+    createReincarnate = {
+        tooltip = "Build a slime with two lives (-2)",
+        image = "images/icons/build.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 2 >= 0 and tile.structure.type == "city"and playerStat[currentPlayer].skills.reincarnate.earned == true
+            end
+        end,
+        action = function()
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
+            local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/defaultSlime.png", structure = nil, health = 1, maxHp = 1}
+            tile.structure.type = "troop"
+            tile.control = currentPlayer
+            tile.structure.controlRender = function(tile)
+                local x = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).x
+                local y = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).y
+                imageLib:drawImage(x, y, "images/extraLife.png")
+            end
+            tile.structure.destructionCallback = function(thisTile)
+                local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
+                tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/defaultSlime.png", structure = nil, health = 1, maxHp = 1}
+                tile.structure.type = "troop"
+                tile.control = thisTile.control
+            end
+        end
+    },
+    createGiant = {
+        tooltip = "Build a Giant Slime (-5)",
+        image = "images/icons/build.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 2 >= 0 and tile.structure.type == "city" and playerStat[currentPlayer].skills.giant.earned == true
+            end
+        end,
+        action = function()
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
+            local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/giant.png", structure = nil, health = 5, maxHp = 5}
+            tile.structure.type = "troop"
+            tile.control = currentPlayer
+        end
+    },
+    createSpirit = {
+        tooltip = "Build a ghost of a slime (-2)",
+        image = "images/icons/build.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 2 >= 0 and tile.structure.type == "city" and playerStat[currentPlayer].skills.spirit.earned == true
+            end
+        end,
+        action = function()
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
+            local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/spirit.png", structure = nil, health = 1, maxHp = 1}
+            tile.structure.type = "troop"
+            tile.control = currentPlayer
+        end
+    },
     createArcher = {
         tooltip = "Create archer (-3)",
         image = "images/icons/createTroop.png",
@@ -264,6 +323,62 @@ actions = {
             selectedTile.structure.kinisis = true
         end
     },
+    whirlwind = { -- range of 10
+        tooltip = "Harms a slime far away (-3)",
+        image = "images/icons/swap.png", -- TODO: finish this
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "troop" and playerStat[currentPlayer].skills.whirlwind.earned == true then
+                    if tile.structure.kinisis then
+                        for _, newTile in ipairs(tileHolder:getTiles()) do
+                            if newTile.structure ~= nil then
+                                if string.find(newTile.structure.type, "troop") ~= nil then
+                                    if distance(newTile.x, newTile.y, tile.x, tile.y) < 10 then
+                                        local tileCopy = deepCopy(newTile)
+                                        tileCopy.image = "images/move.png"
+                                        table.insert(interactibleTiles.tiles, tileCopy)
+                                        interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                                            selectedTile.structure.kinisis = false
+                                            selectedTile.structure.moved = true
+                                            newTile.structure.health = newTile.structure.health - 1
+                                            if newTile.structure.health <= 0 then
+                                                newTile.structure = nil
+                                            end
+                                            
+                                            local distance = 3
+
+                                            local directions = {}
+                                            for dx = -distance, distance do
+                                                for dy = -distance, distance do
+                                                    if math.abs(dx) + math.abs(dy) <= distance and (dx ~= 0 or dy ~= 0) then
+                                                        table.insert(directions, {dx, dy})
+                                                    end
+                                                end
+                                            end
+                                        
+                                            for _, direction in ipairs(directions) do
+                                                local dx, dy = direction[1], direction[2]
+                                                local targetTile = tileHolder:getTileAtPos(selectedTile.x + dx, selectedTile.y + dy)
+                                                if targetTile and targetTile.structure ~= nil then
+                                                    if string.find(targetTile.structure.type, "troop") ~= nil then
+                                                        print("blown back")
+                                                    end
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    return true
+                end
+            end
+        end,
+        action = function()
+            selectedTile.structure.kinisis = true
+        end
+    },
     swap = {
         tooltip = "Swaps two units you control (-2)",
         image = "images/icons/swap.png", -- TODO: finish this
@@ -369,7 +484,8 @@ function moveTroopDist(distance)
                 end
                 -- live tiles would have returned already
                 if newTile.structure.destructionCallback ~= nil then
-                    newTile.structure.destructionCallback()
+                    ---@diagnostic disable-next-line: redundant-parameter
+                    newTile.structure.destructionCallback(newTile)
                 end
             end
             newTile.structure = selectedTile.structure
