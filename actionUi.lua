@@ -82,7 +82,12 @@ function actionUi:renderActions(tile)
             imageLib:drawImage(x + 32 + ((currentButton - 1) * 18), y + 64 + 12 + 2, action.image)
             currentButton = currentButton + 1
         end
-        -- imageLib:drawImage(x + 16 + ((#actionArray) * 18), y + 64 + 13, "images/ui/actionCap.png")
+    end
+    if (tile or {}).structure ~= nil then
+        if tile.structure.health ~= tile.structure.maxHp then -- nil == nil ("clever" code)
+            imageLib:drawImage(x - 16, y, "images/ui/hpbar.png")
+            imageLib:drawImage(x - 16 - (tile.structure.health / tile.structure.maxHp) / 2, y, "images/ui/hpbarFill.png", tile.structure.health / tile.structure.maxHp)
+        end
     end
 end
 

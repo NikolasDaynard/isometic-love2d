@@ -114,10 +114,14 @@ function isometricRenderer:render(rotation)
 end
 
 function isometricRenderer:renderTile(tile)
+    if tile.moved == true then love.graphics.setColor(0.4, 0.4, 0.4) end -- grey out moved units
+
     local x, y = isometricRenderer:rotateCoords(tile.x, tile.y, self.rotation)
 
     -- iteractable tiles go above
     imageLib:drawImage(y * 32 + ((x % 2) * 16), (x * 5) + (tile.height * 16) - 14, tile.image)
+
+    love.graphics.setColor(1, 1, 1)
 end
 
 -- renders the gb for selected tiles these numbers aint right but whatever

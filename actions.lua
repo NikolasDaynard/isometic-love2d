@@ -9,8 +9,11 @@ actions = {
             return tile.insideCity ~= true and tile.structure == nil and playerStat[currentPlayer].oozeNum - 3 >= 0
         end,
         action = function()
-            selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/player.png", structure = nil}
+            selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/player.png", structure = nil, health = 10, maxHp = 10}
             selectedTile.structure.type = "city"
+            selectedTile.structure.destructionCallback = function()
+                print("destroyed :(")
+            end
             selectedTile.insideCity = true
             selectedTile.structure.level = 3
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
@@ -84,7 +87,7 @@ actions = {
         action = function()
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
-            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/defaultSlime.png", structure = nil, health = 1}
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/defaultSlime.png", structure = nil, health = 1, maxHp = 1}
             tile.structure.type = "troop"
             tile.control = currentPlayer
         end
@@ -103,7 +106,7 @@ actions = {
         action = function()
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
-            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/archer.png", structure = nil, health = 1}
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/archer.png", structure = nil, health = 1, maxHp = 1}
             tile.structure.type = "troop"
             tile.control = currentPlayer
         end
@@ -122,7 +125,7 @@ actions = {
         action = function()
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
-            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/drillwarrior.png", structure = nil, health = 2}
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/drillwarrior.png", structure = nil, health = 2, maxHp = 2}
             tile.structure.type = "troop"
             tile.control = currentPlayer
         end
@@ -141,7 +144,7 @@ actions = {
         action = function()
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
-            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/3warrior.png", structure = nil, health = 3}
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/3warrior.png", structure = nil, health = 3, maxHp = 3}
             tile.structure.type = "fastTroop"
             tile.control = currentPlayer
         end
@@ -160,7 +163,7 @@ actions = {
         action = function()
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
-            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/crystalwarrior.png", structure = nil, health = 5}
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/crystalwarrior.png", structure = nil, health = 5, maxHp = 5}
             tile.structure.type = "troop"
             tile.control = currentPlayer
         end
@@ -274,6 +277,10 @@ function moveTroopDist(distance)
                     newTile.structure.moved = true
                     return
                 end
+                -- live tiles would have returned already
+                if newTile.structure.destructionCallback ~= nil then
+                    newTile.structure.destructionCallback()
+                end
             end
             newTile.structure = selectedTile.structure
             newTile.structure.x = newTile.x
@@ -308,7 +315,7 @@ function moveTroopDist(distance)
             end
         elseif targetTile then
             if targetTile.structure ~= nil and targetTile.control ~= currentPlayer then
-                if string.find(string.lower(targetTile.structure.type), "troop") ~= nil then
+                if targetTile.structure.health ~= nil then -- if it has health you can hit it (true)
                     local tileCopy = deepCopy(targetTile)
                     tileCopy.image = "images/attack.png"
                     table.insert(interactibleTiles.tiles, tileCopy)
