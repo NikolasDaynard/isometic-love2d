@@ -19,8 +19,8 @@ realbigfont:setFilter("nearest", "nearest")
 -- playerStat[currentPlayer].oozeNum = 10
 -- playerStat[currentPlayer].oozesPerTurn = 1
 currentPlayer = 1
-playerStat = {{id = 1, oozesPerTurn = 1, oozeNum = 10, skills = deepCopy(menu.skills)},
-{id = 2, oozesPerTurn = 1, oozeNum = 10, skills = deepCopy(menu.skills)}}
+playerStat = {{id = 1, oozesPerTurn = 1, oozeNum = 10, crystalNum = 0, skills = deepCopy(menu.skills)},
+{id = 2, oozesPerTurn = 1, oozeNum = 10, crystalNum = 0, skills = deepCopy(menu.skills)}}
 
 function love.load()
     love.graphics.setFont(font)

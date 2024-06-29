@@ -12,10 +12,35 @@ function ui:render()
     imageLib:drawImage(2, 2, "images/icons/collect.png")
     imageLib:drawImage(width - 30, 2, "images/icons/turnpass.png")
     love.graphics.setFont(font)
-    love.graphics.print("Ooze: " .. playerStat[currentPlayer].oozeNum .. " + (" .. playerStat[currentPlayer].oozesPerTurn .. ")", 23, 1)
+    local oozeString = "Ooze: " .. playerStat[currentPlayer].oozeNum .. " + (" .. playerStat[currentPlayer].oozesPerTurn .. ")"
+    local mineralString = "Crystal: " .. playerStat[currentPlayer].crystalNum
+    local oozeStringOffset = font:getWidth(oozeString)
+    
+    if oozeStringOffset + font:getWidth(mineralString) + font:getWidth(mineralString) > width then
+        oozeString = playerStat[currentPlayer].oozeNum .. " + (" .. playerStat[currentPlayer].oozesPerTurn .. ")"
+        mineralString = playerStat[currentPlayer].crystalNum .. "" -- wow the jank
+        oozeStringOffset = font:getWidth(oozeString)
+
+        if oozeStringOffset + font:getWidth(mineralString) + font:getWidth(mineralString) > width then
+            oozeString = playerStat[currentPlayer].oozeNum .. ""
+            mineralString = playerStat[currentPlayer].crystalNum .. "" -- wow the jank
+            oozeStringOffset = font:getWidth(oozeString)
+
+            if oozeStringOffset + font:getWidth(mineralString) + font:getWidth(mineralString) > width then
+                oozeString = ""
+                mineralString = "" -- wow the jank
+                oozeStringOffset = font:getWidth(oozeString)
+            end
+        end
+    end
+
+    love.graphics.print(oozeString, 23, 1)
+    imageLib:drawImage(32 + oozeStringOffset, 2, "images/icons/crystal.png")
+
+    love.graphics.print(mineralString, 32 + 21 + oozeStringOffset, 2)
 end
 
-function ui:click(x, y) 
+function ui:click(x, y)
     if love.mouse.isDown(1) then
         if clickHitButton(x, y, width - 20, 2, 16) then
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum + playerStat[currentPlayer].oozesPerTurn
@@ -23,7 +48,7 @@ function ui:click(x, y)
             if currentPlayer > 2 then
                 currentPlayer = 1
             end
-            for _, tile in ipairs(tileHolder:getTiles()) do 
+            for _, tile in ipairs(tileHolder:getTiles()) do
                 if tile.structure then
                     tile.structure.moved = false
                 end
