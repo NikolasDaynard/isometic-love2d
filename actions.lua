@@ -85,7 +85,7 @@ actions = {
             return false
         end,
         action = function()
-            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 1
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
             tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/defaultSlime.png", structure = nil, health = 1, maxHp = 1}
             tile.structure.type = "troop"
@@ -104,7 +104,7 @@ actions = {
             return false
         end,
         action = function()
-            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
             tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/archer.png", structure = nil, health = 1, maxHp = 1}
             tile.structure.type = "troop"
@@ -163,9 +163,25 @@ actions = {
         action = function()
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
-            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/crystalwarrior.png", structure = nil, health = 5, maxHp = 5}
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/crystalwarrior.png", structure = nil, health = 5, maxHp = 5, crystal = true}
             tile.structure.type = "troop"
             tile.control = currentPlayer
+        end
+    },
+    crystalize = {
+        tooltip = "Crystalize (-1 crystal)",
+        image = "images/icons/crystal.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                return tile.structure.type == "troop" and tile.structure.crystal == true and playerStat[currentPlayer].skills.crystalize and playerStat[currentPlayer].crystalNum - 1 >= 0
+            end
+        end,
+        action = function()
+            playerStat[currentPlayer].crystalNum = playerStat[currentPlayer].crystalNum - 1
+
+            selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/troops/crystalizedwarrior.png", structure = nil, health = 5, maxHp = 5, crystal = true}
+            selectedTile.structure.type = "troop"
+            selectedTile.control = currentPlayer
         end
     },
     twistTroop = {
@@ -213,6 +229,22 @@ actions = {
             selectedTile.insideCity = true
             selectedTile.image = "images/tiles/cityTile.png"
             selectedTile.structure = nil
+        end
+    },
+    swap = {
+        tooltip = "Swaps two units you control (-2)",
+        image = "images/icons/swap.png", -- TODO: finish this
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "troop" and playerStat[currentPlayer].skills.swap.earned == true then
+                    print("wap")
+                    return true
+                end
+            end
+            return false
+        end,
+        action = function()
+            -- action tiles
         end
     },
     collect = {

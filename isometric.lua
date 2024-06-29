@@ -25,9 +25,6 @@ end
 function isometricRenderer:render(rotation)
     rotation = rotation or 0
 
-    if love.keyboard.isDown("e") then
-        rotation = 90
-    end
     self.rotation = rotation
 
     local tiles = tileHolder:getTiles()
@@ -142,20 +139,23 @@ end
 
 function isometricRenderer:whatTileClickHit(x, y)
     local bestTile = nil
-    for  _, tile in ipairs(tileHolder:getTiles()) do
-        local tileX = IsoCordToWorldSpace(tile.x, tile.y, tile.height, self.rotation).x
-        local tileY = IsoCordToWorldSpace(tile.x, tile.y, tile.height, self.rotation).y
-        if x > tileX and x < tileX + 32 and y > tileY and y < tileY + 32 then
-            if bestTile == nil then
+    local bestScore = math.huge  -- Initialize with a large number
+
+    for _, tile in ipairs(tileHolder:getTiles()) do
+        local tilePos = IsoCordToWorldSpace(tile.x, tile.y, tile.height, self.rotation)
+        local tileX, tileY = tilePos.x, tilePos.y
+
+        if x > tileX and x < tileX + 64 and y > tileY and y < tileY + 64 then
+            local centerX = tileX + 16
+            local centerY = tileY + 30
+            local score = distance(centerX, centerY, x, y)
+
+            if score < bestScore then
+                bestScore = score
                 bestTile = tile
-            else
-                local bestTileX = IsoCordToWorldSpace(bestTile.x, bestTile.y, bestTile.height, self.rotation).x
-                local bestTileY = IsoCordToWorldSpace(bestTile.x, bestTile.y, bestTile.height, self.rotation).y
-                if bestTileY > tileY then
-                    bestTile = tile
-                end
             end
         end
     end
+
     return bestTile
 end

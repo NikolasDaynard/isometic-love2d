@@ -1,7 +1,6 @@
 -- So it's gonna be a bar like \
 --                              0-0-0- with the options cuz thats cool
 
--- returns possible OLDACTIONS on the tile
 require("image")
 require("actions")
 
@@ -83,6 +82,7 @@ function actionUi:renderActions(tile)
             currentButton = currentButton + 1
         end
     end
+    
     if (tile or {}).structure ~= nil then
         if tile.structure.health ~= tile.structure.maxHp then -- nil == nil ("clever" code)
             imageLib:drawImage(x - 16, y, "images/ui/hpbar.png")
