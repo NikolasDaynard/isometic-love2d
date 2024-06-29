@@ -28,7 +28,8 @@ function love.load()
     love.graphics.setFont(font)
     tileHolder:createMap()
     cam = Camera()
-    -- table.insert(interactibleTiles.tiles, #interactibleTiles.tiles + 1, tileHolder:getTileAtPos(1, 1))
+    audio:playSound("audio/City of Gelatin.mp3", 1, true)
+    -- audio:playSound("audio/distortion.wav", 1, true)
 end
 
 local dragging = false

@@ -3,11 +3,18 @@ require("ui")
 title = {
     open = true,
     clicking = false,
+    time = 0,
 }
 
 function title:render()
+    self.time = self.time + 1
     if not title.open then
         return
+    end
+    if self.time < 100 then
+        cam:zoomTo(math.min(((self.time / 10) ^ 2), .3))
+    else
+        cam:zoomTo(math.min(((self.time / 100) ^ 2), .5))
     end
     cam:lookAt(1200 / 2, 600 / 2)
     love.graphics.setColor(0, 0, 0)

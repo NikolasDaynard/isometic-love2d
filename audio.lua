@@ -26,9 +26,8 @@ function audio:playSound(sound, volume, loop)
     end
     self.sounds[sound]:play()
 
-    if loop then
-        self.sounds[sound]:loop()
-    end
+    self.sounds[sound]:setLooping(loop or false)
+
     self.sounds[sound]:setVolume(volume or 1)
 
     table.insert(self.playingSounds, self.sounds[sound])

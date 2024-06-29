@@ -412,7 +412,7 @@ actions = {
                                         newTile.controlRender = function(tile)
                                             local x = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).x
                                             local y = IsoCordToWorldSpace(tile.x, tile.y, tile.height, isometricRenderer.rotation).y
-                                            imageLib:drawImage(x, y + 8, "images/testing.png")
+                                            imageLib:drawImage(x, y + 8, "images/troops/spikeTrap.png")
                                         end
                                         newTile.moveCallback = function(tile, newTile)
                                             tile.structure.health = tile.structure.health - 1
