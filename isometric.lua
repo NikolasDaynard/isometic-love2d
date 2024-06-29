@@ -38,6 +38,10 @@ function isometricRenderer:render(rotation)
 
     for _, tile in ipairs(tiles) do
         local x, y = isometricRenderer:rotateCoords(tile.x, tile.y, rotation)
+        love.graphics.setColor(1, 1, 1)
+        if tile.control ~= currentPlayer and tile.control then
+            love.graphics.setColor(.7, .6, .5)
+        end
 
         if tile ~= selectedTile then
             imageLib:drawImage(y * 32 + ((math.abs(x) % 2) * 16), (x * 5) + (tile.height * 16), tile.image)
@@ -56,7 +60,7 @@ function isometricRenderer:render(rotation)
             end
         end
         if tile.control == currentPlayer then
-            isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "images/testing.png", structure = nil})
+            -- isometricRenderer:renderTile({x = tile.x, y = tile.y, height = tile.height, image = "images/testing.png", structure = nil})
         end
         if tile.insideCity then
             local x, y = tile.x, tile.y

@@ -22,7 +22,7 @@ function ui:render()
 
         if oozeStringOffset + font:getWidth(mineralString) + 80 > width then
             oozeString = playerStat[currentPlayer].oozeNum .. ""
-            mineralString = playerStat[currentPlayer].crystalNum .. "" 
+            mineralString = playerStat[currentPlayer].crystalNum .. ""
             oozeStringOffset = font:getWidth(oozeString)
 
             if oozeStringOffset + font:getWidth(mineralString) + 80 > width then
