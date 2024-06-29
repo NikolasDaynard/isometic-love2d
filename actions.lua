@@ -226,7 +226,7 @@ actions = {
         end
     },
     drill = {
-        tooltip = "Collect minerals (+2)",
+        tooltip = "Collect minerals (+1)",
         image = "images/icons/drill.png",
         check = function(tile)
             if tile.structure ~= nil then
@@ -235,7 +235,7 @@ actions = {
         end,
         action = function()
             selectedTile.structure = nil
-            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum + 2
+            playerStat[currentPlayer].crystalNum = playerStat[currentPlayer].crystalNum + 1
         end
     },
     moveTroop = {
@@ -268,16 +268,23 @@ actions = {
 function moveTroopDist(distance)
     local moveTile = function(tile, newTile)
         if selectedTile.structure ~= nil then
-        newTile.structure = selectedTile.structure
-        newTile.structure.x = newTile.x
-        newTile.structure.y = newTile.y
-        newTile.structure.moved = true
-        newTile.control = selectedTile.control
-        selectedTile.structure = nil
-        if not selectedTile.insideCity then
-            selectedTile.control = nil
+            if newTile.structure ~= nil then
+                newTile.structure.health = newTile.structure.health - 1
+                if newTile.structure.health > 0 then
+                    newTile.structure.moved = true
+                    return
+                end
+            end
+            newTile.structure = selectedTile.structure
+            newTile.structure.x = newTile.x
+            newTile.structure.y = newTile.y
+            newTile.structure.moved = true
+            newTile.control = selectedTile.control
+            selectedTile.structure = nil
+            if not selectedTile.insideCity then
+                selectedTile.control = nil
+            end
         end
-    end
     end
 
     local directions = {}
@@ -300,7 +307,7 @@ function moveTroopDist(distance)
                 moveTile(tile, newTile)
             end
         elseif targetTile then
-            if targetTile.structure ~= nil then
+            if targetTile.structure ~= nil and targetTile.control ~= currentPlayer then
                 if string.find(string.lower(targetTile.structure.type), "troop") ~= nil then
                     local tileCopy = deepCopy(targetTile)
                     tileCopy.image = "images/attack.png"

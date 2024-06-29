@@ -9,24 +9,23 @@ function ui:render()
     love.graphics.rectangle("fill", 0, 0, width, 20)
     love.graphics.setColor(1, 1, 1)
 
-    imageLib:drawImage(2, 2, "images/icons/collect.png")
     imageLib:drawImage(width - 30, 2, "images/icons/turnpass.png")
     love.graphics.setFont(font)
     local oozeString = "Ooze: " .. playerStat[currentPlayer].oozeNum .. " + (" .. playerStat[currentPlayer].oozesPerTurn .. ")"
     local mineralString = "Crystal: " .. playerStat[currentPlayer].crystalNum
     local oozeStringOffset = font:getWidth(oozeString)
-    
-    if oozeStringOffset + font:getWidth(mineralString) + font:getWidth(mineralString) > width then
+
+    if oozeStringOffset + font:getWidth(mineralString) + 80 > width then
         oozeString = playerStat[currentPlayer].oozeNum .. " + (" .. playerStat[currentPlayer].oozesPerTurn .. ")"
         mineralString = playerStat[currentPlayer].crystalNum .. "" -- wow the jank
         oozeStringOffset = font:getWidth(oozeString)
 
-        if oozeStringOffset + font:getWidth(mineralString) + font:getWidth(mineralString) > width then
+        if oozeStringOffset + font:getWidth(mineralString) + 80 > width then
             oozeString = playerStat[currentPlayer].oozeNum .. ""
             mineralString = playerStat[currentPlayer].crystalNum .. "" -- wow the jank
             oozeStringOffset = font:getWidth(oozeString)
 
-            if oozeStringOffset + font:getWidth(mineralString) + font:getWidth(mineralString) > width then
+            if oozeStringOffset + font:getWidth(mineralString) + 80 > width then
                 oozeString = ""
                 mineralString = "" -- wow the jank
                 oozeStringOffset = font:getWidth(oozeString)
@@ -34,10 +33,21 @@ function ui:render()
         end
     end
 
+    imageLib:drawImage(2, 2, "images/icons/collect.png")
     love.graphics.print(oozeString, 23, 1)
     imageLib:drawImage(32 + oozeStringOffset, 2, "images/icons/crystal.png")
-
     love.graphics.print(mineralString, 32 + 21 + oozeStringOffset, 2)
+
+    if clickHitButton(love.mouse.getX(), love.mouse.getY(), 32 + oozeStringOffset + 8, 2 + 8, 8) then
+        ui:renderTooltip("crystal", 32 + oozeStringOffset + 8, 2 + 18)
+        love.graphics.setFont(font)
+    elseif clickHitButton(love.mouse.getX(), love.mouse.getY(), 2 + 8, 2 + 8, 8) then
+        ui:renderTooltip("ooze", 2 + 8, 2 + 18)
+        love.graphics.setFont(font)
+    elseif clickHitButton(love.mouse.getX(), love.mouse.getY(), width - 30 + 8, 2 + 8, 8) then
+        ui:renderTooltip("pass turn", width - 70 + 8, 2 + 18)
+        love.graphics.setFont(font)
+    end
 end
 
 function ui:click(x, y)
