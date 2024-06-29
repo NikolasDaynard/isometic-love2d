@@ -246,19 +246,11 @@ actions = {
                                     table.insert(interactibleTiles.tiles, tileCopy)
                                     interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
                                         selectedTile.structure.kinisis = false
-
-                                        local temp = deepCopy(newTile.structure)
-                                        newTile.structure = selectedTile.structure
-                                        newTile.structure.x = newTile.x
-                                        newTile.structure.y = newTile.y
-                                        newTile.structure.moved = true
-                                        newTile.control = selectedTile.control
-
-                                        selectedTile.structure = temp
-                                        selectedTile.structure.x = selectedTile.x
-                                        selectedTile.structure.y = selectedTile.y
                                         selectedTile.structure.moved = true
-                                        selectedTile.control = temp.control
+                                        newTile.structure.health = newTile.structure.health - 1
+                                        if newTile.structure.health <= 0 then
+                                            newTile.structure = nil
+                                        end
                                     end
                                 end
                             end
@@ -280,7 +272,7 @@ actions = {
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.swap.earned == true then
                     if tile.structure.swapping then
                         for _, tile in ipairs(tileHolder:getTiles()) do
-                            if tile.structure ~= nil then
+                            if tile.structure ~= nil and tile.control == currentPlayer then
                                 if string.find(tile.structure.type, "troop") ~= nil then
                                     local tileCopy = deepCopy(tile)
                                     tileCopy.image = "images/move.png"
