@@ -213,6 +213,12 @@ end
 function camera:getScale()
 	return self.scale
 end
+function camera:getX()
+	return self.x
+end
+function camera:getY()
+	return self.y
+end
 
 -- the module
 return setmetatable({new = new, smooth = camera.smooth},

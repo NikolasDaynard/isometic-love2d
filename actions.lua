@@ -395,6 +395,41 @@ actions = {
             selectedTile.structure = nil
         end
     },
+    shred = {
+        tooltip = "Evicerates a slime in close range (-3)",
+        image = "images/icons/swap.png", -- TODO: finish this
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "troop" and playerStat[currentPlayer].skills.shred.earned == true then
+                    if tile.structure.shred then
+                        for _, newTile in ipairs(tileHolder:getTiles()) do
+                            if newTile.structure ~= nil then
+                                if string.find(newTile.structure.type, "troop") ~= nil then
+                                    if distance(newTile.x, newTile.y, tile.x, tile.y) < 4 then
+                                        local tileCopy = deepCopy(newTile)
+                                        tileCopy.image = "images/attack.png"
+                                        table.insert(interactibleTiles.tiles, tileCopy)
+                                        interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                                            selectedTile.structure.shred = false
+                                            selectedTile.structure.moved = true
+                                            newTile.structure.health = newTile.structure.health - 10
+                                            if newTile.structure.health <= 0 then
+                                                newTile.structure = nil
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    return true
+                end
+            end
+        end,
+        action = function()
+            selectedTile.structure.shred = true
+        end
+    },
     telekinisis = {
         tooltip = "Harms a slime far away (-3)",
         image = "images/icons/swap.png", -- TODO: finish this

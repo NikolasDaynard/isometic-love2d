@@ -5,6 +5,7 @@ require("isometric")
 require("tiles")
 require("actionUi")
 require("ui")
+require("title")
 require("helpers")
 require("menu")
 Camera = require 'camera' 
@@ -54,6 +55,8 @@ function love.update(dt)
     if not dragging then
         if menu.open then
             menu:click(mousex, mousey)
+        elseif title.open then
+            title:click(mousex, mousey)
         elseif actionUi:click(mousex, mousey) or ui:click(love.mouse.getX(), love.mouse.getY()) then
             hitUi = true
             dragging = true
@@ -118,6 +121,7 @@ function love.draw()
         end
     end
     menu:render()
+    title:render()
 
     cam:detach()
 
