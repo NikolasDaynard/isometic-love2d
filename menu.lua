@@ -78,7 +78,7 @@ description = "A big tower to put a lot of slimes",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.drilling end
 }
-menu.skills.swapSkill = {x = -.2, y = -.5, earned = false, image = "images/skillTree/swapSkill.png", text = "Swap",
+menu.skills.swap = {x = -.2, y = -.5, earned = false, image = "images/skillTree/swapSkill.png", text = "Swap",
 description = "A light force instantly swaps two slimes",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.twist end

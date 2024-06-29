@@ -231,20 +231,86 @@ actions = {
             selectedTile.structure = nil
         end
     },
+    telekinisis = {
+        tooltip = "Harms a slime far away (-3)",
+        image = "images/icons/swap.png", -- TODO: finish this
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "troop" and playerStat[currentPlayer].skills.telekinisis.earned == true then
+                    if tile.structure.kinisis then
+                        for _, tile in ipairs(tileHolder:getTiles()) do
+                            if tile.structure ~= nil and tile.control ~= currentPlayer then
+                                if string.find(tile.structure.type, "troop") ~= nil then
+                                    local tileCopy = deepCopy(tile)
+                                    tileCopy.image = "images/move.png"
+                                    table.insert(interactibleTiles.tiles, tileCopy)
+                                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                                        selectedTile.structure.kinisis = false
+
+                                        local temp = deepCopy(newTile.structure)
+                                        newTile.structure = selectedTile.structure
+                                        newTile.structure.x = newTile.x
+                                        newTile.structure.y = newTile.y
+                                        newTile.structure.moved = true
+                                        newTile.control = selectedTile.control
+
+                                        selectedTile.structure = temp
+                                        selectedTile.structure.x = selectedTile.x
+                                        selectedTile.structure.y = selectedTile.y
+                                        selectedTile.structure.moved = true
+                                        selectedTile.control = temp.control
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    return true
+                end
+            end
+        end,
+        action = function()
+            selectedTile.structure.kinisis = true
+        end
+    },
     swap = {
         tooltip = "Swaps two units you control (-2)",
         image = "images/icons/swap.png", -- TODO: finish this
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.swap.earned == true then
-                    print("wap")
+                    if tile.structure.swapping then
+                        for _, tile in ipairs(tileHolder:getTiles()) do
+                            if tile.structure ~= nil then
+                                if string.find(tile.structure.type, "troop") ~= nil then
+                                    local tileCopy = deepCopy(tile)
+                                    tileCopy.image = "images/move.png"
+                                    table.insert(interactibleTiles.tiles, tileCopy)
+                                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                                        selectedTile.structure.swapping = false
+
+                                        local temp = deepCopy(newTile.structure)
+                                        newTile.structure = selectedTile.structure
+                                        newTile.structure.x = newTile.x
+                                        newTile.structure.y = newTile.y
+                                        newTile.structure.moved = true
+                                        newTile.control = selectedTile.control
+
+                                        selectedTile.structure = temp
+                                        selectedTile.structure.x = selectedTile.x
+                                        selectedTile.structure.y = selectedTile.y
+                                        selectedTile.structure.moved = true
+                                        selectedTile.control = temp.control
+                                    end
+                                end
+                            end
+                        end
+                    end
                     return true
                 end
             end
-            return false
         end,
         action = function()
-            -- action tiles
+            selectedTile.structure.swapping = true
         end
     },
     collect = {
