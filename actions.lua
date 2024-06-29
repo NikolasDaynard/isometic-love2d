@@ -119,6 +119,22 @@ actions = {
             end
         end
     },
+    createNetworkSlime = {
+        tooltip = "Build a slime regenerative properties (-2)",
+        image = "images/icons/build.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 2 >= 0 and tile.structure.type == "city"and playerStat[currentPlayer].skills.reincarnate.earned == true
+            end
+        end,
+        action = function()
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 2
+            local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/networkSlime.png", structure = nil, health = 1, maxHp = 1}
+            tile.structure.type = "troop"
+            tile.control = currentPlayer
+        end
+    },
     createGiant = {
         tooltip = "Build a Giant Slime (-5)",
         image = "images/icons/build.png",
@@ -149,6 +165,18 @@ actions = {
             tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/spirit.png", structure = nil, health = 1, maxHp = 1}
             tile.structure.type = "troop"
             tile.control = currentPlayer
+        end
+    },
+    fly = {
+        tooltip = "Make the slime fly",
+        image = "images/icons/upgrade.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                return tile.structure.type == "troop" and playerStat[currentPlayer].skills.fly.earned == true
+            end
+        end,
+        action = function()
+            selectedTile.structure.height = selectedTile.structure.height - 1
         end
     },
     createArcher = {
@@ -222,7 +250,7 @@ actions = {
         action = function()
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
             local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
-            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/crystalwarrior.png", structure = nil, health = 5, maxHp = 5, crystal = true}
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/crystalwarrior.png", structure = nil, health = 5, maxHp = 5, crystal = 1}
             tile.structure.type = "troop"
             tile.control = currentPlayer
         end
@@ -232,13 +260,16 @@ actions = {
         image = "images/icons/crystal.png",
         check = function(tile)
             if tile.structure ~= nil then
-                return tile.structure.type == "troop" and tile.structure.crystal == true and playerStat[currentPlayer].skills.crystalize and playerStat[currentPlayer].crystalNum - 1 >= 0
+                return tile.structure.type == "troop" and tile.structure.crystal and playerStat[currentPlayer].skills.crystalize and playerStat[currentPlayer].crystalNum - 1 >= 0
             end
         end,
         action = function()
             playerStat[currentPlayer].crystalNum = playerStat[currentPlayer].crystalNum - 1
-
-            selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/troops/crystalizedwarrior.png", structure = nil, health = 5, maxHp = 5, crystal = true}
+            if selectedTile.structure.crystal + 1 == 2 then -- level 2
+                selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/troops/crystalizedwarrior.png", structure = nil, health = 5, maxHp = 5, crystal = selectedTile.structure.crystal + 1}
+            else -- final level
+                selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/troops/crystalguardian.png", structure = nil, health = 5, maxHp = 5, crystal = selectedTile.structure.crystal + 1}
+            end
             selectedTile.structure.type = "troop"
             selectedTile.control = currentPlayer
         end
@@ -344,7 +375,7 @@ actions = {
                                             if newTile.structure.health <= 0 then
                                                 newTile.structure = nil
                                             end
-                                            
+
                                             local distance = 3
 
                                             local directions = {}
@@ -355,13 +386,19 @@ actions = {
                                                     end
                                                 end
                                             end
-                                        
+                                            updates = {}
+
                                             for _, direction in ipairs(directions) do
                                                 local dx, dy = direction[1], direction[2]
-                                                local targetTile = tileHolder:getTileAtPos(selectedTile.x + dx, selectedTile.y + dy)
+                                                local targetTile = tileHolder:getTileAtPos(newTile.x + dx, newTile.y + dy)
                                                 if targetTile and targetTile.structure ~= nil then
                                                     if string.find(targetTile.structure.type, "troop") ~= nil then
-                                                        print("blown back")
+                                                        if tileHolder:getTileAtPos(targetTile.x + dx, targetTile.y + dy).structure == nil then
+                                                            targetTile.structure.x = targetTile.x + dx
+                                                            targetTile.structure.y = targetTile.y + dy
+                                                            tileHolder:getTileAtPos(targetTile.x + dx, targetTile.y + dy).structure = deepCopy(targetTile.structure)
+                                                            targetTile.structure = nil
+                                                        end
                                                     end
                                                 end
                                             end

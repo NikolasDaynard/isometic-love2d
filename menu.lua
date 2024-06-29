@@ -108,7 +108,7 @@ description = "A dark magic conceals the form of the slime until it moves for 1 
 price = 3,
 link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
-menu.skills.newtworkSlime = {x = .35, y = -.2, earned = false, image = "images/skillTree/networkwarriorSkill.png", text = "Network Slime",
+menu.skills.networkSlime = {x = .35, y = -.2, earned = false, image = "images/skillTree/networkwarriorSkill.png", text = "Network Slime",
 description = "A small unassuming slime hooked into a large ooze network, giving it regerative properties",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.slimes3 end
@@ -116,7 +116,7 @@ link = function() return playerStat[currentPlayer].skills.slimes3 end
 menu.skills.sleep = {x = .4, y = -.35, earned = false, image = "images/skillTree/sleepSkill.png", text = "Shred",
 description = "A powerful blast of short range dark energy targets anything",
 price = 3,
-link = function() return playerStat[currentPlayer].skills.newtworkSlime end
+link = function() return playerStat[currentPlayer].skills.networkSlime end
 }
 menu.skills.dissolve = {x = .2, y = -.4, earned = false, image = "images/skillTree/dissolveSkill.png", text = "Dissolve",
 description = "A mysterious force crushes the slime and converts the tile into a city tile",
@@ -195,6 +195,7 @@ function menu:render()
             imageLib:drawImage((ui.x * width) - 32, (ui.y * height) - 32, "images/skillTree/skillUnearnedUi.png")
         end
         if ui.link ~= nil then
+            print(ui.image)
             love.graphics.line(menuToScreen(ui.x, ui.y).x + 32, menuToScreen(ui.x, ui.y).y + 32,
             menuToScreen(ui.link().x, ui.link().y).x + 32, menuToScreen(ui.link().x, ui.link().y).y + 32)
             if ui.link().earned ~= true then
