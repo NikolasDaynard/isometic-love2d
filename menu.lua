@@ -37,13 +37,23 @@ menu.skills.giant = {x = -.06, y = -.4, earned = false, image = "images/skillTre
     price = 3,
     link = function() return playerStat[currentPlayer].skills.sawSlime end
 }
-menu.skills.build = {x = -.06, y = -.6, earned = false, image = "images/skillTree/buildSkill.png", text = "Build",
+menu.skills.mechanisedSlime = {x = .02, y = -.47, earned = false, image = "images/skillTree/mechanisedSlimeSkill.png", text = "Mechanized Slime",
+    description = "A mechanical slime",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.crystalSlime end
+}
+menu.skills.build = {x = -.08, y = -.6, earned = false, image = "images/skillTree/buildSkill.png", text = "Build",
     description = "A raises the height of the tile",
     price = 3,
     link = function() return playerStat[currentPlayer].skills.giant end
 }
-menu.skills.rain = {x = 0, y = -.7, earned = false, image = "images/skillTree/slimeRainSkill.png", text = "Rain",
+menu.skills.rain = {x = -0.02, y = -.7, earned = false, image = "images/skillTree/slimeRainSkill.png", text = "Rain",
     description = "A cloud of toxic slime rains down on the tile for a turn",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.build end
+}
+menu.skills.slimeCo = {x = -.14, y = -.7, earned = false, image = "images/skillTree/slimeCo.png", text = "Slime Co.",
+    description = "An industry built on the exponential nature of slime, though the slime doesn't stop with what they make!",
     price = 3,
     link = function() return playerStat[currentPlayer].skills.build end
 }
@@ -57,7 +67,7 @@ description = "A slime with extrodinary crystal coverage",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.crystalSlime end
 }
-menu.skills.crystalGuardian = {x = .1, y = -.5, earned = false, image = "images/skillTree/crystalGuardianSkill.png", text = "Crystal Slime",
+menu.skills.crystalGuardian = {x = .12, y = -.5, earned = false, image = "images/skillTree/crystalGuardianSkill.png", text = "Crystal Slime",
 description = "At what point is it no longer a slime?",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.crystalize end
@@ -83,6 +93,11 @@ description = "A pure slime that sheds it's skin on death, coming back as a sour
 price = 3,
 link = function() return playerStat[currentPlayer].skills.spirit end
 }
+menu.skills.framework = {x = -.55, y = -.4, earned = false, image = "images/skillTree/frameworkSkill.png", text = "Framework",
+description = "A shell of a slime, ready to be embued with the power of another it comes across",
+price = 3,
+link = function() return playerStat[currentPlayer].skills.spirit end
+}
 menu.skills.telekinisis = {x = -.3, y = -.4, earned = false, image = "images/skillTree/telekinisisSkill.png", text = "Telekinisis",
 description = "A blinding force binds and harms slime",
 price = 3,
@@ -98,7 +113,12 @@ description = "A light force spins extremely fast knocking back and damaging all
 price = 3,
 link = function() return playerStat[currentPlayer].skills.fly end
 }
-menu.skills.swap = {x = -.2, y = -.7, earned = false, image = "images/skillTree/swapSkill.png", text = "Swap",
+menu.skills.wizard = {x = -.2, y = -.7, earned = false, image = "images/skillTree/wizardSkill.png", text = "Wizard",
+description = "A wizard embued with crystal magic",
+price = 3,
+link = function() return {playerStat[currentPlayer].skills.whirlwind, playerStat[currentPlayer].skills.giant} end
+}
+menu.skills.swap = {x = -.3, y = -.7, earned = false, image = "images/skillTree/swapSkill.png", text = "Swap",
 description = "A light force instantly swaps two slimes",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.whirlwind end
@@ -194,12 +214,27 @@ function menu:render()
         else
             imageLib:drawImage((ui.x * width) - 32, (ui.y * height) - 32, "images/skillTree/skillUnearnedUi.png")
         end
+        local linked = true
         if ui.link ~= nil then
-            love.graphics.line(menuToScreen(ui.x, ui.y).x + 32, menuToScreen(ui.x, ui.y).y + 32,
-            menuToScreen(ui.link().x, ui.link().y).x + 32, menuToScreen(ui.link().x, ui.link().y).y + 32)
-            if ui.link().earned ~= true then
-                love.graphics.setColor(0.2, 0.2, 0.2)
+            linked = false
+            if #ui.link() == 2 then -- 2 means it's a doubly linked thing
+                for _, link in ipairs(ui.link()) do 
+                    love.graphics.line(menuToScreen(ui.x, ui.y).x + 32, menuToScreen(ui.x, ui.y).y + 32,
+                    menuToScreen(link.x, link.y).x + 32, menuToScreen(link.x, link.y).y + 32)
+                    if link.earned == true then
+                        linked = true
+                    end
+                end
+            else
+                love.graphics.line(menuToScreen(ui.x, ui.y).x + 32, menuToScreen(ui.x, ui.y).y + 32,
+                menuToScreen(ui.link().x, ui.link().y).x + 32, menuToScreen(ui.link().x, ui.link().y).y + 32)
+                if ui.link().earned == true then
+                    linked = true
+                end
             end
+        end
+        if not linked then
+            love.graphics.setColor(.2, .2, .2)
         end
 
         imageLib:drawCircleClipped((ui.x * width) - 16, (ui.y * height) - 16, ui.image, 32)
@@ -252,9 +287,18 @@ function menu:click(x, y)
                 if skillUi.link == nil then
                     self.selectedSkill = skillUi
                     self.clicking = true
-                elseif skillUi.link().earned then
-                    self.selectedSkill = skillUi
-                    self.clicking = true
+                elseif #skillUi.link() ~= 2 then
+                    if skillUi.link().earned then
+                        self.selectedSkill = skillUi
+                        self.clicking = true
+                    end
+                else
+                    for _, link in ipairs(skillUi.link()) do
+                        if link.earned == true then
+                            self.selectedSkill = skillUi
+                            self.clicking = true
+                        end
+                    end
                 end
             end
         end

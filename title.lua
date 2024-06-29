@@ -11,10 +11,12 @@ function title:render()
     if not title.open then
         return
     end
-    if self.time < 100 then
-        cam:zoomTo(math.min(((self.time / 10) ^ 2), .3))
-    else
+    if self.time < 320 then
+        cam:zoomTo(math.min(((self.time / 30) ^ 2), .3))
+    elseif self.time < 320 * 2 then
         cam:zoomTo(math.min(((self.time / 100) ^ 2), .5))
+    elseif self.time < 320 * 3 then
+        cam:zoomTo(math.min(((self.time / 800) ^ 1.2), .7))
     end
     cam:lookAt(1200 / 2, 600 / 2)
     love.graphics.setColor(0, 0, 0)
