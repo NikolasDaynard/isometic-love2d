@@ -113,8 +113,8 @@ description = "A small unassuming slime hooked into a large ooze network, giving
 price = 3,
 link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
-menu.skills.sleep = {x = .4, y = -.35, earned = false, image = "images/skillTree/sleepSkill.png", text = "Shred",
-description = "A powerful blast of short range dark energy targets anything",
+menu.skills.sleep = {x = .4, y = -.35, earned = false, image = "images/skillTree/sleepSkill.png", text = "Sleep",
+description = "A powerful dark incantation manages to stall out the slimes and put them to sleep",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.networkSlime end
 }

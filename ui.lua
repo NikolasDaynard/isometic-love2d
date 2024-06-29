@@ -3,7 +3,7 @@ require("image")
 require("helpers")
 ui = {}
 
-function ui:render() 
+function ui:render()
     width, height, flags = love.window.getMode()
     love.graphics.setColor(0, 0, 0)
     love.graphics.rectangle("fill", 0, 0, width, 20)
@@ -53,15 +53,16 @@ end
 function ui:click(x, y)
     if love.mouse.isDown(1) then
         if clickHitButton(x, y, width - 20, 2, 16) then
+            interactibleTiles.tiles = {}
+            for _, tile in ipairs(tileHolder:getTiles()) do
+                if tile.structure and tile.control == currentPlayer then
+                    tile.structure.moved = false
+                end
+            end
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum + playerStat[currentPlayer].oozesPerTurn
             currentPlayer = currentPlayer + 1
             if currentPlayer > 2 then
                 currentPlayer = 1
-            end
-            for _, tile in ipairs(tileHolder:getTiles()) do
-                if tile.structure then
-                    tile.structure.moved = false
-                end
             end
             return true
         end

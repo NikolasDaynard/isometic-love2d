@@ -344,8 +344,7 @@ actions = {
         end,
         action = function()
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
-            local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
-            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/crystalwarrior.png", structure = nil}
+            selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height - 1, image = "images/troops/rain.png", structure = nil}
         end
     },
     twistTroop = {
@@ -393,6 +392,41 @@ actions = {
             selectedTile.insideCity = true
             selectedTile.image = "images/tiles/cityTile.png"
             selectedTile.structure = nil
+        end
+    },
+    sleep = {
+        tooltip = "Puts slime to sleep in close range (-3)",
+        image = "images/icons/sleep.png", -- TODO: finish this
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "troop" and playerStat[currentPlayer].skills.sleep.earned == true then
+                    if tile.structure.sleep then
+                        for _, newTile in ipairs(tileHolder:getTiles()) do
+                            if newTile.structure ~= nil and newTile.control ~= currentPlayer then
+                                if string.find(newTile.structure.type, "troop") ~= nil then
+                                    if distance(newTile.x, newTile.y, tile.x, tile.y) < 4 then
+                                        local tileCopy = deepCopy(newTile)
+                                        tileCopy.image = "images/attack.png"
+                                        table.insert(interactibleTiles.tiles, tileCopy)
+                                        interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+                                            selectedTile.structure.sleep = false
+                                            selectedTile.structure.moved = true
+                                            newTile.structure.moved = true
+                                            if newTile.structure.health <= 0 then
+                                                newTile.structure = nil
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    return true
+                end
+            end
+        end,
+        action = function()
+            selectedTile.structure.sleep = true
         end
     },
     shred = {

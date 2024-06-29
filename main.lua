@@ -4,6 +4,7 @@ require("image")
 require("isometric")
 require("tiles")
 require("actionUi")
+require("audio")
 require("ui")
 require("title")
 require("helpers")
@@ -47,6 +48,7 @@ function love.update(dt)
     end
 
     menu:update()
+    audio:update()
     
     local mousex = cam:mousePosition().x
     local mousey = cam:mousePosition().y
