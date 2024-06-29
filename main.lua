@@ -28,7 +28,7 @@ function love.load()
     love.graphics.setFont(font)
     tileHolder:createMap()
     cam = Camera()
-    audio:playSound("audio/City of Gelatin.mp3", 1, true)
+    -- audio:playSound("audio/City of Gelatin.mp3", 1, true)
     -- audio:playSound("audio/distortion.wav", 1, true)
 end
 

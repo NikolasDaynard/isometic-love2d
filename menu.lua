@@ -37,25 +37,35 @@ menu.skills.giant = {x = -.06, y = -.4, earned = false, image = "images/skillTre
     price = 3,
     link = function() return playerStat[currentPlayer].skills.sawSlime end
 }
+menu.skills.brickSlime = {x = .01, y = -.6, earned = false, image = "images/skillTree/brickSlimeSkill.png", text = "Brick",
+    description = "Brick slime is strong. Strong like brick. Brick hurt a lot,",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.giant end
+}
 menu.skills.mechanisedSlime = {x = .02, y = -.47, earned = false, image = "images/skillTree/mechanisedSlimeSkill.png", text = "Mechanized Slime",
     description = "A mechanical slime",
     price = 3,
     link = function() return playerStat[currentPlayer].skills.crystalSlime end
 }
-menu.skills.build = {x = -.08, y = -.6, earned = false, image = "images/skillTree/buildSkill.png", text = "Build",
+menu.skills.build = {x = -.1, y = -.6, earned = false, image = "images/skillTree/buildSkill.png", text = "Build",
     description = "A raises the height of the tile",
     price = 3,
     link = function() return playerStat[currentPlayer].skills.giant end
 }
-menu.skills.rain = {x = -0.02, y = -.7, earned = false, image = "images/skillTree/slimeRainSkill.png", text = "Rain",
+menu.skills.rain = {x = -.03, y = -.8, earned = false, image = "images/skillTree/slimeRainSkill.png", text = "Rain",
     description = "A cloud of toxic slime rains down on the tile for a turn",
     price = 3,
     link = function() return playerStat[currentPlayer].skills.build end
 }
-menu.skills.slimeCo = {x = -.14, y = -.7, earned = false, image = "images/skillTree/slimeCo.png", text = "Slime Co.",
+menu.skills.slimeCo = {x = -.15, y = -.8, earned = false, image = "images/skillTree/slimeCo.png", text = "Slime Co.",
     description = "An industry built on the exponential nature of slime, though the slime doesn't stop with what they make!",
     price = 3,
     link = function() return playerStat[currentPlayer].skills.build end
+}
+menu.skills.wealth = {x = -.15, y = -1, earned = false, image = "images/skillTree/wealthSkill.png", text = "Wizard",
+description = "WEALTH WEALTH IT'S ALL MINE HAHAHAHAHAHAHHAHAHHAHAH",
+price = 3,
+link = function() return playerStat[currentPlayer].skills.slimeCo end
 }
 menu.skills.crystalSlime = {x = .06, y = -.2, earned = false, image = "images/skillTree/crystalwarriorSkill.png", text = "Crystal Slime",
 description = "A slime with a mineral shoved into it's head, granting it mystical powers",
@@ -103,6 +113,11 @@ description = "A blinding force binds and harms slime",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.expand end
 }
+menu.skills.blessing = {x = -.3, y = -.55, earned = false, image = "images/skillTree/blessingSkill.png", text = "Blessing",
+description = "A blessing of white light heals and rejuvinates slime",
+price = 3,
+link = function() return playerStat[currentPlayer].skills.telekinisis end
+}
 menu.skills.fly = {x = -.2, y = -.3, earned = false, image = "images/skillTree/flySkill.png", text = "Fly",
 description = "A brilliant white force pushes the slime into the air",
 price = 3,
@@ -118,10 +133,20 @@ description = "A wizard embued with crystal magic",
 price = 3,
 link = function() return {playerStat[currentPlayer].skills.whirlwind, playerStat[currentPlayer].skills.giant} end
 }
+menu.skills.strike = {x = -.25, y = -.9, earned = false, image = "images/skillTree/strikeSkill.png", text = "Wizard",
+description = "A flash white light strikes down the target",
+price = 3,
+link = function() return playerStat[currentPlayer].skills.wizard end
+}
 menu.skills.swap = {x = -.3, y = -.7, earned = false, image = "images/skillTree/swapSkill.png", text = "Swap",
 description = "A light force instantly swaps two slimes",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.whirlwind end
+}
+menu.skills.dig = {x = .15, y = -.2, earned = false, image = "images/skillTree/digSkill.png", text = "Dig",
+description = "A dark magic pulls the ground downward caving in on itself",
+price = 3,
+link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
 menu.skills.disguise = {x = .25, y = -.2, earned = false, image = "images/skillTree/disguiseSkill.png", text = "Cloning",
 description = "A dark magic conceals the form of the slime until it moves for 1 slime",
@@ -152,6 +177,11 @@ menu.skills.hammer = {x = .25, y = -.65, earned = false, image = "images/skillTr
 description = "A slime with a dark hammer radiating evil eneregy",
 price = 3,
 link = function() return playerStat[currentPlayer].skills.slimeTrap end
+}
+menu.skills.slimeCoil = {x = .15, y = -.65, earned = false, image = "images/skillTree/slimeCoilSkill.png", text = "Slime Coil",
+description = "An electic coil that melts slime",
+price = 3,
+link = function() return {playerStat[currentPlayer].skills.hammer, playerStat[currentPlayer].skills.mechanisedSlime} end
 }
 menu.skills.lurker = {x = .4, y = -.65, earned = false, image = "images/skillTree/lurkerSkill.png", text = "Lurker Slime",
 description = "A slime radiating evil energy",
