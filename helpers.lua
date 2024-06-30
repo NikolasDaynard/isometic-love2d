@@ -1,6 +1,11 @@
+helpers = {}
+
 function distance(x1, y1, x2, y2)
   return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
 end
+function helpers:distance(x1, y1, x2, y2)
+    return math.sqrt((x2 - x1)^2 + (y2 - y1)^2)
+  end
 function IsoCordToWorldSpace(x, y, height, rotation)
     rotation = rotation or 0
     local rotX, rotY = isometricRenderer:rotateCoords(x, y, rotation)

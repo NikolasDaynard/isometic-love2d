@@ -58,6 +58,7 @@ function tileHolder:createMap()
     for _, tile in ipairs(self.tiles) do
         self.tileMap[tile.x .. "," .. tile.y] = tile
     end
+    local mounds = 0
     for i = 0, 100 do
         for j = 0, 30 do
             local randHeight = math.random(0, 100) / 100
@@ -83,10 +84,46 @@ function tileHolder:createMap()
                     local tile = tileHolder:getTileAtPos(i, j)
                     tile.structure = {x = i, y = j, height = 1, image = "images/slimeMound.png", structure = nil, type = "mound"}
                     tile.control = nil
+                    mounds = mounds + 1
                 end
             end
         end
     end
+    local moundCount = 0
+    for i = 1, 2 do
+        moundCount = 0
+        local randCity = math.random(mounds)
+        print(randCity)
+        for i2 = 0, 100 do
+            for j = 0, 30 do
+                local newTile = tileHolder:getTileAtPos(i2, j)
+                if ((newTile or {}).structure or {}).type == "mound" then
+
+                    moundCount = moundCount + 1
+                    if moundCount == randCity then
+                        mounds = mounds - 1
+                        newTile.structure = {x = newTile.x, y = newTile.y, height = newTile.height, image = "images/player.png", structure = nil, health = 10, maxHp = 10}
+                        newTile.structure.type = "city"
+                        newTile.structure.destructionCallback = function()
+                            print("destroyed :(")
+                        end
+                        newTile.insideCity = true
+                        newTile.structure.level = 3
+                        for  _, nearTiles in ipairs(tileHolder:getTiles()) do
+                            if distance(nearTiles.x, nearTiles.y, newTile.x, newTile.y) < newTile.structure.level then
+                                nearTiles.image = "images/tiles/cityTile.png"
+                                nearTiles.insideCity = true
+                                nearTiles.control = i
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    local tile = tileHolder:getTileAtPos(3,3)
+    tile.structure = {x = 3, y = 3, height = 1, image = "images/troops/lurker.png", structure = nil, type = "troop", moveSpeed = 1, health = 1, maxHp = 1}
+    tile.control = 1
 end
 function createNoiseMap(resolution)
     local map = {}

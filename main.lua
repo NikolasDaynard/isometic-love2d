@@ -41,6 +41,7 @@ local currentRot = 0
 
 function love.load()
     love.graphics.setFont(font)
+    math.randomseed(os.time())
     tileHolder:createMap()
     cam = Camera(0, 0, 1, 0, Camera.smooth.damped(.9))
     audio:playSound("audio/City of Gelatin.mp3", 1, true)

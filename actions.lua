@@ -2,94 +2,72 @@ require("helpers")
 require("menu")
 
 actions = {
-    -- foundCity = { 
-    --     tooltip = "Build a new slime city",
-    --     image = "images/icons/foundCity.png",
-    --     check = function(tile)
-    --     --     return tile.insideCity ~= true and tile.structure == nil and playerStat[currentPlayer].oozeNum - 3 >= 0
-    --     -- end,
-    --         if tile.structure ~= nil then
-    --             if playerStat[currentPlayer].skills.whirlwind.earned == true then
-    --                 if tile.structure.kinisis then
-    --                     for _, newTile in ipairs(tileHolder:getTiles()) do
-    --                         if newTile.structure ~= nil then
-    --                             if string.find(newTile.structure.type, "troop") ~= nil then
-    --                                 if distance(newTile.x, newTile.y, tile.x, tile.y) < 10 then
-    --                                     local tileCopy = deepCopy(newTile)
-    --                                     tileCopy.image = "images/move.png"
-    --                                     table.insert(interactibleTiles.tiles, tileCopy)
-    --                                     interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
-    --                                         selectedTile.structure.kinisis = false
-    --                                         selectedTile.structure.moved = true
-    --                                         newTile.structure.health = newTile.structure.health - 1
-    --                                         if newTile.structure.health <= 0 then
-    --                                             newTile.structure = nil
-    --                                         end
-
-    --                                         local distance = 3
-
-    --                                         local directions = {}
-    --                                         for dx = -distance, distance do
-    --                                             for dy = -distance, distance do
-    --                                                 if math.abs(dx) + math.abs(dy) <= distance and (dx ~= 0 or dy ~= 0) then
-    --                                                     table.insert(directions, {dx, dy})
-    --                                                 end
-    --                                             end
-    --                                         end
-    --                                         updates = {}
-
-    --                                         for _, direction in ipairs(directions) do
-    --                                             local dx, dy = direction[1], direction[2]
-    --                                             local targetTile = tileHolder:getTileAtPos(newTile.x + dx, newTile.y + dy)
-    --                                             if targetTile and targetTile.structure ~= nil then
-    --                                                 if string.find(targetTile.structure.type, "troop") ~= nil then
-    --                                                     if tileHolder:getTileAtPos(targetTile.x + dx, targetTile.y + dy).structure == nil then
-    --                                                         targetTile.structure.x = targetTile.x + dx
-    --                                                         targetTile.structure.y = targetTile.y + dy
-    --                                                         tileHolder:getTileAtPos(targetTile.x + dx, targetTile.y + dy).structure = deepCopy(targetTile.structure)
-    --                                                         targetTile.structure = nil
-    --                                                     end
-    --                                                 end
-    --                                             end
-    --                                         end
-    --                                     end
-    --                                 end
-    --                             end
-    --                         end
-    --                     end
-    --                 end
-    --                 return true
-    --             end
-    --         end
-    --     end,
-    --     action = function()
-    --         selectedTile.structure.kinisis = true
-    --     end
-    -- },
-    foundCity = {
+    foundCity = { 
         tooltip = "Build a new slime city",
         image = "images/icons/foundCity.png",
         check = function(tile)
-            return tile.insideCity ~= true and tile.structure == nil and playerStat[currentPlayer].oozeNum - 3 >= 0
-        end,
-        action = function()
-            selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/player.png", structure = nil, health = 10, maxHp = 10}
-            selectedTile.structure.type = "city"
-            selectedTile.structure.destructionCallback = function()
-                print("destroyed :(")
-            end
-            selectedTile.insideCity = true
-            selectedTile.structure.level = 3
-            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
-            for  _, nearTiles in ipairs(tileHolder:getTiles()) do
-                if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
-                    nearTiles.image = "images/tiles/cityTile.png"
-                    nearTiles.insideCity = true
-                    nearTiles.control = currentPlayer
+            if tile.structure ~= nil then
+                if tile.structure.type == "troop" then
+                    for _, newTile in ipairs(tileHolder:getTiles()) do
+                        if newTile.structure ~= nil and newTile.insideCity ~= true then
+                            if string.find(newTile.structure.type, "mound") ~= nil then
+                                if distance(newTile.x, newTile.y, tile.x, tile.y) < 2 then
+                                    local tileCopy = deepCopy(newTile)
+                                    tileCopy.image = "images/attack.png"
+                                    table.insert(interactibleTiles.tiles, tileCopy)
+                                    interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+
+                                        newTile.structure = {x = newTile.x, y = newTile.y, height = newTile.height, image = "images/player.png", structure = nil, health = 10, maxHp = 10}
+                                        newTile.structure.type = "city"
+                                        newTile.structure.destructionCallback = function()
+                                            print("destroyed :(")
+                                        end
+                                        newTile.insideCity = true
+                                        newTile.structure.level = 3
+                                        playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
+                                        for  _, nearTiles in ipairs(tileHolder:getTiles()) do
+                                            if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < newTile.structure.level then
+                                                nearTiles.image = "images/tiles/cityTile.png"
+                                                nearTiles.insideCity = true
+                                                nearTiles.control = currentPlayer
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
                 end
             end
+        end,
+        action = function()
+
         end
     },
+    -- foundCity = {
+    --     tooltip = "Build a new slime city",
+    --     image = "images/icons/foundCity.png",
+    --     check = function(tile)
+    --         return tile.insideCity ~= true and tile.structure == nil and playerStat[currentPlayer].oozeNum - 3 >= 0
+    --     end,
+    --     action = function()
+    --         selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/player.png", structure = nil, health = 10, maxHp = 10}
+    --         selectedTile.structure.type = "city"
+    --         selectedTile.structure.destructionCallback = function()
+    --             print("destroyed :(")
+    --         end
+    --         selectedTile.insideCity = true
+    --         selectedTile.structure.level = 3
+    --         playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
+    --         for  _, nearTiles in ipairs(tileHolder:getTiles()) do
+    --             if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
+    --                 nearTiles.image = "images/tiles/cityTile.png"
+    --                 nearTiles.insideCity = true
+    --                 nearTiles.control = currentPlayer
+    --             end
+    --         end
+    --     end
+    -- },
     build = {
         tooltip = "Build a slime factory (-2 (+1))",
         image = "images/icons/build.png",
