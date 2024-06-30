@@ -67,11 +67,17 @@ function love.update(dt)
     local hitTile = false
     local hitUi = false
     if not dragging then
-        if menu.open then
+        if ui:click(love.mouse.getX(), love.mouse.getY()) then
+            hitUi = true
+            dragging = true
+        end
+        if settings.open then
+            settings:click(mousex, mousey)
+        elseif menu.open then
             menu:click(mousex, mousey)
         elseif title.open then
             title:click(mousex, mousey)
-        elseif actionUi:click(mousex, mousey) or ui:click(love.mouse.getX(), love.mouse.getY()) then
+        elseif actionUi:click(mousex, mousey) then
             hitUi = true
             dragging = true
         end
