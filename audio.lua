@@ -6,6 +6,8 @@ audio = {
     fadingAudio = {},
     fadingAudioIn = {},
 }
+local BGM = "audio/City of Gelatin.mp3"
+local BGMRef = nil
 
 function audio:loadSound(sound) 
     if self.sounds[sound] == nil then
@@ -28,6 +30,9 @@ function audio:update()
         end
     end
     for i, sound in ipairs(self.playingSounds) do
+        if self.playingSounds[i] == self.playingSounds[BGM] then
+            print("is ijf")
+        end
         if not sound:isPlaying() then
             table.remove(self.playingSounds, i)
         end
@@ -79,9 +84,14 @@ function audio:fadeIn(soundName)
 end
 
 function audio:startBattleTheme(soundName)
-    if self.sounds[soundName] == nil then
-        audio:loadSound(soundName)
-    end
-    audio:playSound("audio/Battle Theme.mp3", 1, true)
+    BGM = soundName
+    audio:playSound("audio/Battle Theme.mp3", 1, false)
     audio:fade("audio/City of Gelatin.mp3")
+end
+
+function audio:fadeBGM()
+    audio:fade(BGM)
+end
+function audio:fadeInBGM()
+    audio:fadeIn(BGM)
 end

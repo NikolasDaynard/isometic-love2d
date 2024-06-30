@@ -182,7 +182,7 @@ function updateCamPosition()
         cam:move(lerp(0, mouseDeltaX, 1) / (cam:getScale()), lerp(0, mouseDeltaY, 1) / (cam:getScale()))
     end
 
-    cam:move(-zoomIntertiaX, 0)
+    cam:move(zoomIntertiaX, 0)
     if cam:getScale() < 1 then
         cam:zoom(((zoomIntertiaY / 10) / (3 / cam:getScale())) + 1)
     else

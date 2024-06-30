@@ -236,13 +236,13 @@ function menu:update()
         if not self.holdingEsc then
             self.open = not self.open
             if self.open then
-                audio:fade("audio/City of Gelatin.mp3")
+                audio:fadeBGM()
                 audio:playSound("audio/Industrial Wares.mp3", 1, true)
                 self.worldCameraPos.x, self.worldCameraPos.y = cam:position()
                 cam:lookAt(0, 0)
             else
                 audio:fade("audio/Industrial Wares.mp3")
-                audio:fadeIn("audio/City of Gelatin.mp3")
+                audio:fadeInBGM()
                 cam:lookAt(self.worldCameraPos.x, self.worldCameraPos.y)
             end
             self.holdingEsc = true

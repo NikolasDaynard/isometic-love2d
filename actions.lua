@@ -50,6 +50,18 @@ actions = {
             selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/slimescraper.png", structure = nil}
         end
     },
+    buildSlimeCo = {
+        tooltip = "Build a Slimeco (c) Factory (-10 (+7))",
+        image = "images/icons/build.png",
+        check = function(tile)
+            return tile.control == currentPlayer and tile.structure == nil and playerStat[currentPlayer].oozeNum - 10 >= 0
+        end,
+        action = function()
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 5
+            playerStat[currentPlayer].oozesPerTurn = playerStat[currentPlayer].oozesPerTurn + 3
+            selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/slimeCo.png", structure = nil}
+        end
+    },
     upgradeCity = {
         tooltip = "Increace city radius (-${selectedTile.structure.level}",
         image = "images/icons/upgrade.png",
@@ -476,7 +488,7 @@ actions = {
     },
     disguise = { -- TODO: add a custom render for this
         tooltip = "Hides the troop to make it appear like a slime deposit",
-        image = "images/icons/createTroop.png", -- TODO: finish this
+        image = "images/icons/disguise.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.disguise.earned == true then
@@ -529,7 +541,7 @@ actions = {
     },
     dissolve = {
         tooltip = "Dissolve this unit and turn the current tile into a city tile",
-        image = "images/icons/dissolve.png", -- TODO: finish this
+        image = "images/icons/dissolve.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.dissolve.earned == true and selectedTile.insideCity == false then
@@ -587,7 +599,7 @@ actions = {
     },
     sleep = {
         tooltip = "Puts slime to sleep in close range (-3)",
-        image = "images/icons/sleep.png", -- TODO: finish this
+        image = "images/icons/sleep.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.sleep.earned == true then
@@ -692,7 +704,7 @@ actions = {
     },
     telekinisis = {
         tooltip = "Harms a slime far away (-3)",
-        image = "images/icons/swap.png", -- TODO: finish this
+        image = "images/icons/telekinisis.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.telekinisis.earned == true then
@@ -725,7 +737,7 @@ actions = {
     },
     whirlwind = { -- range of 10
         tooltip = "Harms a slime far away (-3)",
-        image = "images/icons/swap.png", -- TODO: finish this
+        image = "images/icons/whirlwind.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.whirlwind.earned == true then
@@ -787,7 +799,7 @@ actions = {
     },
     swap = {
         tooltip = "Swaps two units you control (-2)",
-        image = "images/icons/swap.png", -- TODO: finish this
+        image = "images/icons/swap.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.swap.earned == true then
