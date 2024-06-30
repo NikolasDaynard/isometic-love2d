@@ -72,10 +72,10 @@ menu.skills.wealth = {x = -.15, y = -1, earned = false, image = "images/skillTre
     price = 3,
     link = function() return playerStat[currentPlayer].skills.slimeCo end
 }
-menu.skills.balance = {x = -.3, y = -1, earned = false, image = "images/skillTree/balanceSkill.png", text = "Balance",
-    description = "It comes when a ship is lost at sea, a man feels lost. But that is not because they are away from land. It comes that a ship rocks. It rocks incessantly, unendingly. It rocks in such a way, balance is no longer possible. Such an enviroment, as hinted at by the classics, Dante's Salt, Beoslime, all seem to agree.",
+menu.skills.balance = {x = -.35, y = -1, earned = false, image = "images/skillTree/balanceSkill.png", text = "Balance",
+    description = "It comes when a ship is lost at sea, a man feels lost. But that is not because they are away from land. It comes that a ship rocks. It rocks incessantly, unendingly. It rocks in such a way, balance is no longer possible. Such an enviroment, as hinted at by the classics, Dante's Salt, Beoslime, all seem to agree. Ther...",
     price = 3,
-    link = function() return playerStat[currentPlayer].skills.slimeCo end
+    link = function() return playerStat[currentPlayer].skills.swap end
 }
 menu.skills.crystalSlime = {x = .06, y = -.2, earned = false, image = "images/skillTree/crystalwarriorSkill.png", text = "Crystal Slime",
     description = "A slime with a mineral shoved into it's head, granting it mystical powers",
@@ -167,7 +167,7 @@ menu.skills.disguise = {x = .25, y = -.2, earned = false, image = "images/skillT
     price = 3,
     link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
-menu.skills.cloning = {x = .5, y = -.5, earned = false, image = "images/skillTree/cloneSkill.png", text = "Cloning",
+menu.skills.cloning = {x = .42, y = -.5, earned = false, image = "images/skillTree/cloneSkill.png", text = "Cloning",
     description = "A dark magic disrupts the form splitting the slime in two",
     price = 3,
     link = function() return playerStat[currentPlayer].skills.disguise end
@@ -263,6 +263,28 @@ function menu:render()
         love.graphics.rectangle("fill", 0, 0, width, height)
         love.graphics.setColor(1, 1, 1)
     end
+    for _, ui in pairs(playerStat[currentPlayer].skills) do
+        if ui.link ~= nil then
+            linked = false
+            if #ui.link() == 2 then -- 2 means it's a doubly linked thing
+                for _, link in ipairs(ui.link()) do 
+                    love.graphics.line(menuToScreen(ui.x, ui.y).x + 32, menuToScreen(ui.x, ui.y).y + 32,
+                    menuToScreen(link.x, link.y).x + 32, menuToScreen(link.x, link.y).y + 32)
+                    if link.earned == true then
+                        ui.linked = true
+                    end
+                end
+            else
+                love.graphics.line(menuToScreen(ui.x, ui.y).x + 32, menuToScreen(ui.x, ui.y).y + 32,
+                menuToScreen(ui.link().x, ui.link().y).x + 32, menuToScreen(ui.link().x, ui.link().y).y + 32)
+                if ui.link().earned == true then
+                    ui.linked = true
+                end
+            end
+        else
+            ui.linked = true
+        end
+    end
 
     for _, ui in pairs(playerStat[currentPlayer].skills) do
         if ui.earned then
@@ -272,26 +294,7 @@ function menu:render()
         else
             imageLib:drawImage((ui.x * width) - 32, (ui.y * height) - 32, "images/skillTree/skillUnearnedUi.png")
         end
-        local linked = true
-        if ui.link ~= nil then
-            linked = false
-            if #ui.link() == 2 then -- 2 means it's a doubly linked thing
-                for _, link in ipairs(ui.link()) do 
-                    love.graphics.line(menuToScreen(ui.x, ui.y).x + 32, menuToScreen(ui.x, ui.y).y + 32,
-                    menuToScreen(link.x, link.y).x + 32, menuToScreen(link.x, link.y).y + 32)
-                    if link.earned == true then
-                        linked = true
-                    end
-                end
-            else
-                love.graphics.line(menuToScreen(ui.x, ui.y).x + 32, menuToScreen(ui.x, ui.y).y + 32,
-                menuToScreen(ui.link().x, ui.link().y).x + 32, menuToScreen(ui.link().x, ui.link().y).y + 32)
-                if ui.link().earned == true then
-                    linked = true
-                end
-            end
-        end
-        if not linked then
+        if not ui.linked then
             love.graphics.setColor(.2, .2, .2)
         end
 
