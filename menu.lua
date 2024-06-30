@@ -63,24 +63,24 @@ menu.skills.slimeCo = {x = -.15, y = -.8, earned = false, image = "images/skillT
     link = function() return playerStat[currentPlayer].skills.build end
 }
 menu.skills.wealth = {x = -.15, y = -1, earned = false, image = "images/skillTree/wealthSkill.png", text = "Wizard",
-description = "WEALTH WEALTH IT'S ALL MINE HAHAHAHAHAHAHHAHAHHAHAH",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.slimeCo end
+    description = "WEALTH WEALTH IT'S ALL MINE HAHAHAHAHAHAHHAHAHHAHAH",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.slimeCo end
 }
 menu.skills.crystalSlime = {x = .06, y = -.2, earned = false, image = "images/skillTree/crystalwarriorSkill.png", text = "Crystal Slime",
-description = "A slime with a mineral shoved into it's head, granting it mystical powers",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.drilling end
+    description = "A slime with a mineral shoved into it's head, granting it mystical powers",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.drilling end
 }
 menu.skills.crystalize = {x = .1, y = -.35, earned = false, image = "images/skillTree/crystalizeSkill.png", text = "Crystal Slime",
-description = "A slime with extrodinary crystal coverage",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.crystalSlime end
+    description = "A slime with extrodinary crystal coverage",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.crystalSlime end
 }
 menu.skills.crystalGuardian = {x = .12, y = -.5, earned = false, image = "images/skillTree/crystalGuardianSkill.png", text = "Crystal Slime",
-description = "At what point is it no longer a slime?",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.crystalize end
+    description = "At what point is it no longer a slime?",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.crystalize end
 }
 -- menu.skills.rouge = {x = .1, y = -.5, earned = false, image = "images/skillTree/crystalGuardianSkill.png", text = "Crystal Slime",
 -- description = "At what point is it no longer a slime?",
@@ -89,114 +89,114 @@ link = function() return playerStat[currentPlayer].skills.crystalize end
 -- }
 
 menu.skills.expand = {x = -.25, y = -.2, earned = false, image = "images/skillTree/expandSkill.png", text = "Expansion",
-description = "A blinding light alters the slime",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.twist end
+    description = "A blinding light alters the slime",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.twist end
 }
 menu.skills.spirit = {x = -.4, y = -.25, earned = false, image = "images/skillTree/spiritSkill.png", text = "Spirit",
-description = "A ghastly incantaton of a deceased slime",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.twist end
+    description = "A ghastly incantaton of a deceased slime",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.twist end
 }
 menu.skills.reincarnate = {x = -.4, y = -.4, earned = false, image = "images/skillTree/reincarnate.png", text = "Reincarnate",
-description = "A pure slime that sheds it's skin on death, coming back as a source of purity",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.spirit end
+    description = "A pure slime that sheds it's skin on death, coming back as a source of purity",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.spirit end
 }
 menu.skills.framework = {x = -.55, y = -.4, earned = false, image = "images/skillTree/frameworkSkill.png", text = "Framework",
-description = "A shell of a slime, ready to be embued with the power of another it comes across",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.spirit end
+    description = "A shell of a slime, ready to be embued with the power of another it comes across",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.spirit end
 }
 menu.skills.telekinisis = {x = -.3, y = -.4, earned = false, image = "images/skillTree/telekinisisSkill.png", text = "Telekinisis",
-description = "A blinding force binds and harms slime",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.expand end
+    description = "A blinding force binds and harms slime",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.expand end
 }
 menu.skills.blessing = {x = -.3, y = -.55, earned = false, image = "images/skillTree/blessingSkill.png", text = "Blessing",
-description = "A blessing of white light heals and rejuvinates slime",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.telekinisis end
+    description = "A blessing of white light heals and rejuvinates slime",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.telekinisis end
 }
 menu.skills.fly = {x = -.2, y = -.3, earned = false, image = "images/skillTree/flySkill.png", text = "Fly",
-description = "A brilliant white force pushes the slime into the air",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.twist end
+    description = "A brilliant white force pushes the slime into the air",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.twist end
 }
 menu.skills.whirlwind = {x = -.2, y = -.5, earned = false, image = "images/skillTree/whirlwindSkill.png", text = "Whirlwind",
-description = "A light force spins extremely fast knocking back and damaging all slimes it hits",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.fly end
+    description = "A light force spins extremely fast knocking back and damaging all slimes it hits",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.fly end
 }
 menu.skills.wizard = {x = -.2, y = -.7, earned = false, image = "images/skillTree/wizardSkill.png", text = "Wizard",
-description = "A wizard embued with crystal magic",
-price = 3,
-link = function() return {playerStat[currentPlayer].skills.whirlwind, playerStat[currentPlayer].skills.giant} end
+    description = "A wizard embued with crystal magic",
+    price = 3,
+    link = function() return {playerStat[currentPlayer].skills.whirlwind, playerStat[currentPlayer].skills.giant} end
 }
 menu.skills.strike = {x = -.25, y = -.9, earned = false, image = "images/skillTree/strikeSkill.png", text = "Wizard",
-description = "A flash white light strikes down the target",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.wizard end
+    description = "A flash white light strikes down the target",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.wizard end
 }
 menu.skills.swap = {x = -.3, y = -.7, earned = false, image = "images/skillTree/swapSkill.png", text = "Swap",
-description = "A light force instantly swaps two slimes",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.whirlwind end
+    description = "A light force instantly swaps two slimes",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.whirlwind end
 }
 menu.skills.dig = {x = .15, y = -.2, earned = false, image = "images/skillTree/digSkill.png", text = "Dig",
-description = "A dark magic pulls the ground downward caving in on itself",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.slimes3 end
+    description = "A dark magic pulls the ground downward caving in on itself",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
 menu.skills.disguise = {x = .25, y = -.2, earned = false, image = "images/skillTree/disguiseSkill.png", text = "Cloning",
-description = "A dark magic conceals the form of the slime until it moves for 1 slime",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.slimes3 end
+    description = "A dark magic conceals the form of the slime until it moves for 1 slime",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
 menu.skills.networkSlime = {x = .35, y = -.2, earned = false, image = "images/skillTree/networkwarriorSkill.png", text = "Network Slime",
-description = "A small unassuming slime hooked into a large ooze network, giving it regerative properties",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.slimes3 end
+    description = "A small unassuming slime hooked into a large ooze network, giving it regerative properties",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
 menu.skills.sleep = {x = .4, y = -.35, earned = false, image = "images/skillTree/sleepSkill.png", text = "Sleep",
-description = "A powerful dark incantation manages to stall out the slimes and put them to sleep",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.networkSlime end
+    description = "A powerful dark incantation manages to stall out the slimes and put them to sleep",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.networkSlime end
 }
 menu.skills.dissolve = {x = .2, y = -.4, earned = false, image = "images/skillTree/dissolveSkill.png", text = "Dissolve",
-description = "A mysterious force crushes the slime and converts the tile into a city tile",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.disguise end
+    description = "A mysterious force crushes the slime and converts the tile into a city tile",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.disguise end
 }
 menu.skills.slimeTrap = {x = .25, y = -.5, earned = false, image = "images/skillTree/slimeTrapSkill.png", text = "Slime Trap",
-description = "A mysterious force grabs the slime and crushes them",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.disguise end
+    description = "A mysterious force grabs the slime and crushes them",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.disguise end
 }
 menu.skills.hammer = {x = .25, y = -.65, earned = false, image = "images/skillTree/hammerSkill.png", text = "Hammer Slime",
-description = "A slime with a dark hammer radiating evil eneregy",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.slimeTrap end
+    description = "A slime with a dark hammer radiating evil eneregy",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.slimeTrap end
 }
 menu.skills.slimeCoil = {x = .15, y = -.65, earned = false, image = "images/skillTree/slimeCoilSkill.png", text = "Slime Coil",
-description = "An electic coil that melts slime",
-price = 3,
-link = function() return {playerStat[currentPlayer].skills.hammer, playerStat[currentPlayer].skills.mechanisedSlime} end
+    description = "An electic coil that melts slime",
+    price = 3,
+    link = function() return {playerStat[currentPlayer].skills.hammer, playerStat[currentPlayer].skills.mechanisedSlime} end
 }
 menu.skills.lurker = {x = .4, y = -.65, earned = false, image = "images/skillTree/lurkerSkill.png", text = "Lurker Slime",
-description = "A slime radiating evil energy",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.hammer end
+    description = "A slime radiating evil energy",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.hammer end
 }
 menu.skills.shred = {x = .25, y = -.8, earned = false, image = "images/skillTree/shredSkill.png", text = "Shred",
-description = "A powerful blast of short range dark energy targets anything",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.hammer end
+    description = "A powerful blast of short range dark energy targets anything",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.hammer end
 }
 menu.skills.slimeArrowSkill = {x = 0.3, y = -.4, earned = false, image = "images/skillTree/slimeArrowSkill.png", text = "Slime Arrow",
-description = "A slime that shoots arrows from the cover of darkness",
-price = 3,
-link = function() return playerStat[currentPlayer].skills.disguise end
+    description = "A slime that shoots arrows from the cover of darkness",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.disguise end
 }
 
 local function menuToScreen(x, y)

@@ -125,6 +125,7 @@ function love.draw()
     end
     menu:render()
     title:render()
+    settings:render()
 
     cam:detach()
 

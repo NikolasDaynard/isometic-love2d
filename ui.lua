@@ -1,6 +1,7 @@
 -- this is for static ui :)
 require("image")
 require("helpers")
+require("settings")
 ui = {}
 
 function ui:render()
@@ -10,24 +11,25 @@ function ui:render()
     love.graphics.setColor(1, 1, 1)
 
     imageLib:drawImage(width - 30, 2, "images/icons/turnpass.png")
+    imageLib:drawImage(width - 50, 2, "images/icons/settings.png")
     love.graphics.setFont(font)
     local oozeString = "Ooze: " .. playerStat[currentPlayer].oozeNum .. " + (" .. playerStat[currentPlayer].oozesPerTurn .. ")"
     local mineralString = "Crystal: " .. playerStat[currentPlayer].crystalNum
     local oozeStringOffset = font:getWidth(oozeString)
 
-    if oozeStringOffset + font:getWidth(mineralString) + 80 > width then
+    if oozeStringOffset + font:getWidth(mineralString) + 100 > width then
         oozeString = playerStat[currentPlayer].oozeNum .. " + (" .. playerStat[currentPlayer].oozesPerTurn .. ")"
         mineralString = playerStat[currentPlayer].crystalNum .. "" -- wow the jank
         oozeStringOffset = font:getWidth(oozeString)
 
-        if oozeStringOffset + font:getWidth(mineralString) + 80 > width then
+        if oozeStringOffset + font:getWidth(mineralString) + 100 > width then
             oozeString = playerStat[currentPlayer].oozeNum .. ""
             mineralString = playerStat[currentPlayer].crystalNum .. ""
             oozeStringOffset = font:getWidth(oozeString)
 
-            if oozeStringOffset + font:getWidth(mineralString) + 80 > width then
+            if oozeStringOffset + font:getWidth(mineralString) + 100 > width then
                 oozeString = ""
-                mineralString = "" 
+                mineralString = ""
                 oozeStringOffset = font:getWidth(oozeString)
             end
         end
@@ -44,6 +46,9 @@ function ui:render()
     elseif clickHitButton(love.mouse.getX(), love.mouse.getY(), 2 + 8, 2 + 8, 8) then
         ui:renderTooltip("ooze", 2 + 8, 2 + 18)
         love.graphics.setFont(font)
+    elseif clickHitButton(love.mouse.getX(), love.mouse.getY(), width - 50 + 8, 2 + 8, 8) then
+        ui:renderTooltip("settings", width - 70 + 8, 2 + 18)
+        love.graphics.setFont(font)
     elseif clickHitButton(love.mouse.getX(), love.mouse.getY(), width - 30 + 8, 2 + 8, 8) then
         ui:renderTooltip("pass turn", width - 70 + 8, 2 + 18)
         love.graphics.setFont(font)
@@ -52,6 +57,9 @@ end
 
 function ui:click(x, y)
     if love.mouse.isDown(1) then
+        if clickHitButton(x, y, width - 40, 2, 16) then
+            settings.open = true
+        end
         if clickHitButton(x, y, width - 20, 2, 16) then
             interactibleTiles.tiles = {}
             for _, tile in ipairs(tileHolder:getTiles()) do

@@ -20,8 +20,8 @@ function title:render()
     end
     cam:lookAt(1200 / 2, 600 / 2)
     love.graphics.setColor(0, 0, 0)
-    local windowWidth, winodwHeight, windowMode = love.window.getMode()
-    love.graphics.rectangle("fill", 0, 0, windowWidth + cam:getX(), winodwHeight + cam:getY())
+    local windowWidth, windowHeight, windowMode = love.window.getMode()
+    love.graphics.rectangle("fill", 0, 0, windowWidth + cam:getX(), windowHeight + cam:getY())
     love.graphics.setColor(1, 1, 1)
     -- draw title
     imageLib:drawImage(0, 0, "images/ui/TitleStart.png")
