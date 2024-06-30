@@ -9,6 +9,7 @@ require("ui")
 require("title")
 require("helpers")
 require("menu")
+lunajson = require("libs.lunajson")
 Camera = require 'camera'
 
 font = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 18)
@@ -40,6 +41,9 @@ local currentRot = 0
 
 
 function love.load()
+    if love.filesystem.getInfo("settings.json") ~= nil then
+        settings:loadSettings()
+    end
     love.graphics.setFont(font)
     math.randomseed(os.time())
     tileHolder:createMap()

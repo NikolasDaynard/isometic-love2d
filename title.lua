@@ -18,7 +18,7 @@ function title:render()
     elseif self.time < 320 * 3 then
         cam:zoomTo(math.min(((self.time / 800) ^ 1.2), .7))
     end
-    cam:lookAt(1200 / 2, 600 / 2)
+    cam:lookAt(1300 / 2, 600 / 2)
     love.graphics.setColor(0, 0, 0)
     local windowWidth, windowHeight, windowMode = love.window.getMode()
     love.graphics.rectangle("fill", 0, 0, windowWidth + cam:getX(), windowHeight + cam:getY())

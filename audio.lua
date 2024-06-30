@@ -17,14 +17,15 @@ end
 
 
 function audio:update()
+    love.audio.setVolume(settings:getSetting("volume"))
     for i, sound in ipairs(self.fadingAudio) do
-        sound:setVolume(math.max(sound:getVolume() - .01, 0))
+        sound:setVolume(math.max(sound:getVolume() - .01 * settings:getSetting("volume"), 0))
         if math.max(sound:getVolume() - .01, 0) == 0 then
             table.remove(self.fadingAudio, i)
         end
     end
     for i, sound in ipairs(self.fadingAudioIn) do
-        sound:setVolume(math.min(sound:getVolume() + .01, 1))
+        sound:setVolume(math.min(sound:getVolume() + .01 * settings:getSetting("volume"), 1))
         if math.min(sound:getVolume() + .01, 1) == 1 then
             table.remove(self.fadingAudioIn, i)
         end
@@ -51,7 +52,7 @@ function audio:playSound(sound, volume, loop)
 
     self.sounds[sound]:setLooping(loop or false)
 
-    self.sounds[sound]:setVolume(volume or 1) -- mute game
+    self.sounds[sound]:setVolume((volume or 1)) -- mute game
 
     table.insert(self.playingSounds, self.sounds[sound])
 end

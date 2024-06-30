@@ -91,9 +91,13 @@ function ui:renderTooltip(text, x, y)
     love.graphics.print(text, x, y)
 end
 
-function ui:renderButton(x, y, w, h, text)
+function ui:renderButton(x, y, w, h, value, text)
     text = text or ""
-    love.graphics.setColor(.2, .2, .2)
+    if value then 
+        love.graphics.setColor(.2, .7, .2)
+    else
+        love.graphics.setColor(.7, .2, .2)
+    end
     love.graphics.rectangle("fill", x, y, w, h)
     
     love.graphics.setColor(1, 1, 1)
