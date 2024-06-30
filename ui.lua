@@ -3,6 +3,8 @@ require("image")
 require("helpers")
 require("settings")
 ui = {}
+playerStep = 1
+local currentPlayerAbs = 1
 
 function ui:render()
     width, height, flags = love.window.getMode()
@@ -68,9 +70,11 @@ function ui:click(x, y)
                 end
             end
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum + playerStat[currentPlayer].oozesPerTurn
-            currentPlayer = currentPlayer + 1
+            currentPlayer = math.floor(currentPlayerAbs + playerStep)
+            currentPlayerAbs = currentPlayerAbs + playerStep
             if currentPlayer > 2 then
                 currentPlayer = 1
+                currentPlayerAbs = 1
             end
             return true
         end

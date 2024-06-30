@@ -42,6 +42,10 @@ function isometricRenderer:render(rotation)
         if tile.control ~= currentPlayer and tile.control then
             love.graphics.setColor(.7, .6, .5)
         end
+        if tile.wealth then
+            r, g, b = love.graphics.getColor()
+            love.graphics.setColor(r - .4, g - .3, b + .5)
+        end
 
         if tile ~= selectedTile then
             imageLib:drawImage(y * 32 + ((math.abs(x) % 2) * 16), (x * 5) + (tile.height * 16), tile.image)

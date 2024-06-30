@@ -358,12 +358,35 @@ actions = {
         image = "images/icons/createTroop.png",
         check = function(tile)
             if not tile.illuminated then
-                return true
+                return playerStat[currentPlayer].skills.illuminate.earned
             end
             return false
         end,
         action = function()
             selectedTile.illuminated = true
+        end
+    },
+    wealth = {
+        tooltip = "Enrich tile",
+        image = "images/icons/createTroop.png",
+        check = function(tile)
+            if not tile.wealth then
+                return playerStat[currentPlayer].skills.wealth.earned
+            end
+        end,
+        action = function()
+            selectedTile.wealth = true
+        end
+    },
+    createSlimeStop = {
+        tooltip = "Create Slime Stop",
+        image = "images/icons/createTroop.png",
+        check = function(tile)
+            return playerStat[currentPlayer].oozeNum - 20 >= 0 and playerStat[currentPlayer].skills.slimeStop.earned
+        end,
+        action = function()
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 20
+            playerStep = .1
         end
     },
     buildTile = {
@@ -909,6 +932,7 @@ function moveTroopDist(distance)
                         moveTile(tile, newTile);
                         
                         (tile.structure or {}).moved = true
+                        audio:startBattleTheme("audio/Battle Theme.mp3")
                     end
                 end
             end

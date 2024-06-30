@@ -35,7 +35,7 @@ function audio:update()
 end
 
 function audio:playSound(sound, volume, loop)
-    volume = 0
+    -- volume = 0
     if self.sounds[sound] == nil then
         audio:loadSound(sound)
     end
@@ -45,7 +45,7 @@ function audio:playSound(sound, volume, loop)
 
     self.sounds[sound]:setVolume(volume or 1) -- mute game
 
-    -- table.insert(self.playingSounds, self.sounds[sound])
+    table.insert(self.playingSounds, self.sounds[sound])
 end
 
 function audio:stopSound(soundName)
@@ -68,6 +68,17 @@ function audio:fade(soundName)
     end
 end
 function audio:fadeIn(soundName)
+    if self.sounds[soundName] == nil then
+        audio:loadSound(soundName)
+    end
+    for i, sound in ipairs(self.playingSounds) do
+        if sound == self.sounds[soundName] then
+            table.insert(self.fadingAudioIn, self.playingSounds[i])
+        end
+    end
+end
+
+function audio:startBattleTheme(soundName)
     if self.sounds[soundName] == nil then
         audio:loadSound(soundName)
     end

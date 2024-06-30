@@ -27,7 +27,7 @@ playerStat = {{id = 1, oozesPerTurn = 1, oozeNum = 10, crystalNum = 0, skills = 
 local dragging = false
 local clickedRotate = false
 local drag_offset_x, drag_offset_y = 0, 0
-local zoomIntertiaY = 0
+local zoomIntertiaX, zoomIntertiaY = 0, 0
 local mouseDeltaX, mouseDeltaY = 0, 0
 local mousex, mousey = 0, 0
 local absmousex, absmousey = 0, 0
@@ -181,6 +181,8 @@ function updateCamPosition()
     if love.mouse.isDown(3) then
         cam:move(lerp(0, mouseDeltaX, 1) / (cam:getScale()), lerp(0, mouseDeltaY, 1) / (cam:getScale()))
     end
+
+    cam:move(-zoomIntertiaX, 0)
     if cam:getScale() < 1 then
         cam:zoom(((zoomIntertiaY / 10) / (3 / cam:getScale())) + 1)
     else
@@ -188,6 +190,7 @@ function updateCamPosition()
     end
 
     zoomIntertiaY = zoomIntertiaY / 2
+    zoomIntertiaX = zoomIntertiaX / 1.1
 
     if love.keyboard.isDown("1") then
         if not clickedRotate then
@@ -219,4 +222,5 @@ function updateCamPosition()
 end
 function love.wheelmoved(x, y)
     zoomIntertiaY = zoomIntertiaY + y
+    zoomIntertiaX = zoomIntertiaX + x * 8
 end
