@@ -30,8 +30,11 @@ function audio:update()
         end
     end
     for i, sound in ipairs(self.playingSounds) do
-        if self.playingSounds[i] == self.playingSounds[BGM] then
-            print("is ijf")
+        if self.playingSounds[i] == self.sounds[BGM] then
+            if not sound:isPlaying() then
+                BGM = "audio/City of Gelatin.mp3"
+                audio:fadeInBGM()
+            end
         end
         if not sound:isPlaying() then
             table.remove(self.playingSounds, i)

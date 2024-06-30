@@ -1,4 +1,5 @@
 local simplex = require("simplex")
+require("helpers")
 
 tileHolder = {
     tiles = {},
@@ -14,6 +15,13 @@ end
 function tileHolder:getTileAtPos(x, y)
     return self.tileMap[x .. "," .. y]
 end
+function tileHolder:getTileAtPosDumb(x, y)
+    for _, tile in ipairs(self.tiles) do
+        if tile.x == x and tile.y == y then
+            return tile
+        end
+    end
+end
 
 function tileHolder:getTiles()
     return self.tiles
@@ -27,15 +35,16 @@ function tileHolder:createMap()
             local randHeight = math.random(0, 100) / 100
             local newTile = tileHolder:newTile(i, j, 0, "images/tiles/tilesmudge.png")
             newTile.height = 1
-            if randHeight > .99 then
+            if randHeight > .999 then
                 local mineralImg = "images/resources/mineral.png"
                 newTile.structure = {x = i, y = j, height = 1, image = mineralImg, structure = nil, type = "mineral"}
             end
-            if randHeight < .1 then
+            local slimeOdds = 3
+            if randHeight < .1 / slimeOdds  then
                 local oozeImg
-                if randHeight < .03 then
+                if randHeight < .03 / slimeOdds then
                     oozeImg = "images/resources/ooze1.png"
-                elseif randHeight < .06 then
+                elseif randHeight < .06 / slimeOdds then
                     oozeImg = "images/resources/ooze2.png"
                 else
                     oozeImg = "images/resources/ooze3.png"
@@ -48,6 +57,35 @@ function tileHolder:createMap()
     end
     for _, tile in ipairs(self.tiles) do
         self.tileMap[tile.x .. "," .. tile.y] = tile
+    end
+    for i = 0, 100 do
+        for j = 0, 30 do
+            local randHeight = math.random(0, 100) / 100
+            if randHeight < .5 and randHeight > .46 then
+                local bestDist = math.huge
+                local tileFound = false
+                for i2 = 0, 100 do
+                    for j2 = 0, 30 do
+                        local tile = tileHolder:getTileAtPos(i2, j2)
+                        if tile ~= nil then
+                            if tile.structure ~= nil then
+                                if tile.structure.type == "mound" then
+                                    tileFound = true
+                                    if distance(tile.structure.x, tile.structure.y, i, j) < bestDist then -- finding the closest
+                                        bestDist = distance(tile.structure.x, tile.structure.y, i, j)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                if bestDist > 5 or not tileFound then
+                    local tile = tileHolder:getTileAtPos(i, j)
+                    tile.structure = {x = i, y = j, height = 1, image = "images/slimeMound.png", structure = nil, type = "mound"}
+                    tile.control = nil
+                end
+            end
+        end
     end
 end
 function createNoiseMap(resolution)

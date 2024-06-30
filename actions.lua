@@ -2,6 +2,70 @@ require("helpers")
 require("menu")
 
 actions = {
+    -- foundCity = { 
+    --     tooltip = "Build a new slime city",
+    --     image = "images/icons/foundCity.png",
+    --     check = function(tile)
+    --     --     return tile.insideCity ~= true and tile.structure == nil and playerStat[currentPlayer].oozeNum - 3 >= 0
+    --     -- end,
+    --         if tile.structure ~= nil then
+    --             if playerStat[currentPlayer].skills.whirlwind.earned == true then
+    --                 if tile.structure.kinisis then
+    --                     for _, newTile in ipairs(tileHolder:getTiles()) do
+    --                         if newTile.structure ~= nil then
+    --                             if string.find(newTile.structure.type, "troop") ~= nil then
+    --                                 if distance(newTile.x, newTile.y, tile.x, tile.y) < 10 then
+    --                                     local tileCopy = deepCopy(newTile)
+    --                                     tileCopy.image = "images/move.png"
+    --                                     table.insert(interactibleTiles.tiles, tileCopy)
+    --                                     interactibleTiles.tiles[#interactibleTiles.tiles].callback = function(tile, newTile)
+    --                                         selectedTile.structure.kinisis = false
+    --                                         selectedTile.structure.moved = true
+    --                                         newTile.structure.health = newTile.structure.health - 1
+    --                                         if newTile.structure.health <= 0 then
+    --                                             newTile.structure = nil
+    --                                         end
+
+    --                                         local distance = 3
+
+    --                                         local directions = {}
+    --                                         for dx = -distance, distance do
+    --                                             for dy = -distance, distance do
+    --                                                 if math.abs(dx) + math.abs(dy) <= distance and (dx ~= 0 or dy ~= 0) then
+    --                                                     table.insert(directions, {dx, dy})
+    --                                                 end
+    --                                             end
+    --                                         end
+    --                                         updates = {}
+
+    --                                         for _, direction in ipairs(directions) do
+    --                                             local dx, dy = direction[1], direction[2]
+    --                                             local targetTile = tileHolder:getTileAtPos(newTile.x + dx, newTile.y + dy)
+    --                                             if targetTile and targetTile.structure ~= nil then
+    --                                                 if string.find(targetTile.structure.type, "troop") ~= nil then
+    --                                                     if tileHolder:getTileAtPos(targetTile.x + dx, targetTile.y + dy).structure == nil then
+    --                                                         targetTile.structure.x = targetTile.x + dx
+    --                                                         targetTile.structure.y = targetTile.y + dy
+    --                                                         tileHolder:getTileAtPos(targetTile.x + dx, targetTile.y + dy).structure = deepCopy(targetTile.structure)
+    --                                                         targetTile.structure = nil
+    --                                                     end
+    --                                                 end
+    --                                             end
+    --                                         end
+    --                                     end
+    --                                 end
+    --                             end
+    --                         end
+    --                     end
+    --                 end
+    --                 return true
+    --             end
+    --         end
+    --     end,
+    --     action = function()
+    --         selectedTile.structure.kinisis = true
+    --     end
+    -- },
     foundCity = {
         tooltip = "Build a new slime city",
         image = "images/icons/foundCity.png",

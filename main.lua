@@ -22,7 +22,7 @@ realbigfont:setFilter("nearest", "nearest")
 -- playerStat[currentPlayer].oozesPerTurn = 1
 currentPlayer = 1
 playerStat = {{id = 1, oozesPerTurn = 1, oozeNum = 10, crystalNum = 0, skills = deepCopy(menu.skills)},
-{id = 2, oozesPerTurn = 1, oozeNum = 1000, crystalNum = 100, skills = deepCopy(menu.skills)}}
+    {id = 2, oozesPerTurn = 1, oozeNum = 10, crystalNum = 0, skills = deepCopy(menu.skills)}}
 
 local dragging = false
 local clickedRotate = false
