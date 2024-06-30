@@ -82,9 +82,6 @@ function audio:startBattleTheme(soundName)
     if self.sounds[soundName] == nil then
         audio:loadSound(soundName)
     end
-    for i, sound in ipairs(self.playingSounds) do
-        if sound == self.sounds[soundName] then
-            table.insert(self.fadingAudioIn, self.playingSounds[i])
-        end
-    end
+    audio:playSound("audio/Battle Theme.mp3", 1, true)
+    audio:fade("audio/City of Gelatin.mp3")
 end

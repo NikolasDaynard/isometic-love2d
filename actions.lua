@@ -368,7 +368,7 @@ actions = {
     },
     wealth = {
         tooltip = "Enrich tile",
-        image = "images/icons/createTroop.png",
+        image = "images/icons/wealth.png",
         check = function(tile)
             if not tile.wealth then
                 return playerStat[currentPlayer].skills.wealth.earned
@@ -380,7 +380,7 @@ actions = {
     },
     createSlimeStop = {
         tooltip = "Create Slime Stop",
-        image = "images/icons/createTroop.png",
+        image = "images/icons/slimeStop.png",
         check = function(tile)
             return playerStat[currentPlayer].oozeNum - 20 >= 0 and playerStat[currentPlayer].skills.slimeStop.earned
         end,
@@ -396,7 +396,7 @@ actions = {
             if (tile.structure or {}).type == "city" then
                 return false
             end
-            return true
+            return playerStat[currentPlayer].skills.build.earned
         end,
         action = function()
             selectedTile.height = selectedTile.height - 1
@@ -461,7 +461,7 @@ actions = {
     },
     twistTroop = {
         tooltip = "Twists around the troop and alters it's type",
-        image = "images/icons/createTroop.png", -- TODO: finish this
+        image = "images/icons/twist.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.twist.earned == true then
@@ -491,7 +491,7 @@ actions = {
     },
     clone = {
         tooltip = "Splits the slime into two weaker copies",
-        image = "images/icons/createTroop.png",
+        image = "images/icons/clone.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.cloning.earned == true and findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y) ~= nil then
@@ -514,7 +514,7 @@ actions = {
     },
     blessing = {
         tooltip = "Bless slime",
-        image = "images/icons/createTroop.png",
+        image = "images/icons/bless.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.blessing.earned == true and tile.structure.health ~= tile.structure.maxHp then
@@ -529,7 +529,7 @@ actions = {
     },
     dissolve = {
         tooltip = "Dissolve this unit and turn the current tile into a city tile",
-        image = "images/icons/createTroop.png", -- TODO: finish this
+        image = "images/icons/dissolve.png", -- TODO: finish this
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.dissolve.earned == true and selectedTile.insideCity == false then
@@ -546,7 +546,7 @@ actions = {
     },
     slimeTrap = {
         tooltip = "Destroys slime that steps on it (-3)",
-        image = "images/icons/spike.png", -- TODO: finish this
+        image = "images/icons/spike.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.slimeTrap.earned == true then
@@ -622,7 +622,7 @@ actions = {
     },
     strike = {
         tooltip = "Strike down a nearby slime",
-        image = "images/icons/sleep.png", -- TODO: finish this
+        image = "images/icons/strike.png",
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.strike.earned == true then
@@ -657,7 +657,7 @@ actions = {
     },
     shred = {
         tooltip = "Evicerates a slime in close range (-3)",
-        image = "images/icons/swap.png", -- TODO: finish this
+        image = "images/icons/shred.png", -- TODO: finish this
         check = function(tile)
             if tile.structure ~= nil then
                 if tile.structure.type == "troop" and playerStat[currentPlayer].skills.shred.earned == true then
