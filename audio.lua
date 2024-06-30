@@ -45,7 +45,7 @@ function audio:playSound(sound, volume, loop)
 
     self.sounds[sound]:setVolume(volume or 1) -- mute game
 
-    table.insert(self.playingSounds, self.sounds[sound])
+    -- table.insert(self.playingSounds, self.sounds[sound])
 end
 
 function audio:stopSound(soundName)
