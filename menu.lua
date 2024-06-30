@@ -148,10 +148,15 @@ menu.skills.dig = {x = .15, y = -.2, earned = false, image = "images/skillTree/d
     price = 3,
     link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
-menu.skills.disguise = {x = .25, y = -.2, earned = false, image = "images/skillTree/disguiseSkill.png", text = "Cloning",
+menu.skills.disguise = {x = .25, y = -.2, earned = false, image = "images/skillTree/disguiseSkill.png", text = "Disguise",
     description = "A dark magic conceals the form of the slime until it moves for 1 slime",
     price = 3,
     link = function() return playerStat[currentPlayer].skills.slimes3 end
+}
+menu.skills.cloning = {x = .5, y = -.5, earned = false, image = "images/skillTree/cloningSkill.png", text = "Cloning",
+    description = "A dark magic disrupts the form splitting the slime in two",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.disguise end
 }
 menu.skills.networkSlime = {x = .35, y = -.2, earned = false, image = "images/skillTree/networkwarriorSkill.png", text = "Network Slime",
     description = "A small unassuming slime hooked into a large ooze network, giving it regerative properties",
@@ -212,9 +217,13 @@ function menu:update()
         if not self.holdingEsc then
             self.open = not self.open
             if self.open then
+                audio:fade("audio/City of Gelatin.mp3")
+                audio:playSound("audio/Industrial Wares.mp3", 1, true)
                 self.worldCameraPos.x, self.worldCameraPos.y = cam:position()
                 cam:lookAt(0, 0)
             else
+                audio:fade("audio/Industrial Wares.mp3")
+                audio:fadeIn("audio/City of Gelatin.mp3")
                 cam:lookAt(self.worldCameraPos.x, self.worldCameraPos.y)
             end
             self.holdingEsc = true

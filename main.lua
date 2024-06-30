@@ -9,7 +9,7 @@ require("ui")
 require("title")
 require("helpers")
 require("menu")
-Camera = require 'camera' 
+Camera = require 'camera'
 
 font = love.graphics.newFont("images/Volter__28Goldfish_29.ttf", 18)
 font:setFilter("nearest", "nearest")
@@ -28,7 +28,7 @@ function love.load()
     love.graphics.setFont(font)
     tileHolder:createMap()
     cam = Camera()
-    -- audio:playSound("audio/City of Gelatin.mp3", 1, true)
+    audio:playSound("audio/City of Gelatin.mp3", 1, true)
     -- audio:playSound("audio/distortion.wav", 1, true)
 end
 
