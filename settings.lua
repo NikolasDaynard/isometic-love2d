@@ -1,20 +1,23 @@
 settings = {
-    dragging = false,
+    draggingSlider = nil,
     open = false,
+    clicking = false, 
     buttons = {
-        {x = 3, y = 3, w = 1000, h = 200,
+        {x = 0, y = 0, w = 1000, h = 200,
             callback = function(value)
                 print("called back")
             end,
-            value = false
+            value = false,
+            -- text = 
         }
     },
     sliders = {
-        {x = 3, y = -300, w = 1000, h = 200,
+        {x = 300, y = -300, w = 1000, h = 200,
             callback = function(value)
-                print("called back")
+                print("called back2")
             end,
-            value = .5
+            value = .5,
+            text = "volume"
         }
     }
 }
@@ -30,10 +33,11 @@ function settings:render()
     love.graphics.setColor(1, 1, 1)
 
     for _, button in ipairs(self.buttons) do
-        ui:renderButton(button.x, button.y, button.w, button.h, "foo")
+        love.graphics.setFont(realbigfont)
+        ui:renderButton(button.x, button.y, button.w, button.h, button.text)
     end
     for _, slider in ipairs(self.sliders) do
-        ui:renderSlider(slider.x, slider.y, slider.w, slider.h, slider.value, "foo")
+        ui:renderSlider(slider.x, slider.y, slider.w, slider.h, slider.value, slider.text)
     end
 end
 function settings:click(x, y)
@@ -45,19 +49,21 @@ function settings:click(x, y)
                 end
             end
         end
+
         for _, slider in ipairs(self.sliders) do
             if clickHitRect(x, y, slider.x, slider.y, slider.w, slider.h) then
                 if slider.callback then
                     slider.callback()
                 end
-                dragging = slider
+                self.draggingSlider = slider
             end
         end
     else
-        dragging = nil
+        self.draggingSlider = nil
     end
-    if dragging then -- ref to slider 
-        dragging.value = math.abs(1 - (((dragging.x + dragging.w) - x) / dragging.w))
-        print(dragging.value)
+    if self.draggingSlider then -- ref to slider
+        self.draggingSlider.value = math.abs(math.max(math.min(1 - (((self.draggingSlider.x + self.draggingSlider.w) - x) / self.draggingSlider.w), 1), 0))
+        self.draggingSlider.callback(self.draggingSlider.value)
+        return true
     end
 end

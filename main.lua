@@ -66,14 +66,18 @@ function love.update(dt)
     mousey = cam:mousePosition().y
     local hitTile = false
     local hitUi = false
+    if settings.open then
+        if settings:click(mousex, mousey) then
+            hitUi = true
+            dragging = true
+        end
+    end
     if not dragging then
         if ui:click(love.mouse.getX(), love.mouse.getY()) then
             hitUi = true
             dragging = true
         end
-        if settings.open then
-            settings:click(mousex, mousey)
-        elseif menu.open then
+        if menu.open then
             menu:click(mousex, mousey)
         elseif title.open then
             title:click(mousex, mousey)
@@ -120,7 +124,6 @@ function love.update(dt)
     end
 
     updateCamPosition()
-
     if not hitTile and not hitUi then
         windowUpdate()
     end

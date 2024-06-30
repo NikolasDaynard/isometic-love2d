@@ -104,7 +104,8 @@ function ui:renderSlider(x, y, w, h, value, text)
     text = text or ""
     love.graphics.setColor(.2, .2, .2)
     love.graphics.rectangle("fill", x, y, w, h)
-    love.graphics.rectangle("fill", (x - 10) + (w * (1 / math.max(value, .001))), y - 10, w / 10, h + 10)
+    love.graphics.setColor(1, .2, .2)
+    love.graphics.rectangle("fill", (x - 10) + (w * value), y - 10, w / 10, h + 10)
     
     love.graphics.setColor(1, 1, 1)
     love.graphics.print(text, x, y + 10)
