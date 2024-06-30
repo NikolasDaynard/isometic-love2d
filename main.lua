@@ -24,17 +24,13 @@ currentPlayer = 1
 playerStat = {{id = 1, oozesPerTurn = 1, oozeNum = 10, crystalNum = 0, skills = deepCopy(menu.skills)},
 {id = 2, oozesPerTurn = 1, oozeNum = 1000, crystalNum = 100, skills = deepCopy(menu.skills)}}
 
-function love.load()
-    love.graphics.setFont(font)
-    tileHolder:createMap()
-    cam = Camera()
-    audio:playSound("audio/City of Gelatin.mp3", 1, true)
-    -- audio:playSound("audio/distortion.wav", 1, true)
-end
-
 local dragging = false
 local clickedRotate = false
 local drag_offset_x, drag_offset_y = 0, 0
+local zoomIntertiaY = 0
+local mouseDeltaX, mouseDeltaY = 0, 0
+local mousex, mousey = 0, 0
+local absmousex, absmousey = 0, 0
 selectedTile = nil
 interactibleTiles = {
     tiles = {{x = 3, y = 3, height = 1, image = "images/testing.png", structure = nil, type = "interact"}}
@@ -42,17 +38,31 @@ interactibleTiles = {
 
 local currentRot = 0
 
+
+function love.load()
+    love.graphics.setFont(font)
+    tileHolder:createMap()
+    cam = Camera(0, 0, 1, 0, Camera.smooth.damped(.9))
+    audio:playSound("audio/City of Gelatin.mp3", 1, true)
+    
+    -- audio:playSound("audio/distortion.wav", 1, true)
+end
+
+
+
 function love.update(dt)
     if not love.window.hasFocus() then
         -- disabled for faster dev
         -- love.timer.sleep(1) -- .5 is less delay but .6 more cpu points
     end
-
     menu:update()
     audio:update()
-    
-    local mousex = cam:mousePosition().x
-    local mousey = cam:mousePosition().y
+    local x, y = love.mouse.getPosition()
+    mouseDeltaX = absmousex - x
+    mouseDeltaY = absmousey - y
+    absmousex, absmousey = love.mouse.getPosition()
+    mousex = cam:mousePosition().x
+    mousey = cam:mousePosition().y
     local hitTile = false
     local hitUi = false
     if not dragging then
@@ -168,6 +178,16 @@ function updateCamPosition()
             cam:move(0, 1 / (cam:getScale() / 2))
         end
     end
+    if love.mouse.isDown(3) then
+        cam:move(lerp(0, mouseDeltaX, 1) / (cam:getScale() / 2), lerp(0, mouseDeltaY, 1) / (cam:getScale() / 2))
+    end
+    if cam:getScale() < 1 then
+        cam:zoom(((zoomIntertiaY / 10) / (3 / cam:getScale())) + 1)
+    else
+        cam:zoom(((zoomIntertiaY / 10) / (cam:getScale())) + 1)
+    end
+
+    zoomIntertiaY = zoomIntertiaY / 2
 
     if love.keyboard.isDown("1") then
         if not clickedRotate then
@@ -196,4 +216,7 @@ function updateCamPosition()
         local newCamPos = IsoCordToWorldSpace(selectedTile.x, selectedTile.y, selectedTile.height, currentRot)
         cam:lookAt(newCamPos.x, newCamPos.y)
     end
+end
+function love.wheelmoved(x, y)
+    zoomIntertiaY = zoomIntertiaY + y
 end

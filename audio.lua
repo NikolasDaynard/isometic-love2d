@@ -35,6 +35,7 @@ function audio:update()
 end
 
 function audio:playSound(sound, volume, loop)
+    volume = 0
     if self.sounds[sound] == nil then
         audio:loadSound(sound)
     end
@@ -42,7 +43,7 @@ function audio:playSound(sound, volume, loop)
 
     self.sounds[sound]:setLooping(loop or false)
 
-    self.sounds[sound]:setVolume(volume or 1)
+    self.sounds[sound]:setVolume(volume or 1) -- mute game
 
     table.insert(self.playingSounds, self.sounds[sound])
 end
