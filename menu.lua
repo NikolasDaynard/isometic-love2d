@@ -62,8 +62,18 @@ menu.skills.slimeCo = {x = -.15, y = -.8, earned = false, image = "images/skillT
     price = 3,
     link = function() return playerStat[currentPlayer].skills.build end
 }
+menu.skills.slimeStop = {x = 0, y = -1, earned = false, image = "images/skillTree/slimeStopSkill.png", text = "Slime Stop",
+    description = "The slime seems to have eaten the timer. Is that allowed?",
+    price = 3,
+    link = function() return {playerStat[currentPlayer].skills.slimeCo, playerStat[currentPlayer].skills.rouge} end
+}
 menu.skills.wealth = {x = -.15, y = -1, earned = false, image = "images/skillTree/wealthSkill.png", text = "Wizard",
     description = "WEALTH WEALTH IT'S ALL MINE HAHAHAHAHAHAHHAHAHHAHAH",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.slimeCo end
+}
+menu.skills.balance = {x = -.3, y = -1, earned = false, image = "images/skillTree/balanceSkill.png", text = "Balance",
+    description = "It comes when a ship is lost at sea, a man feels lost. But that is not because they are away from land. It comes that a ship rocks. It rocks incessantly, unendingly. It rocks in such a way, balance is no longer possible. Such an enviroment, as hinted at by the classics, Dante's Salt, Beoslime, all seem to agree.",
     price = 3,
     link = function() return playerStat[currentPlayer].skills.slimeCo end
 }
@@ -82,12 +92,6 @@ menu.skills.crystalGuardian = {x = .12, y = -.5, earned = false, image = "images
     price = 3,
     link = function() return playerStat[currentPlayer].skills.crystalize end
 }
--- menu.skills.rouge = {x = .1, y = -.5, earned = false, image = "images/skillTree/crystalGuardianSkill.png", text = "Crystal Slime",
--- description = "At what point is it no longer a slime?",
--- price = 3,
--- link = function() return playerStat[currentPlayer].skills.crystalGuardian end
--- }
-
 menu.skills.expand = {x = -.25, y = -.2, earned = false, image = "images/skillTree/expandSkill.png", text = "Expansion",
     description = "A blinding light alters the slime",
     price = 3,
@@ -117,6 +121,16 @@ menu.skills.blessing = {x = -.3, y = -.55, earned = false, image = "images/skill
     description = "A blessing of white light heals and rejuvinates slime",
     price = 3,
     link = function() return playerStat[currentPlayer].skills.telekinisis end
+}
+menu.skills.shield = {x = -.45, y = -.6, earned = false, image = "images/skillTree/shieldSkill.png", text = "Shield",
+    description = "A shield of blinding light protects the user",
+    price = 3,
+    link = function() return {playerStat[currentPlayer].skills.blessing, playerStat[currentPlayer].skills.reincarnate} end
+}
+menu.skills.illuminate = {x = -.45, y = -.75, earned = false, image = "images/skillTree/illuminateSkill.png", text = "Illuminate",
+    description = "A white flash of light reveals the slime's true nature",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.blessing end
 }
 menu.skills.fly = {x = -.2, y = -.3, earned = false, image = "images/skillTree/flySkill.png", text = "Fly",
     description = "A brilliant white force pushes the slime into the air",
@@ -153,7 +167,7 @@ menu.skills.disguise = {x = .25, y = -.2, earned = false, image = "images/skillT
     price = 3,
     link = function() return playerStat[currentPlayer].skills.slimes3 end
 }
-menu.skills.cloning = {x = .5, y = -.5, earned = false, image = "images/skillTree/cloningSkill.png", text = "Cloning",
+menu.skills.cloning = {x = .5, y = -.5, earned = false, image = "images/skillTree/cloneSkill.png", text = "Cloning",
     description = "A dark magic disrupts the form splitting the slime in two",
     price = 3,
     link = function() return playerStat[currentPlayer].skills.disguise end
@@ -187,6 +201,11 @@ menu.skills.slimeCoil = {x = .15, y = -.65, earned = false, image = "images/skil
     description = "An electic coil that melts slime",
     price = 3,
     link = function() return {playerStat[currentPlayer].skills.hammer, playerStat[currentPlayer].skills.mechanisedSlime} end
+}
+menu.skills.rouge = {x = .15, y = -.8, earned = false, image = "images/skillTree/rougeSkill.png", text = "Rouge",
+    description = "A sneaky slime with a crystal dagger",
+    price = 3,
+    link = function() return playerStat[currentPlayer].skills.slimeCoil end
 }
 menu.skills.lurker = {x = .4, y = -.65, earned = false, image = "images/skillTree/lurkerSkill.png", text = "Lurker Slime",
     description = "A slime radiating evil energy",
@@ -285,16 +304,21 @@ function menu:render()
     if self.selectedSkill ~= nil then
         local maxWidth = 280
 
-        imageLib:drawImage(self.selectedSkill.x - 160, self.selectedSkill.y - 120, "images/skillTree/ConfirmUi.png") --  -80 is center
-        imageLib:drawImage(self.selectedSkill.x - 160, self.selectedSkill.y + 10, "images/skillTree/PurchaseUi.png")
+        if playerStat[currentPlayer].oozeNum - self.selectedSkill.price <= 0 then
+            love.graphics.setColor(.2, .2, .2)
+        end
+
+        imageLib:drawImage((self.selectedSkill.x * width) - 160, (self.selectedSkill.y * height) - 120, "images/skillTree/ConfirmUi.png") --  -80 is center
+        imageLib:drawImage((self.selectedSkill.x * width) - 160, (self.selectedSkill.y * height) + 10, "images/skillTree/PurchaseUi.png")
+        love.graphics.setColor(1, 1, 1)
 
         love.graphics.setFont(realbigfont)
-        love.graphics.print(self.selectedSkill.price, self.selectedSkill.x - 20, self.selectedSkill.y + 60)
+        love.graphics.print(self.selectedSkill.price, (self.selectedSkill.x * width) - 20, (self.selectedSkill.y * height) + 60)
 
         love.graphics.setFont(smallfont)
 
         -- printf wrapps text which is cool
-        love.graphics.printf(self.selectedSkill.description, self.selectedSkill.x - 130, self.selectedSkill.y - 60, maxWidth, "center")
+        love.graphics.printf(self.selectedSkill.description, (self.selectedSkill.x * width) - 130, (self.selectedSkill.y * height) - 60, maxWidth, "center")
     end
 
 end
@@ -306,10 +330,10 @@ function menu:click(x, y)
             if love.mouse.isDown(1) then
                 if not self.clicking then -- ui for the input
                     -- if it's not in some arbitary bounding box
-                    if not menu:isClickInButton(x, y, self.selectedSkill.x - 130, self.selectedSkill.y - 60, 320, 220) then
+                    if not menu:isClickInButton(x, y, (self.selectedSkill.x * width) - 130, (self.selectedSkill.y * height) - 60, 300, 220) then
                         self.selectedSkill = nil
                     else
-                        if menu:isClickInButton(x, y, self.selectedSkill.x - 160, self.selectedSkill.y + 10, 320, 120) and playerStat[currentPlayer].oozeNum - self.selectedSkill.price >= 0 and self.selectedSkill.earned ~= true then
+                        if menu:isClickInButton(x, y, (self.selectedSkill.x * width) - 160, (self.selectedSkill.y * height) + 10, 300, 120) and playerStat[currentPlayer].oozeNum - self.selectedSkill.price >= 0 and self.selectedSkill.earned ~= true then
                             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - self.selectedSkill.price
                             self.selectedSkill.earned = true
                             self.selectedSkill = nil

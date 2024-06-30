@@ -46,7 +46,7 @@ function isometricRenderer:render(rotation)
         if tile ~= selectedTile then
             imageLib:drawImage(y * 32 + ((math.abs(x) % 2) * 16), (x * 5) + (tile.height * 16), tile.image)
         else
-            imageLib:drawImage(y * 32 + ((math.abs(x) % 2) * 16), (x * 5) + (tile.height * 16), "images/tiles/tileselected.png")
+            imageLib:drawImage(y * 32 + ((math.abs(x) % 2) * 16), (x * 5) + (tile.height * 16), "images/tiles/tileSelected.png")
             if tile.structure ~= nil then
                 love.graphics.setColor(0, .2, 1)
                 isometricRenderer:renderTileBackground(tile.structure)
