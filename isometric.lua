@@ -58,7 +58,7 @@ function isometricRenderer:render(rotation)
         end
         if tile.structure ~= nil then
             isometricRenderer:renderTile(tile.structure)
-            if tile.structure.controlRender and tile.control == currentPlayer then
+            if tile.structure.controlRender and (tile.control == currentPlayer or tile.illuminated) then
                 tile.structure.controlRender(tile)
             end
         end

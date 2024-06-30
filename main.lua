@@ -179,7 +179,7 @@ function updateCamPosition()
         end
     end
     if love.mouse.isDown(3) then
-        cam:move(lerp(0, mouseDeltaX, 1) / (cam:getScale() / 2), lerp(0, mouseDeltaY, 1) / (cam:getScale() / 2))
+        cam:move(lerp(0, mouseDeltaX, 1) / (cam:getScale()), lerp(0, mouseDeltaY, 1) / (cam:getScale()))
     end
     if cam:getScale() < 1 then
         cam:zoom(((zoomIntertiaY / 10) / (3 / cam:getScale())) + 1)

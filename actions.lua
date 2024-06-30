@@ -296,6 +296,76 @@ actions = {
             tile.control = currentPlayer
         end
     },
+    createRouge = {
+        tooltip = "Create a Rouge Slime (-3)",
+        image = "images/icons/createTroop.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "city" and playerStat[currentPlayer].skills.rouge.earned == true then
+                    return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 3 >= 0
+                end
+            end
+            return false
+        end,
+        action = function()
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
+            local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/rougeSlime.png", structure = nil, health = 1, maxHp = 1, attack = 3, moveSpeed = 4}
+            tile.structure.type = "troop"
+            tile.control = currentPlayer
+        end
+    },
+    createFramework = {
+        tooltip = "Create a Framework Slime (-3)",
+        image = "images/icons/createTroop.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "city" and playerStat[currentPlayer].skills.framework.earned == true then
+                    return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 3 >= 0
+                end
+            end
+            return false
+        end,
+        action = function()
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
+            local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/frameworkSlime.png", structure = nil, health = 1, maxHp = 1, attack = 0, moveSpeed = 4}
+            tile.structure.type = "troop"
+            tile.control = currentPlayer
+        end
+    },
+    createMechanizedSlime = {
+        tooltip = "Create a Mechanized Slime (-3)",
+        image = "images/icons/createTroop.png",
+        check = function(tile)
+            if tile.structure ~= nil then
+                if tile.structure.type == "city" and playerStat[currentPlayer].skills.mechanisedSlime.earned == true then
+                    return findRandomOpenTileAdjacent(tile.x, tile.y) ~= nil and playerStat[currentPlayer].oozeNum - 3 >= 0
+                end
+            end
+            return false
+        end,
+        action = function()
+            playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
+            local tile = findRandomOpenTileAdjacent(selectedTile.x, selectedTile.y)
+            tile.structure = {x = tile.x, y = tile.y, height = tile.height, image = "images/troops/mechanizedSlime.png", structure = nil, health = 1, maxHp = 1, attack = 4, moveSpeed = 1}
+            tile.structure.type = "troop"
+            tile.control = currentPlayer
+        end
+    },
+    illuminate = {
+        tooltip = "Reveal tile",
+        image = "images/icons/createTroop.png",
+        check = function(tile)
+            if not tile.illuminated then
+                return true
+            end
+            return false
+        end,
+        action = function()
+            selectedTile.illuminated = true
+        end
+    },
     buildTile = {
         tooltip = "Raise tile (-5)",
         image = "images/icons/upgrade.png",
