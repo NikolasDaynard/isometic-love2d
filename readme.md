@@ -10,5 +10,5 @@ I opted to leave this game borderless, because the idea is when idle, it rests o
 I did a ton of spriting for this game and it all is pretty cool in my opinion.
 [skillTree](skillTree.png)
 
-If you want to download and try the game it is published here on itch for windows:
-TODO: link
+If you want to download and try the game it is published here on itch for windows and macos. I was going to compile for Linux but it kept crashing:
+https://coding-person.itch.io/gelatin-cirt
