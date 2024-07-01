@@ -1,4 +1,5 @@
 lunajson = require("libs.lunajson")
+require("credits")
 
 settings = {
     clicking = false,
@@ -10,7 +11,15 @@ settings = {
                 settings:saveSettings()
             end,
             value = false,
-            -- text = 
+            text = "1"
+        },
+        {x = 0, y = 300, w = 1000, h = 200,
+            callback = function(value)
+                settings.buttons[2].value = false
+                credits.open = not credits.open
+            end,
+            value = false,
+            text = "credits"
         }
     },
     sliders = {
@@ -26,6 +35,9 @@ settings = {
 
 function settings:render()
     if not settings.open then
+        if credits.open then
+            credits.open = false
+        end
         return
     end
 
@@ -43,6 +55,7 @@ function settings:render()
     for _, slider in ipairs(self.sliders) do
         ui:renderSlider(slider.x, slider.y, slider.w, slider.h, slider.value, slider.text)
     end
+    credits:render()
 end
 
 function settings:click(x, y)

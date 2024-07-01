@@ -17,7 +17,7 @@ end
 
 
 function audio:update()
-    love.audio.setVolume(settings:getSetting("volume"))
+    love.audio.setVolume(settings:getSetting("volume") or 1)
     for i, sound in ipairs(self.fadingAudio) do
         sound:setVolume(math.max(sound:getVolume() - .01 * settings:getSetting("volume"), 0))
         if math.max(sound:getVolume() - .01, 0) == 0 then

@@ -19,8 +19,8 @@ actions = {
 
                                         newTile.structure = {x = newTile.x, y = newTile.y, height = newTile.height, image = "images/player.png", structure = nil, health = 10, maxHp = 10}
                                         newTile.structure.type = "city"
-                                        newTile.structure.destructionCallback = function()
-                                            print("destroyed :(")
+                                        newTile.structure.destructionCallback = function(newTile)
+                                            newTile.structure = nil
                                         end
                                         newTile.insideCity = true
                                         newTile.structure.level = 3
@@ -44,30 +44,6 @@ actions = {
 
         end
     },
-    -- foundCity = {
-    --     tooltip = "Build a new slime city",
-    --     image = "images/icons/foundCity.png",
-    --     check = function(tile)
-    --         return tile.insideCity ~= true and tile.structure == nil and playerStat[currentPlayer].oozeNum - 3 >= 0
-    --     end,
-    --     action = function()
-    --         selectedTile.structure = {x = selectedTile.x, y = selectedTile.y, height = selectedTile.height, image = "images/player.png", structure = nil, health = 10, maxHp = 10}
-    --         selectedTile.structure.type = "city"
-    --         selectedTile.structure.destructionCallback = function()
-    --             print("destroyed :(")
-    --         end
-    --         selectedTile.insideCity = true
-    --         selectedTile.structure.level = 3
-    --         playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 3
-    --         for  _, nearTiles in ipairs(tileHolder:getTiles()) do
-    --             if distance(nearTiles.x, nearTiles.y, selectedTile.x, selectedTile.y) < selectedTile.structure.level then
-    --                 nearTiles.image = "images/tiles/cityTile.png"
-    --                 nearTiles.insideCity = true
-    --                 nearTiles.control = currentPlayer
-    --             end
-    --         end
-    --     end
-    -- },
     build = {
         tooltip = "Build a slime factory (-2 (+1))",
         image = "images/icons/build.png",
@@ -96,7 +72,7 @@ actions = {
         tooltip = "Build a Slimeco (c) Factory (-10 (+7))",
         image = "images/icons/build.png",
         check = function(tile)
-            return tile.control == currentPlayer and tile.structure == nil and playerStat[currentPlayer].oozeNum - 10 >= 0
+            return tile.control == currentPlayer and tile.structure == nil and playerStat[currentPlayer].oozeNum - 10 >= 0 and playerStat[currentPlayer].skills.slimeCo.earned
         end,
         action = function()
             playerStat[currentPlayer].oozeNum = playerStat[currentPlayer].oozeNum - 5

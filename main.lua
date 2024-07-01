@@ -58,7 +58,7 @@ end
 function love.update(dt)
     if not love.window.hasFocus() then
         -- disabled for faster dev
-        -- love.timer.sleep(1) -- .5 is less delay but .6 more cpu points
+        love.timer.sleep(1) -- .5 is less delay but .6 more cpu points
     end
     menu:update()
     audio:update()

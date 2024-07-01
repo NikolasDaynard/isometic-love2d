@@ -121,9 +121,6 @@ function tileHolder:createMap()
             end
         end
     end
-    local tile = tileHolder:getTileAtPos(3,3)
-    tile.structure = {x = 3, y = 3, height = 1, image = "images/troops/lurker.png", structure = nil, type = "troop", moveSpeed = 1, health = 1, maxHp = 1}
-    tile.control = 1
 end
 function createNoiseMap(resolution)
     local map = {}
